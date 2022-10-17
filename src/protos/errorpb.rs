@@ -2708,6 +2708,161 @@ impl ::protobuf::reflect::ProtobufValue for RecoveryInProgress {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct FlashbackInProgress {
+    // message fields
+    pub region_id: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a FlashbackInProgress {
+    fn default() -> &'a FlashbackInProgress {
+        <FlashbackInProgress as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl FlashbackInProgress {
+    pub fn new() -> FlashbackInProgress {
+        ::std::default::Default::default()
+    }
+
+    // uint64 region_id = 1;
+
+
+    pub fn get_region_id(&self) -> u64 {
+        self.region_id
+    }
+    pub fn clear_region_id(&mut self) {
+        self.region_id = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region_id(&mut self, v: u64) {
+        self.region_id = v;
+    }
+}
+
+impl ::protobuf::Message for FlashbackInProgress {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.region_id = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if self.region_id != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.region_id, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if self.region_id != 0 {
+            os.write_uint64(1, self.region_id)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> FlashbackInProgress {
+        FlashbackInProgress::new()
+    }
+
+    fn default_instance() -> &'static FlashbackInProgress {
+        static mut instance: ::protobuf::lazy::Lazy<FlashbackInProgress> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const FlashbackInProgress,
+        };
+        unsafe {
+            instance.get(FlashbackInProgress::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for FlashbackInProgress {
+    fn clear(&mut self) {
+        self.region_id = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for FlashbackInProgress {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for FlashbackInProgress {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for FlashbackInProgress {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct Error {
     // message fields
     pub message: ::std::string::String,
@@ -2726,6 +2881,7 @@ pub struct Error {
     pub region_not_initialized: ::protobuf::SingularPtrField<RegionNotInitialized>,
     pub disk_full: ::protobuf::SingularPtrField<DiskFull>,
     pub recovery_in_progress: ::protobuf::SingularPtrField<RecoveryInProgress>,
+    pub flashback_in_progress: ::protobuf::SingularPtrField<FlashbackInProgress>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -3262,6 +3418,39 @@ impl Error {
     pub fn take_recovery_in_progress(&mut self) -> RecoveryInProgress {
         self.recovery_in_progress.take().unwrap_or_else(|| RecoveryInProgress::new())
     }
+
+    // .errorpb.FlashbackInProgress FlashbackInProgress = 17;
+
+
+    pub fn get_flashback_in_progress(&self) -> &FlashbackInProgress {
+        self.flashback_in_progress.as_ref().unwrap_or_else(|| FlashbackInProgress::default_instance())
+    }
+    pub fn clear_flashback_in_progress(&mut self) {
+        self.flashback_in_progress.clear();
+    }
+
+    pub fn has_flashback_in_progress(&self) -> bool {
+        self.flashback_in_progress.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_flashback_in_progress(&mut self, v: FlashbackInProgress) {
+        self.flashback_in_progress = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_flashback_in_progress(&mut self) -> &mut FlashbackInProgress {
+        if self.flashback_in_progress.is_none() {
+            self.flashback_in_progress.set_default();
+        }
+        self.flashback_in_progress.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_flashback_in_progress(&mut self) -> FlashbackInProgress {
+        self.flashback_in_progress.take().unwrap_or_else(|| FlashbackInProgress::new())
+    }
 }
 
 impl ::protobuf::Message for Error {
@@ -3341,6 +3530,11 @@ impl ::protobuf::Message for Error {
                 return false;
             }
         };
+        for v in &self.flashback_in_progress {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
@@ -3395,6 +3589,9 @@ impl ::protobuf::Message for Error {
                 },
                 16 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.recovery_in_progress)?;
+                },
+                17 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.flashback_in_progress)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -3468,6 +3665,10 @@ impl ::protobuf::Message for Error {
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         if let Some(ref v) = self.recovery_in_progress.as_ref() {
+            let len = v.compute_size();
+            my_size += 2 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if let Some(ref v) = self.flashback_in_progress.as_ref() {
             let len = v.compute_size();
             my_size += 2 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
@@ -3555,6 +3756,11 @@ impl ::protobuf::Message for Error {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
+        if let Some(ref v) = self.flashback_in_progress.as_ref() {
+            os.write_tag(17, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -3618,6 +3824,7 @@ impl ::protobuf::Clear for Error {
         self.region_not_initialized.clear();
         self.disk_full.clear();
         self.recovery_in_progress.clear();
+        self.flashback_in_progress.clear();
         self.unknown_fields.clear();
     }
 }
@@ -3643,6 +3850,7 @@ impl ::protobuf::PbPrint for Error {
         ::protobuf::PbPrint::fmt(&self.region_not_initialized, "region_not_initialized", buf);
         ::protobuf::PbPrint::fmt(&self.disk_full, "disk_full", buf);
         ::protobuf::PbPrint::fmt(&self.recovery_in_progress, "recovery_in_progress", buf);
+        ::protobuf::PbPrint::fmt(&self.flashback_in_progress, "flashback_in_progress", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -3669,6 +3877,7 @@ impl ::std::fmt::Debug for Error {
         ::protobuf::PbPrint::fmt(&self.region_not_initialized, "region_not_initialized", &mut s);
         ::protobuf::PbPrint::fmt(&self.disk_full, "disk_full", &mut s);
         ::protobuf::PbPrint::fmt(&self.recovery_in_progress, "recovery_in_progress", &mut s);
+        ::protobuf::PbPrint::fmt(&self.flashback_in_progress, "flashback_in_progress", &mut s);
         write!(f, "{}", s)
     }
 }

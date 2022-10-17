@@ -6470,7 +6470,9 @@ impl ::protobuf::reflect::ProtobufValue for DuplicateDetectResponse {
 pub struct KvMeta {
     // message fields
     pub name: ::std::string::String,
+    pub range_offset: u64,
     pub length: u64,
+    pub range_length: u64,
     pub cf: ::std::string::String,
     pub is_delete: bool,
     pub start_ts: u64,
@@ -6479,6 +6481,7 @@ pub struct KvMeta {
     pub end_key: ::std::vec::Vec<u8>,
     pub sha256: ::std::vec::Vec<u8>,
     pub start_snapshot_ts: u64,
+    pub compression_type: super::brpb::CompressionType,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -6521,6 +6524,21 @@ impl KvMeta {
         ::std::mem::replace(&mut self.name, ::std::string::String::new())
     }
 
+    // uint64 range_offset = 11;
+
+
+    pub fn get_range_offset(&self) -> u64 {
+        self.range_offset
+    }
+    pub fn clear_range_offset(&mut self) {
+        self.range_offset = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range_offset(&mut self, v: u64) {
+        self.range_offset = v;
+    }
+
     // uint64 length = 2;
 
 
@@ -6534,6 +6552,21 @@ impl KvMeta {
     // Param is passed by value, moved
     pub fn set_length(&mut self, v: u64) {
         self.length = v;
+    }
+
+    // uint64 range_length = 12;
+
+
+    pub fn get_range_length(&self) -> u64 {
+        self.range_length
+    }
+    pub fn clear_range_length(&mut self) {
+        self.range_length = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range_length(&mut self, v: u64) {
+        self.range_length = v;
     }
 
     // string cf = 3;
@@ -6699,6 +6732,21 @@ impl KvMeta {
     pub fn set_start_snapshot_ts(&mut self, v: u64) {
         self.start_snapshot_ts = v;
     }
+
+    // .backup.CompressionType compression_type = 13;
+
+
+    pub fn get_compression_type(&self) -> super::brpb::CompressionType {
+        self.compression_type
+    }
+    pub fn clear_compression_type(&mut self) {
+        self.compression_type = super::brpb::CompressionType::Unknown;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_compression_type(&mut self, v: super::brpb::CompressionType) {
+        self.compression_type = v;
+    }
 }
 
 impl ::protobuf::Message for KvMeta {
@@ -6713,12 +6761,26 @@ impl ::protobuf::Message for KvMeta {
                 1 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.name)?;
                 },
+                11 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.range_offset = tmp;
+                },
                 2 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
                     let tmp = is.read_uint64()?;
                     self.length = tmp;
+                },
+                12 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.range_length = tmp;
                 },
                 3 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.cf)?;
@@ -6760,6 +6822,9 @@ impl ::protobuf::Message for KvMeta {
                     let tmp = is.read_uint64()?;
                     self.start_snapshot_ts = tmp;
                 },
+                13 => {
+                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.compression_type = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -6775,8 +6840,14 @@ impl ::protobuf::Message for KvMeta {
         if !self.name.is_empty() {
             my_size += ::protobuf::rt::string_size(1, &self.name);
         }
+        if self.range_offset != 0 {
+            my_size += ::protobuf::rt::value_size(11, self.range_offset, ::protobuf::wire_format::WireTypeVarint);
+        }
         if self.length != 0 {
             my_size += ::protobuf::rt::value_size(2, self.length, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.range_length != 0 {
+            my_size += ::protobuf::rt::value_size(12, self.range_length, ::protobuf::wire_format::WireTypeVarint);
         }
         if !self.cf.is_empty() {
             my_size += ::protobuf::rt::string_size(3, &self.cf);
@@ -6802,6 +6873,9 @@ impl ::protobuf::Message for KvMeta {
         if self.start_snapshot_ts != 0 {
             my_size += ::protobuf::rt::value_size(9, self.start_snapshot_ts, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.compression_type != super::brpb::CompressionType::Unknown {
+            my_size += ::protobuf::rt::enum_size(13, self.compression_type);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -6811,8 +6885,14 @@ impl ::protobuf::Message for KvMeta {
         if !self.name.is_empty() {
             os.write_string(1, &self.name)?;
         }
+        if self.range_offset != 0 {
+            os.write_uint64(11, self.range_offset)?;
+        }
         if self.length != 0 {
             os.write_uint64(2, self.length)?;
+        }
+        if self.range_length != 0 {
+            os.write_uint64(12, self.range_length)?;
         }
         if !self.cf.is_empty() {
             os.write_string(3, &self.cf)?;
@@ -6837,6 +6917,9 @@ impl ::protobuf::Message for KvMeta {
         }
         if self.start_snapshot_ts != 0 {
             os.write_uint64(9, self.start_snapshot_ts)?;
+        }
+        if self.compression_type != super::brpb::CompressionType::Unknown {
+            os.write_enum(13, self.compression_type.value())?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -6886,7 +6969,9 @@ impl ::protobuf::Message for KvMeta {
 impl ::protobuf::Clear for KvMeta {
     fn clear(&mut self) {
         self.name.clear();
+        self.range_offset = 0;
         self.length = 0;
+        self.range_length = 0;
         self.cf.clear();
         self.is_delete = false;
         self.start_ts = 0;
@@ -6895,6 +6980,7 @@ impl ::protobuf::Clear for KvMeta {
         self.end_key.clear();
         self.sha256.clear();
         self.start_snapshot_ts = 0;
+        self.compression_type = super::brpb::CompressionType::Unknown;
         self.unknown_fields.clear();
     }
 }
@@ -6905,7 +6991,9 @@ impl ::protobuf::PbPrint for KvMeta {
         ::protobuf::push_message_start(name, buf);
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.name, "name", buf);
+        ::protobuf::PbPrint::fmt(&self.range_offset, "range_offset", buf);
         ::protobuf::PbPrint::fmt(&self.length, "length", buf);
+        ::protobuf::PbPrint::fmt(&self.range_length, "range_length", buf);
         ::protobuf::PbPrint::fmt(&self.cf, "cf", buf);
         ::protobuf::PbPrint::fmt(&self.is_delete, "is_delete", buf);
         ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", buf);
@@ -6914,6 +7002,7 @@ impl ::protobuf::PbPrint for KvMeta {
         ::protobuf::PbPrint::fmt(&self.end_key, "end_key", buf);
         ::protobuf::PbPrint::fmt(&self.sha256, "sha256", buf);
         ::protobuf::PbPrint::fmt(&self.start_snapshot_ts, "start_snapshot_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -6925,7 +7014,9 @@ impl ::std::fmt::Debug for KvMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.name, "name", &mut s);
+        ::protobuf::PbPrint::fmt(&self.range_offset, "range_offset", &mut s);
         ::protobuf::PbPrint::fmt(&self.length, "length", &mut s);
+        ::protobuf::PbPrint::fmt(&self.range_length, "range_length", &mut s);
         ::protobuf::PbPrint::fmt(&self.cf, "cf", &mut s);
         ::protobuf::PbPrint::fmt(&self.is_delete, "is_delete", &mut s);
         ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", &mut s);
@@ -6934,6 +7025,7 @@ impl ::std::fmt::Debug for KvMeta {
         ::protobuf::PbPrint::fmt(&self.end_key, "end_key", &mut s);
         ::protobuf::PbPrint::fmt(&self.sha256, "sha256", &mut s);
         ::protobuf::PbPrint::fmt(&self.start_snapshot_ts, "start_snapshot_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", &mut s);
         write!(f, "{}", s)
     }
 }

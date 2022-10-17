@@ -1100,6 +1100,9 @@ pub struct SnapshotMeta {
     // message fields
     pub cf_files: ::protobuf::RepeatedField<SnapshotCfFile>,
     pub for_balance: bool,
+    pub for_witness: bool,
+    pub start: u64,
+    pub generate_duration_sec: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -1155,6 +1158,51 @@ impl SnapshotMeta {
     pub fn set_for_balance(&mut self, v: bool) {
         self.for_balance = v;
     }
+
+    // bool for_witness = 3;
+
+
+    pub fn get_for_witness(&self) -> bool {
+        self.for_witness
+    }
+    pub fn clear_for_witness(&mut self) {
+        self.for_witness = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_for_witness(&mut self, v: bool) {
+        self.for_witness = v;
+    }
+
+    // uint64 start = 4;
+
+
+    pub fn get_start(&self) -> u64 {
+        self.start
+    }
+    pub fn clear_start(&mut self) {
+        self.start = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_start(&mut self, v: u64) {
+        self.start = v;
+    }
+
+    // uint64 generate_duration_sec = 5;
+
+
+    pub fn get_generate_duration_sec(&self) -> u64 {
+        self.generate_duration_sec
+    }
+    pub fn clear_generate_duration_sec(&mut self) {
+        self.generate_duration_sec = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_generate_duration_sec(&mut self, v: u64) {
+        self.generate_duration_sec = v;
+    }
 }
 
 impl ::protobuf::Message for SnapshotMeta {
@@ -1181,6 +1229,27 @@ impl ::protobuf::Message for SnapshotMeta {
                     let tmp = is.read_bool()?;
                     self.for_balance = tmp;
                 },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.for_witness = tmp;
+                },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.start = tmp;
+                },
+                5 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.generate_duration_sec = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -1200,6 +1269,15 @@ impl ::protobuf::Message for SnapshotMeta {
         if self.for_balance != false {
             my_size += 2;
         }
+        if self.for_witness != false {
+            my_size += 2;
+        }
+        if self.start != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.start, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.generate_duration_sec != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.generate_duration_sec, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -1213,6 +1291,15 @@ impl ::protobuf::Message for SnapshotMeta {
         };
         if self.for_balance != false {
             os.write_bool(2, self.for_balance)?;
+        }
+        if self.for_witness != false {
+            os.write_bool(3, self.for_witness)?;
+        }
+        if self.start != 0 {
+            os.write_uint64(4, self.start)?;
+        }
+        if self.generate_duration_sec != 0 {
+            os.write_uint64(5, self.generate_duration_sec)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -1263,6 +1350,9 @@ impl ::protobuf::Clear for SnapshotMeta {
     fn clear(&mut self) {
         self.cf_files.clear();
         self.for_balance = false;
+        self.for_witness = false;
+        self.start = 0;
+        self.generate_duration_sec = 0;
         self.unknown_fields.clear();
     }
 }
@@ -1274,6 +1364,9 @@ impl ::protobuf::PbPrint for SnapshotMeta {
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.cf_files, "cf_files", buf);
         ::protobuf::PbPrint::fmt(&self.for_balance, "for_balance", buf);
+        ::protobuf::PbPrint::fmt(&self.for_witness, "for_witness", buf);
+        ::protobuf::PbPrint::fmt(&self.start, "start", buf);
+        ::protobuf::PbPrint::fmt(&self.generate_duration_sec, "generate_duration_sec", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -1286,6 +1379,9 @@ impl ::std::fmt::Debug for SnapshotMeta {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.cf_files, "cf_files", &mut s);
         ::protobuf::PbPrint::fmt(&self.for_balance, "for_balance", &mut s);
+        ::protobuf::PbPrint::fmt(&self.for_witness, "for_witness", &mut s);
+        ::protobuf::PbPrint::fmt(&self.start, "start", &mut s);
+        ::protobuf::PbPrint::fmt(&self.generate_duration_sec, "generate_duration_sec", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -2385,6 +2481,161 @@ impl ::protobuf::reflect::ProtobufValue for StoreIdent {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct StoreRecoverState {
+    // message fields
+    pub seqno: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a StoreRecoverState {
+    fn default() -> &'a StoreRecoverState {
+        <StoreRecoverState as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl StoreRecoverState {
+    pub fn new() -> StoreRecoverState {
+        ::std::default::Default::default()
+    }
+
+    // uint64 seqno = 1;
+
+
+    pub fn get_seqno(&self) -> u64 {
+        self.seqno
+    }
+    pub fn clear_seqno(&mut self) {
+        self.seqno = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_seqno(&mut self, v: u64) {
+        self.seqno = v;
+    }
+}
+
+impl ::protobuf::Message for StoreRecoverState {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.seqno = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if self.seqno != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.seqno, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if self.seqno != 0 {
+            os.write_uint64(1, self.seqno)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> StoreRecoverState {
+        StoreRecoverState::new()
+    }
+
+    fn default_instance() -> &'static StoreRecoverState {
+        static mut instance: ::protobuf::lazy::Lazy<StoreRecoverState> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const StoreRecoverState,
+        };
+        unsafe {
+            instance.get(StoreRecoverState::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for StoreRecoverState {
+    fn clear(&mut self) {
+        self.seqno = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for StoreRecoverState {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.seqno, "seqno", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for StoreRecoverState {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.seqno, "seqno", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for StoreRecoverState {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct RaftLocalState {
     // message fields
     pub hard_state: ::protobuf::SingularPtrField<super::eraftpb::HardState>,
@@ -3425,6 +3676,247 @@ impl ::std::fmt::Debug for RegionLocalState {
 }
 
 impl ::protobuf::reflect::ProtobufValue for RegionLocalState {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct RegionSequenceNumberRelation {
+    // message fields
+    pub region_id: u64,
+    pub sequence_number: u64,
+    pub apply_state: ::protobuf::SingularPtrField<RaftApplyState>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a RegionSequenceNumberRelation {
+    fn default() -> &'a RegionSequenceNumberRelation {
+        <RegionSequenceNumberRelation as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl RegionSequenceNumberRelation {
+    pub fn new() -> RegionSequenceNumberRelation {
+        ::std::default::Default::default()
+    }
+
+    // uint64 region_id = 1;
+
+
+    pub fn get_region_id(&self) -> u64 {
+        self.region_id
+    }
+    pub fn clear_region_id(&mut self) {
+        self.region_id = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region_id(&mut self, v: u64) {
+        self.region_id = v;
+    }
+
+    // uint64 sequence_number = 2;
+
+
+    pub fn get_sequence_number(&self) -> u64 {
+        self.sequence_number
+    }
+    pub fn clear_sequence_number(&mut self) {
+        self.sequence_number = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_sequence_number(&mut self, v: u64) {
+        self.sequence_number = v;
+    }
+
+    // .raft_serverpb.RaftApplyState apply_state = 3;
+
+
+    pub fn get_apply_state(&self) -> &RaftApplyState {
+        self.apply_state.as_ref().unwrap_or_else(|| RaftApplyState::default_instance())
+    }
+    pub fn clear_apply_state(&mut self) {
+        self.apply_state.clear();
+    }
+
+    pub fn has_apply_state(&self) -> bool {
+        self.apply_state.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_apply_state(&mut self, v: RaftApplyState) {
+        self.apply_state = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_apply_state(&mut self) -> &mut RaftApplyState {
+        if self.apply_state.is_none() {
+            self.apply_state.set_default();
+        }
+        self.apply_state.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_apply_state(&mut self) -> RaftApplyState {
+        self.apply_state.take().unwrap_or_else(|| RaftApplyState::new())
+    }
+}
+
+impl ::protobuf::Message for RegionSequenceNumberRelation {
+    fn is_initialized(&self) -> bool {
+        for v in &self.apply_state {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.region_id = tmp;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.sequence_number = tmp;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.apply_state)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if self.region_id != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.region_id, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.sequence_number != 0 {
+            my_size += ::protobuf::rt::value_size(2, self.sequence_number, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if let Some(ref v) = self.apply_state.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if self.region_id != 0 {
+            os.write_uint64(1, self.region_id)?;
+        }
+        if self.sequence_number != 0 {
+            os.write_uint64(2, self.sequence_number)?;
+        }
+        if let Some(ref v) = self.apply_state.as_ref() {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> RegionSequenceNumberRelation {
+        RegionSequenceNumberRelation::new()
+    }
+
+    fn default_instance() -> &'static RegionSequenceNumberRelation {
+        static mut instance: ::protobuf::lazy::Lazy<RegionSequenceNumberRelation> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const RegionSequenceNumberRelation,
+        };
+        unsafe {
+            instance.get(RegionSequenceNumberRelation::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for RegionSequenceNumberRelation {
+    fn clear(&mut self) {
+        self.region_id = 0;
+        self.sequence_number = 0;
+        self.apply_state.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for RegionSequenceNumberRelation {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", buf);
+        ::protobuf::PbPrint::fmt(&self.sequence_number, "sequence_number", buf);
+        ::protobuf::PbPrint::fmt(&self.apply_state, "apply_state", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for RegionSequenceNumberRelation {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", &mut s);
+        ::protobuf::PbPrint::fmt(&self.sequence_number, "sequence_number", &mut s);
+        ::protobuf::PbPrint::fmt(&self.apply_state, "apply_state", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for RegionSequenceNumberRelation {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }

@@ -51,6 +51,13 @@ const METHOD_PD_ALLOC_ID: ::grpcio::Method<super::pdpb::AllocIdRequest, super::p
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_PD_IS_SNAPSHOT_RECOVERING: ::grpcio::Method<super::pdpb::IsSnapshotRecoveringRequest, super::pdpb::IsSnapshotRecoveringResponse> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/pdpb.PD/IsSnapshotRecovering",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 const METHOD_PD_GET_STORE: ::grpcio::Method<super::pdpb::GetStoreRequest, super::pdpb::GetStoreResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/pdpb.PD/GetStore",
@@ -343,6 +350,22 @@ impl PdClient {
 
     pub fn alloc_id_async(&self, req: &super::pdpb::AllocIdRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::AllocIdResponse>> {
         self.alloc_id_async_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn is_snapshot_recovering_opt(&self, req: &super::pdpb::IsSnapshotRecoveringRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::IsSnapshotRecoveringResponse> {
+        self.client.unary_call(&METHOD_PD_IS_SNAPSHOT_RECOVERING, req, opt)
+    }
+
+    pub fn is_snapshot_recovering(&self, req: &super::pdpb::IsSnapshotRecoveringRequest) -> ::grpcio::Result<super::pdpb::IsSnapshotRecoveringResponse> {
+        self.is_snapshot_recovering_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn is_snapshot_recovering_async_opt(&self, req: &super::pdpb::IsSnapshotRecoveringRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::IsSnapshotRecoveringResponse>> {
+        self.client.unary_call_async(&METHOD_PD_IS_SNAPSHOT_RECOVERING, req, opt)
+    }
+
+    pub fn is_snapshot_recovering_async(&self, req: &super::pdpb::IsSnapshotRecoveringRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::IsSnapshotRecoveringResponse>> {
+        self.is_snapshot_recovering_async_opt(req, ::grpcio::CallOption::default())
     }
 
     pub fn get_store_opt(&self, req: &super::pdpb::GetStoreRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::GetStoreResponse> {
@@ -813,6 +836,9 @@ pub trait Pd {
     fn alloc_id(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::AllocIdRequest, sink: ::grpcio::UnarySink<super::pdpb::AllocIdResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
+    fn is_snapshot_recovering(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::IsSnapshotRecoveringRequest, sink: ::grpcio::UnarySink<super::pdpb::IsSnapshotRecoveringResponse>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
     fn get_store(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::GetStoreRequest, sink: ::grpcio::UnarySink<super::pdpb::GetStoreResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
@@ -926,6 +952,10 @@ pub fn create_pd<S: Pd + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_PD_ALLOC_ID, move |ctx, req, resp| {
         instance.alloc_id(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_PD_IS_SNAPSHOT_RECOVERING, move |ctx, req, resp| {
+        instance.is_snapshot_recovering(ctx, req, resp)
     });
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_PD_GET_STORE, move |ctx, req, resp| {

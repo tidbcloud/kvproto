@@ -4010,6 +4010,7 @@ pub struct StreamBackupTaskInfo {
     pub end_ts: u64,
     pub name: ::std::string::String,
     pub table_filter: ::protobuf::RepeatedField<::std::string::String>,
+    pub compression_type: CompressionType,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -4139,6 +4140,21 @@ impl StreamBackupTaskInfo {
     pub fn take_table_filter(&mut self) -> ::protobuf::RepeatedField<::std::string::String> {
         ::std::mem::replace(&mut self.table_filter, ::protobuf::RepeatedField::new())
     }
+
+    // .backup.CompressionType compression_type = 6;
+
+
+    pub fn get_compression_type(&self) -> CompressionType {
+        self.compression_type
+    }
+    pub fn clear_compression_type(&mut self) {
+        self.compression_type = CompressionType::Unknown;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_compression_type(&mut self, v: CompressionType) {
+        self.compression_type = v;
+    }
 }
 
 impl ::protobuf::Message for StreamBackupTaskInfo {
@@ -4178,6 +4194,9 @@ impl ::protobuf::Message for StreamBackupTaskInfo {
                 5 => {
                     ::protobuf::rt::read_repeated_string_into(wire_type, is, &mut self.table_filter)?;
                 },
+                6 => {
+                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.compression_type = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -4206,6 +4225,9 @@ impl ::protobuf::Message for StreamBackupTaskInfo {
         for value in &self.table_filter {
             my_size += ::protobuf::rt::string_size(5, &value);
         };
+        if self.compression_type != CompressionType::Unknown {
+            my_size += ::protobuf::rt::enum_size(6, self.compression_type);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -4229,6 +4251,9 @@ impl ::protobuf::Message for StreamBackupTaskInfo {
         for v in &self.table_filter {
             os.write_string(5, &v)?;
         };
+        if self.compression_type != CompressionType::Unknown {
+            os.write_enum(6, self.compression_type.value())?;
+        }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -4281,6 +4306,7 @@ impl ::protobuf::Clear for StreamBackupTaskInfo {
         self.end_ts = 0;
         self.name.clear();
         self.table_filter.clear();
+        self.compression_type = CompressionType::Unknown;
         self.unknown_fields.clear();
     }
 }
@@ -4295,6 +4321,7 @@ impl ::protobuf::PbPrint for StreamBackupTaskInfo {
         ::protobuf::PbPrint::fmt(&self.end_ts, "end_ts", buf);
         ::protobuf::PbPrint::fmt(&self.name, "name", buf);
         ::protobuf::PbPrint::fmt(&self.table_filter, "table_filter", buf);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -4310,6 +4337,7 @@ impl ::std::fmt::Debug for StreamBackupTaskInfo {
         ::protobuf::PbPrint::fmt(&self.end_ts, "end_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.name, "name", &mut s);
         ::protobuf::PbPrint::fmt(&self.table_filter, "table_filter", &mut s);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -5260,6 +5288,9 @@ pub struct S3 {
     pub secret_access_key: ::std::string::String,
     pub force_path_style: bool,
     pub sse_kms_key_id: ::std::string::String,
+    pub role_arn: ::std::string::String,
+    pub external_id: ::std::string::String,
+    pub object_lock_enabled: bool,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -5550,6 +5581,73 @@ impl S3 {
     pub fn take_sse_kms_key_id(&mut self) -> ::std::string::String {
         ::std::mem::replace(&mut self.sse_kms_key_id, ::std::string::String::new())
     }
+
+    // string role_arn = 12;
+
+
+    pub fn get_role_arn(&self) -> &str {
+        &self.role_arn
+    }
+    pub fn clear_role_arn(&mut self) {
+        self.role_arn.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_role_arn(&mut self, v: ::std::string::String) {
+        self.role_arn = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_role_arn(&mut self) -> &mut ::std::string::String {
+        &mut self.role_arn
+    }
+
+    // Take field
+    pub fn take_role_arn(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.role_arn, ::std::string::String::new())
+    }
+
+    // string external_id = 13;
+
+
+    pub fn get_external_id(&self) -> &str {
+        &self.external_id
+    }
+    pub fn clear_external_id(&mut self) {
+        self.external_id.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_external_id(&mut self, v: ::std::string::String) {
+        self.external_id = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_external_id(&mut self) -> &mut ::std::string::String {
+        &mut self.external_id
+    }
+
+    // Take field
+    pub fn take_external_id(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.external_id, ::std::string::String::new())
+    }
+
+    // bool object_lock_enabled = 14;
+
+
+    pub fn get_object_lock_enabled(&self) -> bool {
+        self.object_lock_enabled
+    }
+    pub fn clear_object_lock_enabled(&mut self) {
+        self.object_lock_enabled = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_object_lock_enabled(&mut self, v: bool) {
+        self.object_lock_enabled = v;
+    }
 }
 
 impl ::protobuf::Message for S3 {
@@ -5598,6 +5696,19 @@ impl ::protobuf::Message for S3 {
                 11 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.sse_kms_key_id)?;
                 },
+                12 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.role_arn)?;
+                },
+                13 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.external_id)?;
+                },
+                14 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.object_lock_enabled = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -5643,6 +5754,15 @@ impl ::protobuf::Message for S3 {
         if !self.sse_kms_key_id.is_empty() {
             my_size += ::protobuf::rt::string_size(11, &self.sse_kms_key_id);
         }
+        if !self.role_arn.is_empty() {
+            my_size += ::protobuf::rt::string_size(12, &self.role_arn);
+        }
+        if !self.external_id.is_empty() {
+            my_size += ::protobuf::rt::string_size(13, &self.external_id);
+        }
+        if self.object_lock_enabled != false {
+            my_size += 2;
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -5681,6 +5801,15 @@ impl ::protobuf::Message for S3 {
         }
         if !self.sse_kms_key_id.is_empty() {
             os.write_string(11, &self.sse_kms_key_id)?;
+        }
+        if !self.role_arn.is_empty() {
+            os.write_string(12, &self.role_arn)?;
+        }
+        if !self.external_id.is_empty() {
+            os.write_string(13, &self.external_id)?;
+        }
+        if self.object_lock_enabled != false {
+            os.write_bool(14, self.object_lock_enabled)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -5740,6 +5869,9 @@ impl ::protobuf::Clear for S3 {
         self.secret_access_key.clear();
         self.force_path_style = false;
         self.sse_kms_key_id.clear();
+        self.role_arn.clear();
+        self.external_id.clear();
+        self.object_lock_enabled = false;
         self.unknown_fields.clear();
     }
 }
@@ -5760,6 +5892,9 @@ impl ::protobuf::PbPrint for S3 {
         ::protobuf::PbPrint::fmt(&self.secret_access_key, "secret_access_key", buf);
         ::protobuf::PbPrint::fmt(&self.force_path_style, "force_path_style", buf);
         ::protobuf::PbPrint::fmt(&self.sse_kms_key_id, "sse_kms_key_id", buf);
+        ::protobuf::PbPrint::fmt(&self.role_arn, "role_arn", buf);
+        ::protobuf::PbPrint::fmt(&self.external_id, "external_id", buf);
+        ::protobuf::PbPrint::fmt(&self.object_lock_enabled, "object_lock_enabled", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -5781,6 +5916,9 @@ impl ::std::fmt::Debug for S3 {
         ::protobuf::PbPrint::fmt(&self.secret_access_key, "secret_access_key", &mut s);
         ::protobuf::PbPrint::fmt(&self.force_path_style, "force_path_style", &mut s);
         ::protobuf::PbPrint::fmt(&self.sse_kms_key_id, "sse_kms_key_id", &mut s);
+        ::protobuf::PbPrint::fmt(&self.role_arn, "role_arn", &mut s);
+        ::protobuf::PbPrint::fmt(&self.external_id, "external_id", &mut s);
+        ::protobuf::PbPrint::fmt(&self.object_lock_enabled, "object_lock_enabled", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -7565,6 +7703,384 @@ impl ::protobuf::reflect::ProtobufValue for BackupResponse {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct CheckAdminRequest {
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a CheckAdminRequest {
+    fn default() -> &'a CheckAdminRequest {
+        <CheckAdminRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl CheckAdminRequest {
+    pub fn new() -> CheckAdminRequest {
+        ::std::default::Default::default()
+    }
+}
+
+impl ::protobuf::Message for CheckAdminRequest {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> CheckAdminRequest {
+        CheckAdminRequest::new()
+    }
+
+    fn default_instance() -> &'static CheckAdminRequest {
+        static mut instance: ::protobuf::lazy::Lazy<CheckAdminRequest> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const CheckAdminRequest,
+        };
+        unsafe {
+            instance.get(CheckAdminRequest::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for CheckAdminRequest {
+    fn clear(&mut self) {
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for CheckAdminRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+    }
+}
+impl ::std::fmt::Debug for CheckAdminRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        Ok(())
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for CheckAdminRequest {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct CheckAdminResponse {
+    // message fields
+    pub error: ::protobuf::SingularPtrField<Error>,
+    pub region: ::protobuf::SingularPtrField<super::metapb::Region>,
+    pub has_pending_admin: bool,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a CheckAdminResponse {
+    fn default() -> &'a CheckAdminResponse {
+        <CheckAdminResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl CheckAdminResponse {
+    pub fn new() -> CheckAdminResponse {
+        ::std::default::Default::default()
+    }
+
+    // .backup.Error error = 1;
+
+
+    pub fn get_error(&self) -> &Error {
+        self.error.as_ref().unwrap_or_else(|| Error::default_instance())
+    }
+    pub fn clear_error(&mut self) {
+        self.error.clear();
+    }
+
+    pub fn has_error(&self) -> bool {
+        self.error.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_error(&mut self, v: Error) {
+        self.error = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_error(&mut self) -> &mut Error {
+        if self.error.is_none() {
+            self.error.set_default();
+        }
+        self.error.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_error(&mut self) -> Error {
+        self.error.take().unwrap_or_else(|| Error::new())
+    }
+
+    // .metapb.Region region = 2;
+
+
+    pub fn get_region(&self) -> &super::metapb::Region {
+        self.region.as_ref().unwrap_or_else(|| super::metapb::Region::default_instance())
+    }
+    pub fn clear_region(&mut self) {
+        self.region.clear();
+    }
+
+    pub fn has_region(&self) -> bool {
+        self.region.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region(&mut self, v: super::metapb::Region) {
+        self.region = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_region(&mut self) -> &mut super::metapb::Region {
+        if self.region.is_none() {
+            self.region.set_default();
+        }
+        self.region.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_region(&mut self) -> super::metapb::Region {
+        self.region.take().unwrap_or_else(|| super::metapb::Region::new())
+    }
+
+    // bool has_pending_admin = 3;
+
+
+    pub fn get_has_pending_admin(&self) -> bool {
+        self.has_pending_admin
+    }
+    pub fn clear_has_pending_admin(&mut self) {
+        self.has_pending_admin = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_has_pending_admin(&mut self, v: bool) {
+        self.has_pending_admin = v;
+    }
+}
+
+impl ::protobuf::Message for CheckAdminResponse {
+    fn is_initialized(&self) -> bool {
+        for v in &self.error {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.region {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.error)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.region)?;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.has_pending_admin = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.error.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if let Some(ref v) = self.region.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if self.has_pending_admin != false {
+            my_size += 2;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.error.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if let Some(ref v) = self.region.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if self.has_pending_admin != false {
+            os.write_bool(3, self.has_pending_admin)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> CheckAdminResponse {
+        CheckAdminResponse::new()
+    }
+
+    fn default_instance() -> &'static CheckAdminResponse {
+        static mut instance: ::protobuf::lazy::Lazy<CheckAdminResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const CheckAdminResponse,
+        };
+        unsafe {
+            instance.get(CheckAdminResponse::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for CheckAdminResponse {
+    fn clear(&mut self) {
+        self.error.clear();
+        self.region.clear();
+        self.has_pending_admin = false;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for CheckAdminResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.error, "error", buf);
+        ::protobuf::PbPrint::fmt(&self.region, "region", buf);
+        ::protobuf::PbPrint::fmt(&self.has_pending_admin, "has_pending_admin", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for CheckAdminResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.error, "error", &mut s);
+        ::protobuf::PbPrint::fmt(&self.region, "region", &mut s);
+        ::protobuf::PbPrint::fmt(&self.has_pending_admin, "has_pending_admin", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for CheckAdminResponse {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct ExternalStorageRestoreRequest {
     // message fields
     pub storage_backend: ::protobuf::SingularPtrField<StorageBackend>,
@@ -8333,10 +8849,12 @@ impl ::protobuf::reflect::ProtobufValue for ExternalStorageSaveResponse {
 pub struct Metadata {
     // message fields
     pub files: ::protobuf::RepeatedField<DataFileInfo>,
+    pub file_groups: ::protobuf::RepeatedField<DataFileGroup>,
     pub store_id: i64,
     pub resolved_ts: u64,
     pub max_ts: u64,
     pub min_ts: u64,
+    pub meta_version: MetaVersion,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -8376,6 +8894,31 @@ impl Metadata {
     // Take field
     pub fn take_files(&mut self) -> ::protobuf::RepeatedField<DataFileInfo> {
         ::std::mem::replace(&mut self.files, ::protobuf::RepeatedField::new())
+    }
+
+    // repeated .backup.DataFileGroup file_groups = 6;
+
+
+    pub fn get_file_groups(&self) -> &[DataFileGroup] {
+        &self.file_groups
+    }
+    pub fn clear_file_groups(&mut self) {
+        self.file_groups.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_file_groups(&mut self, v: ::protobuf::RepeatedField<DataFileGroup>) {
+        self.file_groups = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_file_groups(&mut self) -> &mut ::protobuf::RepeatedField<DataFileGroup> {
+        &mut self.file_groups
+    }
+
+    // Take field
+    pub fn take_file_groups(&mut self) -> ::protobuf::RepeatedField<DataFileGroup> {
+        ::std::mem::replace(&mut self.file_groups, ::protobuf::RepeatedField::new())
     }
 
     // int64 store_id = 2;
@@ -8437,11 +8980,31 @@ impl Metadata {
     pub fn set_min_ts(&mut self, v: u64) {
         self.min_ts = v;
     }
+
+    // .backup.MetaVersion meta_version = 7;
+
+
+    pub fn get_meta_version(&self) -> MetaVersion {
+        self.meta_version
+    }
+    pub fn clear_meta_version(&mut self) {
+        self.meta_version = MetaVersion::V1;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_meta_version(&mut self, v: MetaVersion) {
+        self.meta_version = v;
+    }
 }
 
 impl ::protobuf::Message for Metadata {
     fn is_initialized(&self) -> bool {
         for v in &self.files {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.file_groups {
             if !v.is_initialized() {
                 return false;
             }
@@ -8455,6 +9018,9 @@ impl ::protobuf::Message for Metadata {
             match field_number {
                 1 => {
                     ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.files)?;
+                },
+                6 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.file_groups)?;
                 },
                 2 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -8484,6 +9050,9 @@ impl ::protobuf::Message for Metadata {
                     let tmp = is.read_uint64()?;
                     self.min_ts = tmp;
                 },
+                7 => {
+                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.meta_version = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -8500,6 +9069,10 @@ impl ::protobuf::Message for Metadata {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
+        for value in &self.file_groups {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
         if self.store_id != 0 {
             my_size += ::protobuf::rt::value_size(2, self.store_id, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -8512,6 +9085,9 @@ impl ::protobuf::Message for Metadata {
         if self.min_ts != 0 {
             my_size += ::protobuf::rt::value_size(5, self.min_ts, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.meta_version != MetaVersion::V1 {
+            my_size += ::protobuf::rt::enum_size(7, self.meta_version);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -8520,6 +9096,11 @@ impl ::protobuf::Message for Metadata {
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         for v in &self.files {
             os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        for v in &self.file_groups {
+            os.write_tag(6, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         };
@@ -8534,6 +9115,9 @@ impl ::protobuf::Message for Metadata {
         }
         if self.min_ts != 0 {
             os.write_uint64(5, self.min_ts)?;
+        }
+        if self.meta_version != MetaVersion::V1 {
+            os.write_enum(7, self.meta_version.value())?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -8583,10 +9167,12 @@ impl ::protobuf::Message for Metadata {
 impl ::protobuf::Clear for Metadata {
     fn clear(&mut self) {
         self.files.clear();
+        self.file_groups.clear();
         self.store_id = 0;
         self.resolved_ts = 0;
         self.max_ts = 0;
         self.min_ts = 0;
+        self.meta_version = MetaVersion::V1;
         self.unknown_fields.clear();
     }
 }
@@ -8597,10 +9183,12 @@ impl ::protobuf::PbPrint for Metadata {
         ::protobuf::push_message_start(name, buf);
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.files, "files", buf);
+        ::protobuf::PbPrint::fmt(&self.file_groups, "file_groups", buf);
         ::protobuf::PbPrint::fmt(&self.store_id, "store_id", buf);
         ::protobuf::PbPrint::fmt(&self.resolved_ts, "resolved_ts", buf);
         ::protobuf::PbPrint::fmt(&self.max_ts, "max_ts", buf);
         ::protobuf::PbPrint::fmt(&self.min_ts, "min_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.meta_version, "meta_version", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -8612,15 +9200,353 @@ impl ::std::fmt::Debug for Metadata {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.files, "files", &mut s);
+        ::protobuf::PbPrint::fmt(&self.file_groups, "file_groups", &mut s);
         ::protobuf::PbPrint::fmt(&self.store_id, "store_id", &mut s);
         ::protobuf::PbPrint::fmt(&self.resolved_ts, "resolved_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.max_ts, "max_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.min_ts, "min_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.meta_version, "meta_version", &mut s);
         write!(f, "{}", s)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Metadata {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct DataFileGroup {
+    // message fields
+    pub path: ::std::string::String,
+    pub data_files_info: ::protobuf::RepeatedField<DataFileInfo>,
+    pub min_ts: u64,
+    pub max_ts: u64,
+    pub min_resolved_ts: u64,
+    pub length: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a DataFileGroup {
+    fn default() -> &'a DataFileGroup {
+        <DataFileGroup as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl DataFileGroup {
+    pub fn new() -> DataFileGroup {
+        ::std::default::Default::default()
+    }
+
+    // string path = 1;
+
+
+    pub fn get_path(&self) -> &str {
+        &self.path
+    }
+    pub fn clear_path(&mut self) {
+        self.path.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_path(&mut self, v: ::std::string::String) {
+        self.path = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_path(&mut self) -> &mut ::std::string::String {
+        &mut self.path
+    }
+
+    // Take field
+    pub fn take_path(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.path, ::std::string::String::new())
+    }
+
+    // repeated .backup.DataFileInfo data_files_info = 2;
+
+
+    pub fn get_data_files_info(&self) -> &[DataFileInfo] {
+        &self.data_files_info
+    }
+    pub fn clear_data_files_info(&mut self) {
+        self.data_files_info.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_data_files_info(&mut self, v: ::protobuf::RepeatedField<DataFileInfo>) {
+        self.data_files_info = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_data_files_info(&mut self) -> &mut ::protobuf::RepeatedField<DataFileInfo> {
+        &mut self.data_files_info
+    }
+
+    // Take field
+    pub fn take_data_files_info(&mut self) -> ::protobuf::RepeatedField<DataFileInfo> {
+        ::std::mem::replace(&mut self.data_files_info, ::protobuf::RepeatedField::new())
+    }
+
+    // uint64 min_ts = 3;
+
+
+    pub fn get_min_ts(&self) -> u64 {
+        self.min_ts
+    }
+    pub fn clear_min_ts(&mut self) {
+        self.min_ts = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_min_ts(&mut self, v: u64) {
+        self.min_ts = v;
+    }
+
+    // uint64 max_ts = 4;
+
+
+    pub fn get_max_ts(&self) -> u64 {
+        self.max_ts
+    }
+    pub fn clear_max_ts(&mut self) {
+        self.max_ts = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_max_ts(&mut self, v: u64) {
+        self.max_ts = v;
+    }
+
+    // uint64 min_resolved_ts = 5;
+
+
+    pub fn get_min_resolved_ts(&self) -> u64 {
+        self.min_resolved_ts
+    }
+    pub fn clear_min_resolved_ts(&mut self) {
+        self.min_resolved_ts = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_min_resolved_ts(&mut self, v: u64) {
+        self.min_resolved_ts = v;
+    }
+
+    // uint64 length = 6;
+
+
+    pub fn get_length(&self) -> u64 {
+        self.length
+    }
+    pub fn clear_length(&mut self) {
+        self.length = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_length(&mut self, v: u64) {
+        self.length = v;
+    }
+}
+
+impl ::protobuf::Message for DataFileGroup {
+    fn is_initialized(&self) -> bool {
+        for v in &self.data_files_info {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.path)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.data_files_info)?;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.min_ts = tmp;
+                },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.max_ts = tmp;
+                },
+                5 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.min_resolved_ts = tmp;
+                },
+                6 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.length = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.path.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.path);
+        }
+        for value in &self.data_files_info {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
+        if self.min_ts != 0 {
+            my_size += ::protobuf::rt::value_size(3, self.min_ts, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.max_ts != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.max_ts, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.min_resolved_ts != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.min_resolved_ts, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.length != 0 {
+            my_size += ::protobuf::rt::value_size(6, self.length, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.path.is_empty() {
+            os.write_string(1, &self.path)?;
+        }
+        for v in &self.data_files_info {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        if self.min_ts != 0 {
+            os.write_uint64(3, self.min_ts)?;
+        }
+        if self.max_ts != 0 {
+            os.write_uint64(4, self.max_ts)?;
+        }
+        if self.min_resolved_ts != 0 {
+            os.write_uint64(5, self.min_resolved_ts)?;
+        }
+        if self.length != 0 {
+            os.write_uint64(6, self.length)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> DataFileGroup {
+        DataFileGroup::new()
+    }
+
+    fn default_instance() -> &'static DataFileGroup {
+        static mut instance: ::protobuf::lazy::Lazy<DataFileGroup> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const DataFileGroup,
+        };
+        unsafe {
+            instance.get(DataFileGroup::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for DataFileGroup {
+    fn clear(&mut self) {
+        self.path.clear();
+        self.data_files_info.clear();
+        self.min_ts = 0;
+        self.max_ts = 0;
+        self.min_resolved_ts = 0;
+        self.length = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for DataFileGroup {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.path, "path", buf);
+        ::protobuf::PbPrint::fmt(&self.data_files_info, "data_files_info", buf);
+        ::protobuf::PbPrint::fmt(&self.min_ts, "min_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.max_ts, "max_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.min_resolved_ts, "min_resolved_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.length, "length", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for DataFileGroup {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.path, "path", &mut s);
+        ::protobuf::PbPrint::fmt(&self.data_files_info, "data_files_info", &mut s);
+        ::protobuf::PbPrint::fmt(&self.min_ts, "min_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.max_ts, "max_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.min_resolved_ts, "min_resolved_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.length, "length", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for DataFileGroup {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
@@ -8644,6 +9570,9 @@ pub struct DataFileInfo {
     pub table_id: i64,
     pub length: u64,
     pub min_begin_ts_in_default_cf: u64,
+    pub range_offset: u64,
+    pub range_length: u64,
+    pub compression_type: CompressionType,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -8939,6 +9868,51 @@ impl DataFileInfo {
     pub fn set_min_begin_ts_in_default_cf(&mut self, v: u64) {
         self.min_begin_ts_in_default_cf = v;
     }
+
+    // uint64 range_offset = 16;
+
+
+    pub fn get_range_offset(&self) -> u64 {
+        self.range_offset
+    }
+    pub fn clear_range_offset(&mut self) {
+        self.range_offset = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range_offset(&mut self, v: u64) {
+        self.range_offset = v;
+    }
+
+    // uint64 range_length = 17;
+
+
+    pub fn get_range_length(&self) -> u64 {
+        self.range_length
+    }
+    pub fn clear_range_length(&mut self) {
+        self.range_length = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range_length(&mut self, v: u64) {
+        self.range_length = v;
+    }
+
+    // .backup.CompressionType compression_type = 18;
+
+
+    pub fn get_compression_type(&self) -> CompressionType {
+        self.compression_type
+    }
+    pub fn clear_compression_type(&mut self) {
+        self.compression_type = CompressionType::Unknown;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_compression_type(&mut self, v: CompressionType) {
+        self.compression_type = v;
+    }
 }
 
 impl ::protobuf::Message for DataFileInfo {
@@ -9031,6 +10005,23 @@ impl ::protobuf::Message for DataFileInfo {
                     let tmp = is.read_uint64()?;
                     self.min_begin_ts_in_default_cf = tmp;
                 },
+                16 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.range_offset = tmp;
+                },
+                17 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.range_length = tmp;
+                },
+                18 => {
+                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.compression_type = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -9088,6 +10079,15 @@ impl ::protobuf::Message for DataFileInfo {
         if self.min_begin_ts_in_default_cf != 0 {
             my_size += ::protobuf::rt::value_size(15, self.min_begin_ts_in_default_cf, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.range_offset != 0 {
+            my_size += ::protobuf::rt::value_size(16, self.range_offset, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.range_length != 0 {
+            my_size += ::protobuf::rt::value_size(17, self.range_length, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.compression_type != CompressionType::Unknown {
+            my_size += ::protobuf::rt::enum_size(18, self.compression_type);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -9138,6 +10138,15 @@ impl ::protobuf::Message for DataFileInfo {
         }
         if self.min_begin_ts_in_default_cf != 0 {
             os.write_uint64(15, self.min_begin_ts_in_default_cf)?;
+        }
+        if self.range_offset != 0 {
+            os.write_uint64(16, self.range_offset)?;
+        }
+        if self.range_length != 0 {
+            os.write_uint64(17, self.range_length)?;
+        }
+        if self.compression_type != CompressionType::Unknown {
+            os.write_enum(18, self.compression_type.value())?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -9201,6 +10210,9 @@ impl ::protobuf::Clear for DataFileInfo {
         self.table_id = 0;
         self.length = 0;
         self.min_begin_ts_in_default_cf = 0;
+        self.range_offset = 0;
+        self.range_length = 0;
+        self.compression_type = CompressionType::Unknown;
         self.unknown_fields.clear();
     }
 }
@@ -9225,6 +10237,9 @@ impl ::protobuf::PbPrint for DataFileInfo {
         ::protobuf::PbPrint::fmt(&self.table_id, "table_id", buf);
         ::protobuf::PbPrint::fmt(&self.length, "length", buf);
         ::protobuf::PbPrint::fmt(&self.min_begin_ts_in_default_cf, "min_begin_ts_in_default_cf", buf);
+        ::protobuf::PbPrint::fmt(&self.range_offset, "range_offset", buf);
+        ::protobuf::PbPrint::fmt(&self.range_length, "range_length", buf);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -9250,6 +10265,9 @@ impl ::std::fmt::Debug for DataFileInfo {
         ::protobuf::PbPrint::fmt(&self.table_id, "table_id", &mut s);
         ::protobuf::PbPrint::fmt(&self.length, "length", &mut s);
         ::protobuf::PbPrint::fmt(&self.min_begin_ts_in_default_cf, "min_begin_ts_in_default_cf", &mut s);
+        ::protobuf::PbPrint::fmt(&self.range_offset, "range_offset", &mut s);
+        ::protobuf::PbPrint::fmt(&self.range_length, "range_length", &mut s);
+        ::protobuf::PbPrint::fmt(&self.compression_type, "compression_type", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -9580,6 +10598,60 @@ impl ::std::default::Default for CompressionType {
 }
 
 impl ::protobuf::reflect::ProtobufValue for CompressionType {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
+    }
+}
+
+#[derive(Clone,PartialEq,Eq,Debug,Hash)]
+pub enum MetaVersion {
+    V1 = 0,
+    V2 = 1,
+}
+
+impl ::protobuf::ProtobufEnum for MetaVersion {
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<MetaVersion> {
+        match value {
+            0 => ::std::option::Option::Some(MetaVersion::V1),
+            1 => ::std::option::Option::Some(MetaVersion::V2),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn values() -> &'static [Self] {
+        static values: &'static [MetaVersion] = &[
+            MetaVersion::V1,
+            MetaVersion::V2,
+        ];
+        values
+    }
+}
+
+impl ::std::marker::Copy for MetaVersion {
+}
+
+impl ::protobuf::PbPrint for MetaVersion {
+    fn fmt(&self, name: &str, buf: &mut String) {
+        use std::fmt::Write;
+        if *self == MetaVersion::default() {
+            return;
+        }
+        ::protobuf::push_field_start(name, buf);
+        write!(buf, "{:?}", self).unwrap();
+    }
+}
+
+impl ::std::default::Default for MetaVersion {
+    fn default() -> Self {
+        MetaVersion::V1
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for MetaVersion {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
     }

@@ -23,6 +23,13 @@ const METHOD_BACKUP_BACKUP: ::grpcio::Method<super::brpb::BackupRequest, super::
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_BACKUP_CHECK_PENDING_ADMIN_OP: ::grpcio::Method<super::brpb::CheckAdminRequest, super::brpb::CheckAdminResponse> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::ServerStreaming,
+    name: "/backup.Backup/CheckPendingAdminOp",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 #[derive(Clone)]
 pub struct BackupClient {
     client: ::grpcio::Client,
@@ -42,6 +49,14 @@ impl BackupClient {
     pub fn backup(&self, req: &super::brpb::BackupRequest) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::brpb::BackupResponse>> {
         self.backup_opt(req, ::grpcio::CallOption::default())
     }
+
+    pub fn check_pending_admin_op_opt(&self, req: &super::brpb::CheckAdminRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::brpb::CheckAdminResponse>> {
+        self.client.server_streaming(&METHOD_BACKUP_CHECK_PENDING_ADMIN_OP, req, opt)
+    }
+
+    pub fn check_pending_admin_op(&self, req: &super::brpb::CheckAdminRequest) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::brpb::CheckAdminResponse>> {
+        self.check_pending_admin_op_opt(req, ::grpcio::CallOption::default())
+    }
     pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
@@ -51,13 +66,20 @@ pub trait Backup {
     fn backup(&mut self, ctx: ::grpcio::RpcContext, _req: super::brpb::BackupRequest, sink: ::grpcio::ServerStreamingSink<super::brpb::BackupResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
+    fn check_pending_admin_op(&mut self, ctx: ::grpcio::RpcContext, _req: super::brpb::CheckAdminRequest, sink: ::grpcio::ServerStreamingSink<super::brpb::CheckAdminResponse>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
 }
 
 pub fn create_backup<S: Backup + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
-    let mut instance = s;
+    let mut instance = s.clone();
     builder = builder.add_server_streaming_handler(&METHOD_BACKUP_BACKUP, move |ctx, req, resp| {
         instance.backup(ctx, req, resp)
+    });
+    let mut instance = s;
+    builder = builder.add_server_streaming_handler(&METHOD_BACKUP_CHECK_PENDING_ADMIN_OP, move |ctx, req, resp| {
+        instance.check_pending_admin_op(ctx, req, resp)
     });
     builder.build()
 }

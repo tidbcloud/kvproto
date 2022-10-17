@@ -3846,6 +3846,392 @@ impl ::protobuf::reflect::ProtobufValue for AllocIdResponse {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct IsSnapshotRecoveringRequest {
+    // message fields
+    pub header: ::protobuf::SingularPtrField<RequestHeader>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a IsSnapshotRecoveringRequest {
+    fn default() -> &'a IsSnapshotRecoveringRequest {
+        <IsSnapshotRecoveringRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl IsSnapshotRecoveringRequest {
+    pub fn new() -> IsSnapshotRecoveringRequest {
+        ::std::default::Default::default()
+    }
+
+    // .pdpb.RequestHeader header = 1;
+
+
+    pub fn get_header(&self) -> &RequestHeader {
+        self.header.as_ref().unwrap_or_else(|| RequestHeader::default_instance())
+    }
+    pub fn clear_header(&mut self) {
+        self.header.clear();
+    }
+
+    pub fn has_header(&self) -> bool {
+        self.header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_header(&mut self, v: RequestHeader) {
+        self.header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_header(&mut self) -> &mut RequestHeader {
+        if self.header.is_none() {
+            self.header.set_default();
+        }
+        self.header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_header(&mut self) -> RequestHeader {
+        self.header.take().unwrap_or_else(|| RequestHeader::new())
+    }
+}
+
+impl ::protobuf::Message for IsSnapshotRecoveringRequest {
+    fn is_initialized(&self) -> bool {
+        for v in &self.header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.header.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> IsSnapshotRecoveringRequest {
+        IsSnapshotRecoveringRequest::new()
+    }
+
+    fn default_instance() -> &'static IsSnapshotRecoveringRequest {
+        static mut instance: ::protobuf::lazy::Lazy<IsSnapshotRecoveringRequest> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const IsSnapshotRecoveringRequest,
+        };
+        unsafe {
+            instance.get(IsSnapshotRecoveringRequest::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for IsSnapshotRecoveringRequest {
+    fn clear(&mut self) {
+        self.header.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for IsSnapshotRecoveringRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for IsSnapshotRecoveringRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for IsSnapshotRecoveringRequest {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct IsSnapshotRecoveringResponse {
+    // message fields
+    pub header: ::protobuf::SingularPtrField<ResponseHeader>,
+    pub marked: bool,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a IsSnapshotRecoveringResponse {
+    fn default() -> &'a IsSnapshotRecoveringResponse {
+        <IsSnapshotRecoveringResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl IsSnapshotRecoveringResponse {
+    pub fn new() -> IsSnapshotRecoveringResponse {
+        ::std::default::Default::default()
+    }
+
+    // .pdpb.ResponseHeader header = 1;
+
+
+    pub fn get_header(&self) -> &ResponseHeader {
+        self.header.as_ref().unwrap_or_else(|| ResponseHeader::default_instance())
+    }
+    pub fn clear_header(&mut self) {
+        self.header.clear();
+    }
+
+    pub fn has_header(&self) -> bool {
+        self.header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_header(&mut self, v: ResponseHeader) {
+        self.header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_header(&mut self) -> &mut ResponseHeader {
+        if self.header.is_none() {
+            self.header.set_default();
+        }
+        self.header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_header(&mut self) -> ResponseHeader {
+        self.header.take().unwrap_or_else(|| ResponseHeader::new())
+    }
+
+    // bool marked = 2;
+
+
+    pub fn get_marked(&self) -> bool {
+        self.marked
+    }
+    pub fn clear_marked(&mut self) {
+        self.marked = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_marked(&mut self, v: bool) {
+        self.marked = v;
+    }
+}
+
+impl ::protobuf::Message for IsSnapshotRecoveringResponse {
+    fn is_initialized(&self) -> bool {
+        for v in &self.header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.marked = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if self.marked != false {
+            my_size += 2;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.header.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if self.marked != false {
+            os.write_bool(2, self.marked)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> IsSnapshotRecoveringResponse {
+        IsSnapshotRecoveringResponse::new()
+    }
+
+    fn default_instance() -> &'static IsSnapshotRecoveringResponse {
+        static mut instance: ::protobuf::lazy::Lazy<IsSnapshotRecoveringResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const IsSnapshotRecoveringResponse,
+        };
+        unsafe {
+            instance.get(IsSnapshotRecoveringResponse::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for IsSnapshotRecoveringResponse {
+    fn clear(&mut self) {
+        self.header.clear();
+        self.marked = false;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for IsSnapshotRecoveringResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        ::protobuf::PbPrint::fmt(&self.marked, "marked", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for IsSnapshotRecoveringResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        ::protobuf::PbPrint::fmt(&self.marked, "marked", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for IsSnapshotRecoveringResponse {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct GetStoreRequest {
     // message fields
     pub header: ::protobuf::SingularPtrField<RequestHeader>,
@@ -14212,6 +14598,7 @@ pub struct StoreStats {
     pub slow_score: u64,
     pub damaged_regions_id: ::std::vec::Vec<u64>,
     pub is_apply_busy: bool,
+    pub snapshot_stats: ::protobuf::RepeatedField<SnapshotStat>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -14683,6 +15070,31 @@ impl StoreStats {
     pub fn set_is_apply_busy(&mut self, v: bool) {
         self.is_apply_busy = v;
     }
+
+    // repeated .pdpb.SnapshotStat snapshot_stats = 25;
+
+
+    pub fn get_snapshot_stats(&self) -> &[SnapshotStat] {
+        &self.snapshot_stats
+    }
+    pub fn clear_snapshot_stats(&mut self) {
+        self.snapshot_stats.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_snapshot_stats(&mut self, v: ::protobuf::RepeatedField<SnapshotStat>) {
+        self.snapshot_stats = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_snapshot_stats(&mut self) -> &mut ::protobuf::RepeatedField<SnapshotStat> {
+        &mut self.snapshot_stats
+    }
+
+    // Take field
+    pub fn take_snapshot_stats(&mut self) -> ::protobuf::RepeatedField<SnapshotStat> {
+        ::std::mem::replace(&mut self.snapshot_stats, ::protobuf::RepeatedField::new())
+    }
 }
 
 impl ::protobuf::Message for StoreStats {
@@ -14718,6 +15130,11 @@ impl ::protobuf::Message for StoreStats {
             }
         };
         for v in &self.query_stats {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.snapshot_stats {
             if !v.is_initialized() {
                 return false;
             }
@@ -14865,6 +15282,9 @@ impl ::protobuf::Message for StoreStats {
                     let tmp = is.read_bool()?;
                     self.is_apply_busy = tmp;
                 },
+                25 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.snapshot_stats)?;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -14956,6 +15376,10 @@ impl ::protobuf::Message for StoreStats {
         if self.is_apply_busy != false {
             my_size += 3;
         }
+        for value in &self.snapshot_stats {
+            let len = value.compute_size();
+            my_size += 2 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -15048,6 +15472,11 @@ impl ::protobuf::Message for StoreStats {
         if self.is_apply_busy != false {
             os.write_bool(24, self.is_apply_busy)?;
         }
+        for v in &self.snapshot_stats {
+            os.write_tag(25, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -15119,6 +15548,7 @@ impl ::protobuf::Clear for StoreStats {
         self.slow_score = 0;
         self.damaged_regions_id.clear();
         self.is_apply_busy = false;
+        self.snapshot_stats.clear();
         self.unknown_fields.clear();
     }
 }
@@ -15152,6 +15582,7 @@ impl ::protobuf::PbPrint for StoreStats {
         ::protobuf::PbPrint::fmt(&self.slow_score, "slow_score", buf);
         ::protobuf::PbPrint::fmt(&self.damaged_regions_id, "damaged_regions_id", buf);
         ::protobuf::PbPrint::fmt(&self.is_apply_busy, "is_apply_busy", buf);
+        ::protobuf::PbPrint::fmt(&self.snapshot_stats, "snapshot_stats", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -15186,11 +15617,295 @@ impl ::std::fmt::Debug for StoreStats {
         ::protobuf::PbPrint::fmt(&self.slow_score, "slow_score", &mut s);
         ::protobuf::PbPrint::fmt(&self.damaged_regions_id, "damaged_regions_id", &mut s);
         ::protobuf::PbPrint::fmt(&self.is_apply_busy, "is_apply_busy", &mut s);
+        ::protobuf::PbPrint::fmt(&self.snapshot_stats, "snapshot_stats", &mut s);
         write!(f, "{}", s)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for StoreStats {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct SnapshotStat {
+    // message fields
+    pub region_id: u64,
+    pub generate_duration_sec: u64,
+    pub send_duration_sec: u64,
+    pub total_duration_sec: u64,
+    pub transport_size: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a SnapshotStat {
+    fn default() -> &'a SnapshotStat {
+        <SnapshotStat as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl SnapshotStat {
+    pub fn new() -> SnapshotStat {
+        ::std::default::Default::default()
+    }
+
+    // uint64 region_id = 1;
+
+
+    pub fn get_region_id(&self) -> u64 {
+        self.region_id
+    }
+    pub fn clear_region_id(&mut self) {
+        self.region_id = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region_id(&mut self, v: u64) {
+        self.region_id = v;
+    }
+
+    // uint64 generate_duration_sec = 2;
+
+
+    pub fn get_generate_duration_sec(&self) -> u64 {
+        self.generate_duration_sec
+    }
+    pub fn clear_generate_duration_sec(&mut self) {
+        self.generate_duration_sec = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_generate_duration_sec(&mut self, v: u64) {
+        self.generate_duration_sec = v;
+    }
+
+    // uint64 send_duration_sec = 3;
+
+
+    pub fn get_send_duration_sec(&self) -> u64 {
+        self.send_duration_sec
+    }
+    pub fn clear_send_duration_sec(&mut self) {
+        self.send_duration_sec = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_send_duration_sec(&mut self, v: u64) {
+        self.send_duration_sec = v;
+    }
+
+    // uint64 total_duration_sec = 4;
+
+
+    pub fn get_total_duration_sec(&self) -> u64 {
+        self.total_duration_sec
+    }
+    pub fn clear_total_duration_sec(&mut self) {
+        self.total_duration_sec = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_total_duration_sec(&mut self, v: u64) {
+        self.total_duration_sec = v;
+    }
+
+    // uint64 transport_size = 5;
+
+
+    pub fn get_transport_size(&self) -> u64 {
+        self.transport_size
+    }
+    pub fn clear_transport_size(&mut self) {
+        self.transport_size = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_transport_size(&mut self, v: u64) {
+        self.transport_size = v;
+    }
+}
+
+impl ::protobuf::Message for SnapshotStat {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.region_id = tmp;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.generate_duration_sec = tmp;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.send_duration_sec = tmp;
+                },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.total_duration_sec = tmp;
+                },
+                5 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.transport_size = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if self.region_id != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.region_id, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.generate_duration_sec != 0 {
+            my_size += ::protobuf::rt::value_size(2, self.generate_duration_sec, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.send_duration_sec != 0 {
+            my_size += ::protobuf::rt::value_size(3, self.send_duration_sec, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.total_duration_sec != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.total_duration_sec, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.transport_size != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.transport_size, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if self.region_id != 0 {
+            os.write_uint64(1, self.region_id)?;
+        }
+        if self.generate_duration_sec != 0 {
+            os.write_uint64(2, self.generate_duration_sec)?;
+        }
+        if self.send_duration_sec != 0 {
+            os.write_uint64(3, self.send_duration_sec)?;
+        }
+        if self.total_duration_sec != 0 {
+            os.write_uint64(4, self.total_duration_sec)?;
+        }
+        if self.transport_size != 0 {
+            os.write_uint64(5, self.transport_size)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> SnapshotStat {
+        SnapshotStat::new()
+    }
+
+    fn default_instance() -> &'static SnapshotStat {
+        static mut instance: ::protobuf::lazy::Lazy<SnapshotStat> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const SnapshotStat,
+        };
+        unsafe {
+            instance.get(SnapshotStat::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for SnapshotStat {
+    fn clear(&mut self) {
+        self.region_id = 0;
+        self.generate_duration_sec = 0;
+        self.send_duration_sec = 0;
+        self.total_duration_sec = 0;
+        self.transport_size = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for SnapshotStat {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", buf);
+        ::protobuf::PbPrint::fmt(&self.generate_duration_sec, "generate_duration_sec", buf);
+        ::protobuf::PbPrint::fmt(&self.send_duration_sec, "send_duration_sec", buf);
+        ::protobuf::PbPrint::fmt(&self.total_duration_sec, "total_duration_sec", buf);
+        ::protobuf::PbPrint::fmt(&self.transport_size, "transport_size", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for SnapshotStat {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.region_id, "region_id", &mut s);
+        ::protobuf::PbPrint::fmt(&self.generate_duration_sec, "generate_duration_sec", &mut s);
+        ::protobuf::PbPrint::fmt(&self.send_duration_sec, "send_duration_sec", &mut s);
+        ::protobuf::PbPrint::fmt(&self.total_duration_sec, "total_duration_sec", &mut s);
+        ::protobuf::PbPrint::fmt(&self.transport_size, "transport_size", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for SnapshotStat {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }

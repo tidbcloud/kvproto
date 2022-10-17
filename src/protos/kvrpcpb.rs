@@ -1331,7 +1331,7 @@ pub struct PrewriteRequest {
     pub start_version: u64,
     pub lock_ttl: u64,
     pub skip_constraint_check: bool,
-    pub is_pessimistic_lock: ::std::vec::Vec<bool>,
+    pub pessimistic_actions: ::std::vec::Vec<PrewriteRequestPessimisticAction>,
     pub txn_size: u64,
     pub for_update_ts: u64,
     pub min_commit_ts: u64,
@@ -1485,29 +1485,29 @@ impl PrewriteRequest {
         self.skip_constraint_check = v;
     }
 
-    // repeated bool is_pessimistic_lock = 7;
+    // repeated .kvrpcpb.PrewriteRequest.PessimisticAction pessimistic_actions = 7;
 
 
-    pub fn get_is_pessimistic_lock(&self) -> &[bool] {
-        &self.is_pessimistic_lock
+    pub fn get_pessimistic_actions(&self) -> &[PrewriteRequestPessimisticAction] {
+        &self.pessimistic_actions
     }
-    pub fn clear_is_pessimistic_lock(&mut self) {
-        self.is_pessimistic_lock.clear();
+    pub fn clear_pessimistic_actions(&mut self) {
+        self.pessimistic_actions.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_is_pessimistic_lock(&mut self, v: ::std::vec::Vec<bool>) {
-        self.is_pessimistic_lock = v;
+    pub fn set_pessimistic_actions(&mut self, v: ::std::vec::Vec<PrewriteRequestPessimisticAction>) {
+        self.pessimistic_actions = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_is_pessimistic_lock(&mut self) -> &mut ::std::vec::Vec<bool> {
-        &mut self.is_pessimistic_lock
+    pub fn mut_pessimistic_actions(&mut self) -> &mut ::std::vec::Vec<PrewriteRequestPessimisticAction> {
+        &mut self.pessimistic_actions
     }
 
     // Take field
-    pub fn take_is_pessimistic_lock(&mut self) -> ::std::vec::Vec<bool> {
-        ::std::mem::replace(&mut self.is_pessimistic_lock, ::std::vec::Vec::new())
+    pub fn take_pessimistic_actions(&mut self) -> ::std::vec::Vec<PrewriteRequestPessimisticAction> {
+        ::std::mem::replace(&mut self.pessimistic_actions, ::std::vec::Vec::new())
     }
 
     // uint64 txn_size = 8;
@@ -1691,7 +1691,7 @@ impl ::protobuf::Message for PrewriteRequest {
                     self.skip_constraint_check = tmp;
                 },
                 7 => {
-                    ::protobuf::rt::read_repeated_bool_into(wire_type, is, &mut self.is_pessimistic_lock)?;
+                    ::protobuf::rt::read_repeated_enum_with_unknown_fields_into(wire_type, is, &mut self.pessimistic_actions, 7, &mut self.unknown_fields)?
                 },
                 8 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -1773,7 +1773,9 @@ impl ::protobuf::Message for PrewriteRequest {
         if self.skip_constraint_check != false {
             my_size += 2;
         }
-        my_size += 2 * self.is_pessimistic_lock.len() as u32;
+        for value in &self.pessimistic_actions {
+            my_size += ::protobuf::rt::enum_size(7, *value);
+        };
         if self.txn_size != 0 {
             my_size += ::protobuf::rt::value_size(8, self.txn_size, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -1826,8 +1828,8 @@ impl ::protobuf::Message for PrewriteRequest {
         if self.skip_constraint_check != false {
             os.write_bool(6, self.skip_constraint_check)?;
         }
-        for v in &self.is_pessimistic_lock {
-            os.write_bool(7, *v)?;
+        for v in &self.pessimistic_actions {
+            os.write_enum(7, v.value())?;
         };
         if self.txn_size != 0 {
             os.write_uint64(8, self.txn_size)?;
@@ -1906,7 +1908,7 @@ impl ::protobuf::Clear for PrewriteRequest {
         self.start_version = 0;
         self.lock_ttl = 0;
         self.skip_constraint_check = false;
-        self.is_pessimistic_lock.clear();
+        self.pessimistic_actions.clear();
         self.txn_size = 0;
         self.for_update_ts = 0;
         self.min_commit_ts = 0;
@@ -1930,7 +1932,7 @@ impl ::protobuf::PbPrint for PrewriteRequest {
         ::protobuf::PbPrint::fmt(&self.start_version, "start_version", buf);
         ::protobuf::PbPrint::fmt(&self.lock_ttl, "lock_ttl", buf);
         ::protobuf::PbPrint::fmt(&self.skip_constraint_check, "skip_constraint_check", buf);
-        ::protobuf::PbPrint::fmt(&self.is_pessimistic_lock, "is_pessimistic_lock", buf);
+        ::protobuf::PbPrint::fmt(&self.pessimistic_actions, "pessimistic_actions", buf);
         ::protobuf::PbPrint::fmt(&self.txn_size, "txn_size", buf);
         ::protobuf::PbPrint::fmt(&self.for_update_ts, "for_update_ts", buf);
         ::protobuf::PbPrint::fmt(&self.min_commit_ts, "min_commit_ts", buf);
@@ -1955,7 +1957,7 @@ impl ::std::fmt::Debug for PrewriteRequest {
         ::protobuf::PbPrint::fmt(&self.start_version, "start_version", &mut s);
         ::protobuf::PbPrint::fmt(&self.lock_ttl, "lock_ttl", &mut s);
         ::protobuf::PbPrint::fmt(&self.skip_constraint_check, "skip_constraint_check", &mut s);
-        ::protobuf::PbPrint::fmt(&self.is_pessimistic_lock, "is_pessimistic_lock", &mut s);
+        ::protobuf::PbPrint::fmt(&self.pessimistic_actions, "pessimistic_actions", &mut s);
         ::protobuf::PbPrint::fmt(&self.txn_size, "txn_size", &mut s);
         ::protobuf::PbPrint::fmt(&self.for_update_ts, "for_update_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.min_commit_ts, "min_commit_ts", &mut s);
@@ -1971,6 +1973,63 @@ impl ::std::fmt::Debug for PrewriteRequest {
 impl ::protobuf::reflect::ProtobufValue for PrewriteRequest {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(Clone,PartialEq,Eq,Debug,Hash)]
+pub enum PrewriteRequestPessimisticAction {
+    SkipPessimisticCheck = 0,
+    DoPessimisticCheck = 1,
+    DoConstraintCheck = 2,
+}
+
+impl ::protobuf::ProtobufEnum for PrewriteRequestPessimisticAction {
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<PrewriteRequestPessimisticAction> {
+        match value {
+            0 => ::std::option::Option::Some(PrewriteRequestPessimisticAction::SkipPessimisticCheck),
+            1 => ::std::option::Option::Some(PrewriteRequestPessimisticAction::DoPessimisticCheck),
+            2 => ::std::option::Option::Some(PrewriteRequestPessimisticAction::DoConstraintCheck),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn values() -> &'static [Self] {
+        static values: &'static [PrewriteRequestPessimisticAction] = &[
+            PrewriteRequestPessimisticAction::SkipPessimisticCheck,
+            PrewriteRequestPessimisticAction::DoPessimisticCheck,
+            PrewriteRequestPessimisticAction::DoConstraintCheck,
+        ];
+        values
+    }
+}
+
+impl ::std::marker::Copy for PrewriteRequestPessimisticAction {
+}
+
+impl ::protobuf::PbPrint for PrewriteRequestPessimisticAction {
+    fn fmt(&self, name: &str, buf: &mut String) {
+        use std::fmt::Write;
+        if *self == PrewriteRequestPessimisticAction::default() {
+            return;
+        }
+        ::protobuf::push_field_start(name, buf);
+        write!(buf, "{:?}", self).unwrap();
+    }
+}
+
+impl ::std::default::Default for PrewriteRequestPessimisticAction {
+    fn default() -> Self {
+        PrewriteRequestPessimisticAction::SkipPessimisticCheck
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for PrewriteRequestPessimisticAction {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
     }
 }
 
@@ -2330,6 +2389,7 @@ pub struct PessimisticLockRequest {
     pub return_values: bool,
     pub min_commit_ts: u64,
     pub check_existence: bool,
+    pub lock_only_if_exists: bool,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -2564,6 +2624,21 @@ impl PessimisticLockRequest {
     pub fn set_check_existence(&mut self, v: bool) {
         self.check_existence = v;
     }
+
+    // bool lock_only_if_exists = 13;
+
+
+    pub fn get_lock_only_if_exists(&self) -> bool {
+        self.lock_only_if_exists
+    }
+    pub fn clear_lock_only_if_exists(&mut self) {
+        self.lock_only_if_exists = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_lock_only_if_exists(&mut self, v: bool) {
+        self.lock_only_if_exists = v;
+    }
 }
 
 impl ::protobuf::Message for PessimisticLockRequest {
@@ -2657,6 +2732,13 @@ impl ::protobuf::Message for PessimisticLockRequest {
                     let tmp = is.read_bool()?;
                     self.check_existence = tmp;
                 },
+                13 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.lock_only_if_exists = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -2707,6 +2789,9 @@ impl ::protobuf::Message for PessimisticLockRequest {
         if self.check_existence != false {
             my_size += 2;
         }
+        if self.lock_only_if_exists != false {
+            my_size += 2;
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -2752,6 +2837,9 @@ impl ::protobuf::Message for PessimisticLockRequest {
         }
         if self.check_existence != false {
             os.write_bool(12, self.check_existence)?;
+        }
+        if self.lock_only_if_exists != false {
+            os.write_bool(13, self.lock_only_if_exists)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2812,6 +2900,7 @@ impl ::protobuf::Clear for PessimisticLockRequest {
         self.return_values = false;
         self.min_commit_ts = 0;
         self.check_existence = false;
+        self.lock_only_if_exists = false;
         self.unknown_fields.clear();
     }
 }
@@ -2833,6 +2922,7 @@ impl ::protobuf::PbPrint for PessimisticLockRequest {
         ::protobuf::PbPrint::fmt(&self.return_values, "return_values", buf);
         ::protobuf::PbPrint::fmt(&self.min_commit_ts, "min_commit_ts", buf);
         ::protobuf::PbPrint::fmt(&self.check_existence, "check_existence", buf);
+        ::protobuf::PbPrint::fmt(&self.lock_only_if_exists, "lock_only_if_exists", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -2855,6 +2945,7 @@ impl ::std::fmt::Debug for PessimisticLockRequest {
         ::protobuf::PbPrint::fmt(&self.return_values, "return_values", &mut s);
         ::protobuf::PbPrint::fmt(&self.min_commit_ts, "min_commit_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.check_existence, "check_existence", &mut s);
+        ::protobuf::PbPrint::fmt(&self.lock_only_if_exists, "lock_only_if_exists", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -10753,6 +10844,573 @@ impl ::std::fmt::Debug for DeleteRangeResponse {
 }
 
 impl ::protobuf::reflect::ProtobufValue for DeleteRangeResponse {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct FlashbackToVersionRequest {
+    // message fields
+    pub context: ::protobuf::SingularPtrField<Context>,
+    pub version: u64,
+    pub start_key: ::std::vec::Vec<u8>,
+    pub end_key: ::std::vec::Vec<u8>,
+    pub start_ts: u64,
+    pub commit_ts: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a FlashbackToVersionRequest {
+    fn default() -> &'a FlashbackToVersionRequest {
+        <FlashbackToVersionRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl FlashbackToVersionRequest {
+    pub fn new() -> FlashbackToVersionRequest {
+        ::std::default::Default::default()
+    }
+
+    // .kvrpcpb.Context context = 1;
+
+
+    pub fn get_context(&self) -> &Context {
+        self.context.as_ref().unwrap_or_else(|| Context::default_instance())
+    }
+    pub fn clear_context(&mut self) {
+        self.context.clear();
+    }
+
+    pub fn has_context(&self) -> bool {
+        self.context.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_context(&mut self, v: Context) {
+        self.context = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_context(&mut self) -> &mut Context {
+        if self.context.is_none() {
+            self.context.set_default();
+        }
+        self.context.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_context(&mut self) -> Context {
+        self.context.take().unwrap_or_else(|| Context::new())
+    }
+
+    // uint64 version = 2;
+
+
+    pub fn get_version(&self) -> u64 {
+        self.version
+    }
+    pub fn clear_version(&mut self) {
+        self.version = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_version(&mut self, v: u64) {
+        self.version = v;
+    }
+
+    // bytes start_key = 3;
+
+
+    pub fn get_start_key(&self) -> &[u8] {
+        &self.start_key
+    }
+    pub fn clear_start_key(&mut self) {
+        self.start_key.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_start_key(&mut self, v: ::std::vec::Vec<u8>) {
+        self.start_key = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_start_key(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.start_key
+    }
+
+    // Take field
+    pub fn take_start_key(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.start_key, ::std::vec::Vec::new())
+    }
+
+    // bytes end_key = 4;
+
+
+    pub fn get_end_key(&self) -> &[u8] {
+        &self.end_key
+    }
+    pub fn clear_end_key(&mut self) {
+        self.end_key.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_end_key(&mut self, v: ::std::vec::Vec<u8>) {
+        self.end_key = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_end_key(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.end_key
+    }
+
+    // Take field
+    pub fn take_end_key(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.end_key, ::std::vec::Vec::new())
+    }
+
+    // uint64 start_ts = 5;
+
+
+    pub fn get_start_ts(&self) -> u64 {
+        self.start_ts
+    }
+    pub fn clear_start_ts(&mut self) {
+        self.start_ts = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_start_ts(&mut self, v: u64) {
+        self.start_ts = v;
+    }
+
+    // uint64 commit_ts = 6;
+
+
+    pub fn get_commit_ts(&self) -> u64 {
+        self.commit_ts
+    }
+    pub fn clear_commit_ts(&mut self) {
+        self.commit_ts = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_commit_ts(&mut self, v: u64) {
+        self.commit_ts = v;
+    }
+}
+
+impl ::protobuf::Message for FlashbackToVersionRequest {
+    fn is_initialized(&self) -> bool {
+        for v in &self.context {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.context)?;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.version = tmp;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.start_key)?;
+                },
+                4 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.end_key)?;
+                },
+                5 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.start_ts = tmp;
+                },
+                6 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.commit_ts = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.context.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if self.version != 0 {
+            my_size += ::protobuf::rt::value_size(2, self.version, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if !self.start_key.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(3, &self.start_key);
+        }
+        if !self.end_key.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(4, &self.end_key);
+        }
+        if self.start_ts != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.start_ts, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.commit_ts != 0 {
+            my_size += ::protobuf::rt::value_size(6, self.commit_ts, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.context.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if self.version != 0 {
+            os.write_uint64(2, self.version)?;
+        }
+        if !self.start_key.is_empty() {
+            os.write_bytes(3, &self.start_key)?;
+        }
+        if !self.end_key.is_empty() {
+            os.write_bytes(4, &self.end_key)?;
+        }
+        if self.start_ts != 0 {
+            os.write_uint64(5, self.start_ts)?;
+        }
+        if self.commit_ts != 0 {
+            os.write_uint64(6, self.commit_ts)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> FlashbackToVersionRequest {
+        FlashbackToVersionRequest::new()
+    }
+
+    fn default_instance() -> &'static FlashbackToVersionRequest {
+        static mut instance: ::protobuf::lazy::Lazy<FlashbackToVersionRequest> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const FlashbackToVersionRequest,
+        };
+        unsafe {
+            instance.get(FlashbackToVersionRequest::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for FlashbackToVersionRequest {
+    fn clear(&mut self) {
+        self.context.clear();
+        self.version = 0;
+        self.start_key.clear();
+        self.end_key.clear();
+        self.start_ts = 0;
+        self.commit_ts = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for FlashbackToVersionRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.context, "context", buf);
+        ::protobuf::PbPrint::fmt(&self.version, "version", buf);
+        ::protobuf::PbPrint::fmt(&self.start_key, "start_key", buf);
+        ::protobuf::PbPrint::fmt(&self.end_key, "end_key", buf);
+        ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.commit_ts, "commit_ts", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for FlashbackToVersionRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.context, "context", &mut s);
+        ::protobuf::PbPrint::fmt(&self.version, "version", &mut s);
+        ::protobuf::PbPrint::fmt(&self.start_key, "start_key", &mut s);
+        ::protobuf::PbPrint::fmt(&self.end_key, "end_key", &mut s);
+        ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.commit_ts, "commit_ts", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for FlashbackToVersionRequest {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct FlashbackToVersionResponse {
+    // message fields
+    pub region_error: ::protobuf::SingularPtrField<super::errorpb::Error>,
+    pub error: ::std::string::String,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a FlashbackToVersionResponse {
+    fn default() -> &'a FlashbackToVersionResponse {
+        <FlashbackToVersionResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl FlashbackToVersionResponse {
+    pub fn new() -> FlashbackToVersionResponse {
+        ::std::default::Default::default()
+    }
+
+    // .errorpb.Error region_error = 1;
+
+
+    pub fn get_region_error(&self) -> &super::errorpb::Error {
+        self.region_error.as_ref().unwrap_or_else(|| super::errorpb::Error::default_instance())
+    }
+    pub fn clear_region_error(&mut self) {
+        self.region_error.clear();
+    }
+
+    pub fn has_region_error(&self) -> bool {
+        self.region_error.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region_error(&mut self, v: super::errorpb::Error) {
+        self.region_error = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_region_error(&mut self) -> &mut super::errorpb::Error {
+        if self.region_error.is_none() {
+            self.region_error.set_default();
+        }
+        self.region_error.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_region_error(&mut self) -> super::errorpb::Error {
+        self.region_error.take().unwrap_or_else(|| super::errorpb::Error::new())
+    }
+
+    // string error = 2;
+
+
+    pub fn get_error(&self) -> &str {
+        &self.error
+    }
+    pub fn clear_error(&mut self) {
+        self.error.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_error(&mut self, v: ::std::string::String) {
+        self.error = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_error(&mut self) -> &mut ::std::string::String {
+        &mut self.error
+    }
+
+    // Take field
+    pub fn take_error(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.error, ::std::string::String::new())
+    }
+}
+
+impl ::protobuf::Message for FlashbackToVersionResponse {
+    fn is_initialized(&self) -> bool {
+        for v in &self.region_error {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.region_error)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.error)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.region_error.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if !self.error.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.error);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.region_error.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if !self.error.is_empty() {
+            os.write_string(2, &self.error)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> FlashbackToVersionResponse {
+        FlashbackToVersionResponse::new()
+    }
+
+    fn default_instance() -> &'static FlashbackToVersionResponse {
+        static mut instance: ::protobuf::lazy::Lazy<FlashbackToVersionResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const FlashbackToVersionResponse,
+        };
+        unsafe {
+            instance.get(FlashbackToVersionResponse::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for FlashbackToVersionResponse {
+    fn clear(&mut self) {
+        self.region_error.clear();
+        self.error.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for FlashbackToVersionResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.region_error, "region_error", buf);
+        ::protobuf::PbPrint::fmt(&self.error, "error", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for FlashbackToVersionResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.region_error, "region_error", &mut s);
+        ::protobuf::PbPrint::fmt(&self.error, "error", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for FlashbackToVersionResponse {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
@@ -21964,6 +22622,7 @@ pub struct WriteConflict {
     pub key: ::std::vec::Vec<u8>,
     pub primary: ::std::vec::Vec<u8>,
     pub conflict_commit_ts: u64,
+    pub reason: WriteConflictReason,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -22076,6 +22735,21 @@ impl WriteConflict {
     pub fn set_conflict_commit_ts(&mut self, v: u64) {
         self.conflict_commit_ts = v;
     }
+
+    // .kvrpcpb.WriteConflict.Reason reason = 6;
+
+
+    pub fn get_reason(&self) -> WriteConflictReason {
+        self.reason
+    }
+    pub fn clear_reason(&mut self) {
+        self.reason = WriteConflictReason::Unknown;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_reason(&mut self, v: WriteConflictReason) {
+        self.reason = v;
+    }
 }
 
 impl ::protobuf::Message for WriteConflict {
@@ -22114,6 +22788,9 @@ impl ::protobuf::Message for WriteConflict {
                     let tmp = is.read_uint64()?;
                     self.conflict_commit_ts = tmp;
                 },
+                6 => {
+                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.reason = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -22141,6 +22818,9 @@ impl ::protobuf::Message for WriteConflict {
         if self.conflict_commit_ts != 0 {
             my_size += ::protobuf::rt::value_size(5, self.conflict_commit_ts, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.reason != WriteConflictReason::Unknown {
+            my_size += ::protobuf::rt::enum_size(6, self.reason);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -22161,6 +22841,9 @@ impl ::protobuf::Message for WriteConflict {
         }
         if self.conflict_commit_ts != 0 {
             os.write_uint64(5, self.conflict_commit_ts)?;
+        }
+        if self.reason != WriteConflictReason::Unknown {
+            os.write_enum(6, self.reason.value())?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -22214,6 +22897,7 @@ impl ::protobuf::Clear for WriteConflict {
         self.key.clear();
         self.primary.clear();
         self.conflict_commit_ts = 0;
+        self.reason = WriteConflictReason::Unknown;
         self.unknown_fields.clear();
     }
 }
@@ -22228,6 +22912,7 @@ impl ::protobuf::PbPrint for WriteConflict {
         ::protobuf::PbPrint::fmt(&self.key, "key", buf);
         ::protobuf::PbPrint::fmt(&self.primary, "primary", buf);
         ::protobuf::PbPrint::fmt(&self.conflict_commit_ts, "conflict_commit_ts", buf);
+        ::protobuf::PbPrint::fmt(&self.reason, "reason", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -22243,6 +22928,7 @@ impl ::std::fmt::Debug for WriteConflict {
         ::protobuf::PbPrint::fmt(&self.key, "key", &mut s);
         ::protobuf::PbPrint::fmt(&self.primary, "primary", &mut s);
         ::protobuf::PbPrint::fmt(&self.conflict_commit_ts, "conflict_commit_ts", &mut s);
+        ::protobuf::PbPrint::fmt(&self.reason, "reason", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -22250,6 +22936,72 @@ impl ::std::fmt::Debug for WriteConflict {
 impl ::protobuf::reflect::ProtobufValue for WriteConflict {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(Clone,PartialEq,Eq,Debug,Hash)]
+pub enum WriteConflictReason {
+    Unknown = 0,
+    Optimistic = 1,
+    PessimisticRetry = 2,
+    SelfRolledBack = 3,
+    RcCheckTs = 4,
+    LazyUniquenessCheck = 5,
+}
+
+impl ::protobuf::ProtobufEnum for WriteConflictReason {
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<WriteConflictReason> {
+        match value {
+            0 => ::std::option::Option::Some(WriteConflictReason::Unknown),
+            1 => ::std::option::Option::Some(WriteConflictReason::Optimistic),
+            2 => ::std::option::Option::Some(WriteConflictReason::PessimisticRetry),
+            3 => ::std::option::Option::Some(WriteConflictReason::SelfRolledBack),
+            4 => ::std::option::Option::Some(WriteConflictReason::RcCheckTs),
+            5 => ::std::option::Option::Some(WriteConflictReason::LazyUniquenessCheck),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn values() -> &'static [Self] {
+        static values: &'static [WriteConflictReason] = &[
+            WriteConflictReason::Unknown,
+            WriteConflictReason::Optimistic,
+            WriteConflictReason::PessimisticRetry,
+            WriteConflictReason::SelfRolledBack,
+            WriteConflictReason::RcCheckTs,
+            WriteConflictReason::LazyUniquenessCheck,
+        ];
+        values
+    }
+}
+
+impl ::std::marker::Copy for WriteConflictReason {
+}
+
+impl ::protobuf::PbPrint for WriteConflictReason {
+    fn fmt(&self, name: &str, buf: &mut String) {
+        use std::fmt::Write;
+        if *self == WriteConflictReason::default() {
+            return;
+        }
+        ::protobuf::push_field_start(name, buf);
+        write!(buf, "{:?}", self).unwrap();
+    }
+}
+
+impl ::std::default::Default for WriteConflictReason {
+    fn default() -> Self {
+        WriteConflictReason::Unknown
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for WriteConflictReason {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
     }
 }
 
@@ -24348,6 +25100,9 @@ pub struct ScanDetailV2 {
     pub rocksdb_block_read_byte: u64,
     pub rocksdb_block_read_nanos: u64,
     pub get_snapshot_nanos: u64,
+    pub read_index_propose_wait_nanos: u64,
+    pub read_index_confirm_wait_nanos: u64,
+    pub read_pool_schedule_wait_nanos: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -24513,6 +25268,51 @@ impl ScanDetailV2 {
     pub fn set_get_snapshot_nanos(&mut self, v: u64) {
         self.get_snapshot_nanos = v;
     }
+
+    // uint64 read_index_propose_wait_nanos = 11;
+
+
+    pub fn get_read_index_propose_wait_nanos(&self) -> u64 {
+        self.read_index_propose_wait_nanos
+    }
+    pub fn clear_read_index_propose_wait_nanos(&mut self) {
+        self.read_index_propose_wait_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_read_index_propose_wait_nanos(&mut self, v: u64) {
+        self.read_index_propose_wait_nanos = v;
+    }
+
+    // uint64 read_index_confirm_wait_nanos = 12;
+
+
+    pub fn get_read_index_confirm_wait_nanos(&self) -> u64 {
+        self.read_index_confirm_wait_nanos
+    }
+    pub fn clear_read_index_confirm_wait_nanos(&mut self) {
+        self.read_index_confirm_wait_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_read_index_confirm_wait_nanos(&mut self, v: u64) {
+        self.read_index_confirm_wait_nanos = v;
+    }
+
+    // uint64 read_pool_schedule_wait_nanos = 13;
+
+
+    pub fn get_read_pool_schedule_wait_nanos(&self) -> u64 {
+        self.read_pool_schedule_wait_nanos
+    }
+    pub fn clear_read_pool_schedule_wait_nanos(&mut self) {
+        self.read_pool_schedule_wait_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_read_pool_schedule_wait_nanos(&mut self, v: u64) {
+        self.read_pool_schedule_wait_nanos = v;
+    }
 }
 
 impl ::protobuf::Message for ScanDetailV2 {
@@ -24594,6 +25394,27 @@ impl ::protobuf::Message for ScanDetailV2 {
                     let tmp = is.read_uint64()?;
                     self.get_snapshot_nanos = tmp;
                 },
+                11 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.read_index_propose_wait_nanos = tmp;
+                },
+                12 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.read_index_confirm_wait_nanos = tmp;
+                },
+                13 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.read_pool_schedule_wait_nanos = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -24636,6 +25457,15 @@ impl ::protobuf::Message for ScanDetailV2 {
         if self.get_snapshot_nanos != 0 {
             my_size += ::protobuf::rt::value_size(10, self.get_snapshot_nanos, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.read_index_propose_wait_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(11, self.read_index_propose_wait_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.read_index_confirm_wait_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(12, self.read_index_confirm_wait_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.read_pool_schedule_wait_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(13, self.read_pool_schedule_wait_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -24671,6 +25501,15 @@ impl ::protobuf::Message for ScanDetailV2 {
         }
         if self.get_snapshot_nanos != 0 {
             os.write_uint64(10, self.get_snapshot_nanos)?;
+        }
+        if self.read_index_propose_wait_nanos != 0 {
+            os.write_uint64(11, self.read_index_propose_wait_nanos)?;
+        }
+        if self.read_index_confirm_wait_nanos != 0 {
+            os.write_uint64(12, self.read_index_confirm_wait_nanos)?;
+        }
+        if self.read_pool_schedule_wait_nanos != 0 {
+            os.write_uint64(13, self.read_pool_schedule_wait_nanos)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -24729,6 +25568,9 @@ impl ::protobuf::Clear for ScanDetailV2 {
         self.rocksdb_block_read_byte = 0;
         self.rocksdb_block_read_nanos = 0;
         self.get_snapshot_nanos = 0;
+        self.read_index_propose_wait_nanos = 0;
+        self.read_index_confirm_wait_nanos = 0;
+        self.read_pool_schedule_wait_nanos = 0;
         self.unknown_fields.clear();
     }
 }
@@ -24748,6 +25590,9 @@ impl ::protobuf::PbPrint for ScanDetailV2 {
         ::protobuf::PbPrint::fmt(&self.rocksdb_block_read_byte, "rocksdb_block_read_byte", buf);
         ::protobuf::PbPrint::fmt(&self.rocksdb_block_read_nanos, "rocksdb_block_read_nanos", buf);
         ::protobuf::PbPrint::fmt(&self.get_snapshot_nanos, "get_snapshot_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.read_index_propose_wait_nanos, "read_index_propose_wait_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.read_index_confirm_wait_nanos, "read_index_confirm_wait_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.read_pool_schedule_wait_nanos, "read_pool_schedule_wait_nanos", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -24768,6 +25613,9 @@ impl ::std::fmt::Debug for ScanDetailV2 {
         ::protobuf::PbPrint::fmt(&self.rocksdb_block_read_byte, "rocksdb_block_read_byte", &mut s);
         ::protobuf::PbPrint::fmt(&self.rocksdb_block_read_nanos, "rocksdb_block_read_nanos", &mut s);
         ::protobuf::PbPrint::fmt(&self.get_snapshot_nanos, "get_snapshot_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.read_index_propose_wait_nanos, "read_index_propose_wait_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.read_index_confirm_wait_nanos, "read_index_confirm_wait_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.read_pool_schedule_wait_nanos, "read_pool_schedule_wait_nanos", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -25310,6 +26158,10 @@ pub struct WriteDetail {
     pub apply_write_leader_wait_nanos: u64,
     pub apply_write_wal_nanos: u64,
     pub apply_write_memtable_nanos: u64,
+    pub latch_wait_nanos: u64,
+    pub process_nanos: u64,
+    pub throttle_nanos: u64,
+    pub pessimistic_lock_wait_nanos: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -25520,6 +26372,66 @@ impl WriteDetail {
     pub fn set_apply_write_memtable_nanos(&mut self, v: u64) {
         self.apply_write_memtable_nanos = v;
     }
+
+    // uint64 latch_wait_nanos = 14;
+
+
+    pub fn get_latch_wait_nanos(&self) -> u64 {
+        self.latch_wait_nanos
+    }
+    pub fn clear_latch_wait_nanos(&mut self) {
+        self.latch_wait_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_latch_wait_nanos(&mut self, v: u64) {
+        self.latch_wait_nanos = v;
+    }
+
+    // uint64 process_nanos = 15;
+
+
+    pub fn get_process_nanos(&self) -> u64 {
+        self.process_nanos
+    }
+    pub fn clear_process_nanos(&mut self) {
+        self.process_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_process_nanos(&mut self, v: u64) {
+        self.process_nanos = v;
+    }
+
+    // uint64 throttle_nanos = 16;
+
+
+    pub fn get_throttle_nanos(&self) -> u64 {
+        self.throttle_nanos
+    }
+    pub fn clear_throttle_nanos(&mut self) {
+        self.throttle_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_throttle_nanos(&mut self, v: u64) {
+        self.throttle_nanos = v;
+    }
+
+    // uint64 pessimistic_lock_wait_nanos = 17;
+
+
+    pub fn get_pessimistic_lock_wait_nanos(&self) -> u64 {
+        self.pessimistic_lock_wait_nanos
+    }
+    pub fn clear_pessimistic_lock_wait_nanos(&mut self) {
+        self.pessimistic_lock_wait_nanos = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_pessimistic_lock_wait_nanos(&mut self, v: u64) {
+        self.pessimistic_lock_wait_nanos = v;
+    }
 }
 
 impl ::protobuf::Message for WriteDetail {
@@ -25622,6 +26534,34 @@ impl ::protobuf::Message for WriteDetail {
                     let tmp = is.read_uint64()?;
                     self.apply_write_memtable_nanos = tmp;
                 },
+                14 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.latch_wait_nanos = tmp;
+                },
+                15 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.process_nanos = tmp;
+                },
+                16 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.throttle_nanos = tmp;
+                },
+                17 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.pessimistic_lock_wait_nanos = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -25673,6 +26613,18 @@ impl ::protobuf::Message for WriteDetail {
         if self.apply_write_memtable_nanos != 0 {
             my_size += ::protobuf::rt::value_size(13, self.apply_write_memtable_nanos, ::protobuf::wire_format::WireTypeVarint);
         }
+        if self.latch_wait_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(14, self.latch_wait_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.process_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(15, self.process_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.throttle_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(16, self.throttle_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.pessimistic_lock_wait_nanos != 0 {
+            my_size += ::protobuf::rt::value_size(17, self.pessimistic_lock_wait_nanos, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -25717,6 +26669,18 @@ impl ::protobuf::Message for WriteDetail {
         }
         if self.apply_write_memtable_nanos != 0 {
             os.write_uint64(13, self.apply_write_memtable_nanos)?;
+        }
+        if self.latch_wait_nanos != 0 {
+            os.write_uint64(14, self.latch_wait_nanos)?;
+        }
+        if self.process_nanos != 0 {
+            os.write_uint64(15, self.process_nanos)?;
+        }
+        if self.throttle_nanos != 0 {
+            os.write_uint64(16, self.throttle_nanos)?;
+        }
+        if self.pessimistic_lock_wait_nanos != 0 {
+            os.write_uint64(17, self.pessimistic_lock_wait_nanos)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -25778,6 +26742,10 @@ impl ::protobuf::Clear for WriteDetail {
         self.apply_write_leader_wait_nanos = 0;
         self.apply_write_wal_nanos = 0;
         self.apply_write_memtable_nanos = 0;
+        self.latch_wait_nanos = 0;
+        self.process_nanos = 0;
+        self.throttle_nanos = 0;
+        self.pessimistic_lock_wait_nanos = 0;
         self.unknown_fields.clear();
     }
 }
@@ -25800,6 +26768,10 @@ impl ::protobuf::PbPrint for WriteDetail {
         ::protobuf::PbPrint::fmt(&self.apply_write_leader_wait_nanos, "apply_write_leader_wait_nanos", buf);
         ::protobuf::PbPrint::fmt(&self.apply_write_wal_nanos, "apply_write_wal_nanos", buf);
         ::protobuf::PbPrint::fmt(&self.apply_write_memtable_nanos, "apply_write_memtable_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.latch_wait_nanos, "latch_wait_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.process_nanos, "process_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.throttle_nanos, "throttle_nanos", buf);
+        ::protobuf::PbPrint::fmt(&self.pessimistic_lock_wait_nanos, "pessimistic_lock_wait_nanos", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -25823,6 +26795,10 @@ impl ::std::fmt::Debug for WriteDetail {
         ::protobuf::PbPrint::fmt(&self.apply_write_leader_wait_nanos, "apply_write_leader_wait_nanos", &mut s);
         ::protobuf::PbPrint::fmt(&self.apply_write_wal_nanos, "apply_write_wal_nanos", &mut s);
         ::protobuf::PbPrint::fmt(&self.apply_write_memtable_nanos, "apply_write_memtable_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.latch_wait_nanos, "latch_wait_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.process_nanos, "process_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.throttle_nanos, "throttle_nanos", &mut s);
+        ::protobuf::PbPrint::fmt(&self.pessimistic_lock_wait_nanos, "pessimistic_lock_wait_nanos", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -30936,6 +31912,445 @@ impl ::std::fmt::Debug for GetLockWaitInfoResponse {
 }
 
 impl ::protobuf::reflect::ProtobufValue for GetLockWaitInfoResponse {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct GetLockWaitHistoryRequest {
+    // message fields
+    pub context: ::protobuf::SingularPtrField<Context>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a GetLockWaitHistoryRequest {
+    fn default() -> &'a GetLockWaitHistoryRequest {
+        <GetLockWaitHistoryRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl GetLockWaitHistoryRequest {
+    pub fn new() -> GetLockWaitHistoryRequest {
+        ::std::default::Default::default()
+    }
+
+    // .kvrpcpb.Context context = 1;
+
+
+    pub fn get_context(&self) -> &Context {
+        self.context.as_ref().unwrap_or_else(|| Context::default_instance())
+    }
+    pub fn clear_context(&mut self) {
+        self.context.clear();
+    }
+
+    pub fn has_context(&self) -> bool {
+        self.context.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_context(&mut self, v: Context) {
+        self.context = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_context(&mut self) -> &mut Context {
+        if self.context.is_none() {
+            self.context.set_default();
+        }
+        self.context.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_context(&mut self) -> Context {
+        self.context.take().unwrap_or_else(|| Context::new())
+    }
+}
+
+impl ::protobuf::Message for GetLockWaitHistoryRequest {
+    fn is_initialized(&self) -> bool {
+        for v in &self.context {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.context)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.context.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.context.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> GetLockWaitHistoryRequest {
+        GetLockWaitHistoryRequest::new()
+    }
+
+    fn default_instance() -> &'static GetLockWaitHistoryRequest {
+        static mut instance: ::protobuf::lazy::Lazy<GetLockWaitHistoryRequest> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const GetLockWaitHistoryRequest,
+        };
+        unsafe {
+            instance.get(GetLockWaitHistoryRequest::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for GetLockWaitHistoryRequest {
+    fn clear(&mut self) {
+        self.context.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for GetLockWaitHistoryRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.context, "context", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for GetLockWaitHistoryRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.context, "context", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for GetLockWaitHistoryRequest {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct GetLockWaitHistoryResponse {
+    // message fields
+    pub region_error: ::protobuf::SingularPtrField<super::errorpb::Error>,
+    pub error: ::std::string::String,
+    pub entries: ::protobuf::RepeatedField<super::deadlock::WaitForEntry>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a GetLockWaitHistoryResponse {
+    fn default() -> &'a GetLockWaitHistoryResponse {
+        <GetLockWaitHistoryResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl GetLockWaitHistoryResponse {
+    pub fn new() -> GetLockWaitHistoryResponse {
+        ::std::default::Default::default()
+    }
+
+    // .errorpb.Error region_error = 1;
+
+
+    pub fn get_region_error(&self) -> &super::errorpb::Error {
+        self.region_error.as_ref().unwrap_or_else(|| super::errorpb::Error::default_instance())
+    }
+    pub fn clear_region_error(&mut self) {
+        self.region_error.clear();
+    }
+
+    pub fn has_region_error(&self) -> bool {
+        self.region_error.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_region_error(&mut self, v: super::errorpb::Error) {
+        self.region_error = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_region_error(&mut self) -> &mut super::errorpb::Error {
+        if self.region_error.is_none() {
+            self.region_error.set_default();
+        }
+        self.region_error.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_region_error(&mut self) -> super::errorpb::Error {
+        self.region_error.take().unwrap_or_else(|| super::errorpb::Error::new())
+    }
+
+    // string error = 2;
+
+
+    pub fn get_error(&self) -> &str {
+        &self.error
+    }
+    pub fn clear_error(&mut self) {
+        self.error.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_error(&mut self, v: ::std::string::String) {
+        self.error = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_error(&mut self) -> &mut ::std::string::String {
+        &mut self.error
+    }
+
+    // Take field
+    pub fn take_error(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.error, ::std::string::String::new())
+    }
+
+    // repeated .deadlock.WaitForEntry entries = 3;
+
+
+    pub fn get_entries(&self) -> &[super::deadlock::WaitForEntry] {
+        &self.entries
+    }
+    pub fn clear_entries(&mut self) {
+        self.entries.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_entries(&mut self, v: ::protobuf::RepeatedField<super::deadlock::WaitForEntry>) {
+        self.entries = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_entries(&mut self) -> &mut ::protobuf::RepeatedField<super::deadlock::WaitForEntry> {
+        &mut self.entries
+    }
+
+    // Take field
+    pub fn take_entries(&mut self) -> ::protobuf::RepeatedField<super::deadlock::WaitForEntry> {
+        ::std::mem::replace(&mut self.entries, ::protobuf::RepeatedField::new())
+    }
+}
+
+impl ::protobuf::Message for GetLockWaitHistoryResponse {
+    fn is_initialized(&self) -> bool {
+        for v in &self.region_error {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.entries {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.region_error)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.error)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.entries)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.region_error.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if !self.error.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.error);
+        }
+        for value in &self.entries {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.region_error.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if !self.error.is_empty() {
+            os.write_string(2, &self.error)?;
+        }
+        for v in &self.entries {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> GetLockWaitHistoryResponse {
+        GetLockWaitHistoryResponse::new()
+    }
+
+    fn default_instance() -> &'static GetLockWaitHistoryResponse {
+        static mut instance: ::protobuf::lazy::Lazy<GetLockWaitHistoryResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const GetLockWaitHistoryResponse,
+        };
+        unsafe {
+            instance.get(GetLockWaitHistoryResponse::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for GetLockWaitHistoryResponse {
+    fn clear(&mut self) {
+        self.region_error.clear();
+        self.error.clear();
+        self.entries.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for GetLockWaitHistoryResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.region_error, "region_error", buf);
+        ::protobuf::PbPrint::fmt(&self.error, "error", buf);
+        ::protobuf::PbPrint::fmt(&self.entries, "entries", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for GetLockWaitHistoryResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.region_error, "region_error", &mut s);
+        ::protobuf::PbPrint::fmt(&self.error, "error", &mut s);
+        ::protobuf::PbPrint::fmt(&self.entries, "entries", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for GetLockWaitHistoryResponse {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }

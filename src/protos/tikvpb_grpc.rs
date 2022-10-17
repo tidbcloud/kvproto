@@ -135,6 +135,13 @@ const METHOD_TIKV_KV_DELETE_RANGE: ::grpcio::Method<super::kvrpcpb::DeleteRangeR
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_TIKV_KV_FLASHBACK_TO_VERSION: ::grpcio::Method<super::kvrpcpb::FlashbackToVersionRequest, super::kvrpcpb::FlashbackToVersionResponse> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/tikvpb.Tikv/KvFlashbackToVersion",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 const METHOD_TIKV_RAW_GET: ::grpcio::Method<super::kvrpcpb::RawGetRequest, super::kvrpcpb::RawGetResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/tikvpb.Tikv/RawGet",
@@ -390,6 +397,13 @@ const METHOD_TIKV_GET_LOCK_WAIT_INFO: ::grpcio::Method<super::kvrpcpb::GetLockWa
 const METHOD_TIKV_COMPACT: ::grpcio::Method<super::kvrpcpb::CompactRequest, super::kvrpcpb::CompactResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/tikvpb.Tikv/Compact",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+const METHOD_TIKV_GET_LOCK_WAIT_HISTORY: ::grpcio::Method<super::kvrpcpb::GetLockWaitHistoryRequest, super::kvrpcpb::GetLockWaitHistoryResponse> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/tikvpb.Tikv/GetLockWaitHistory",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
@@ -676,6 +690,22 @@ impl TikvClient {
 
     pub fn kv_delete_range_async(&self, req: &super::kvrpcpb::DeleteRangeRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::DeleteRangeResponse>> {
         self.kv_delete_range_async_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn kv_flashback_to_version_opt(&self, req: &super::kvrpcpb::FlashbackToVersionRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvrpcpb::FlashbackToVersionResponse> {
+        self.client.unary_call(&METHOD_TIKV_KV_FLASHBACK_TO_VERSION, req, opt)
+    }
+
+    pub fn kv_flashback_to_version(&self, req: &super::kvrpcpb::FlashbackToVersionRequest) -> ::grpcio::Result<super::kvrpcpb::FlashbackToVersionResponse> {
+        self.kv_flashback_to_version_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn kv_flashback_to_version_async_opt(&self, req: &super::kvrpcpb::FlashbackToVersionRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::FlashbackToVersionResponse>> {
+        self.client.unary_call_async(&METHOD_TIKV_KV_FLASHBACK_TO_VERSION, req, opt)
+    }
+
+    pub fn kv_flashback_to_version_async(&self, req: &super::kvrpcpb::FlashbackToVersionRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::FlashbackToVersionResponse>> {
+        self.kv_flashback_to_version_async_opt(req, ::grpcio::CallOption::default())
     }
 
     pub fn raw_get_opt(&self, req: &super::kvrpcpb::RawGetRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvrpcpb::RawGetResponse> {
@@ -1213,6 +1243,22 @@ impl TikvClient {
     pub fn compact_async(&self, req: &super::kvrpcpb::CompactRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::CompactResponse>> {
         self.compact_async_opt(req, ::grpcio::CallOption::default())
     }
+
+    pub fn get_lock_wait_history_opt(&self, req: &super::kvrpcpb::GetLockWaitHistoryRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvrpcpb::GetLockWaitHistoryResponse> {
+        self.client.unary_call(&METHOD_TIKV_GET_LOCK_WAIT_HISTORY, req, opt)
+    }
+
+    pub fn get_lock_wait_history(&self, req: &super::kvrpcpb::GetLockWaitHistoryRequest) -> ::grpcio::Result<super::kvrpcpb::GetLockWaitHistoryResponse> {
+        self.get_lock_wait_history_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn get_lock_wait_history_async_opt(&self, req: &super::kvrpcpb::GetLockWaitHistoryRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::GetLockWaitHistoryResponse>> {
+        self.client.unary_call_async(&METHOD_TIKV_GET_LOCK_WAIT_HISTORY, req, opt)
+    }
+
+    pub fn get_lock_wait_history_async(&self, req: &super::kvrpcpb::GetLockWaitHistoryRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvrpcpb::GetLockWaitHistoryResponse>> {
+        self.get_lock_wait_history_async_opt(req, ::grpcio::CallOption::default())
+    }
     pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
@@ -1268,6 +1314,9 @@ pub trait Tikv {
         grpcio::unimplemented_call!(ctx, sink)
     }
     fn kv_delete_range(&mut self, ctx: ::grpcio::RpcContext, _req: super::kvrpcpb::DeleteRangeRequest, sink: ::grpcio::UnarySink<super::kvrpcpb::DeleteRangeResponse>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
+    fn kv_flashback_to_version(&mut self, ctx: ::grpcio::RpcContext, _req: super::kvrpcpb::FlashbackToVersionRequest, sink: ::grpcio::UnarySink<super::kvrpcpb::FlashbackToVersionResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
     fn raw_get(&mut self, ctx: ::grpcio::RpcContext, _req: super::kvrpcpb::RawGetRequest, sink: ::grpcio::UnarySink<super::kvrpcpb::RawGetResponse>) {
@@ -1381,6 +1430,9 @@ pub trait Tikv {
     fn compact(&mut self, ctx: ::grpcio::RpcContext, _req: super::kvrpcpb::CompactRequest, sink: ::grpcio::UnarySink<super::kvrpcpb::CompactResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
+    fn get_lock_wait_history(&mut self, ctx: ::grpcio::RpcContext, _req: super::kvrpcpb::GetLockWaitHistoryRequest, sink: ::grpcio::UnarySink<super::kvrpcpb::GetLockWaitHistoryResponse>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
 }
 
 pub fn create_tikv<S: Tikv + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
@@ -1452,6 +1504,10 @@ pub fn create_tikv<S: Tikv + Send + Clone + 'static>(s: S) -> ::grpcio::Service 
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_TIKV_KV_DELETE_RANGE, move |ctx, req, resp| {
         instance.kv_delete_range(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_TIKV_KV_FLASHBACK_TO_VERSION, move |ctx, req, resp| {
+        instance.kv_flashback_to_version(ctx, req, resp)
     });
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_TIKV_RAW_GET, move |ctx, req, resp| {
@@ -1597,9 +1653,13 @@ pub fn create_tikv<S: Tikv + Send + Clone + 'static>(s: S) -> ::grpcio::Service 
     builder = builder.add_unary_handler(&METHOD_TIKV_GET_LOCK_WAIT_INFO, move |ctx, req, resp| {
         instance.get_lock_wait_info(ctx, req, resp)
     });
-    let mut instance = s;
+    let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_TIKV_COMPACT, move |ctx, req, resp| {
         instance.compact(ctx, req, resp)
+    });
+    let mut instance = s;
+    builder = builder.add_unary_handler(&METHOD_TIKV_GET_LOCK_WAIT_HISTORY, move |ctx, req, resp| {
+        instance.get_lock_wait_history(ctx, req, resp)
     });
     builder.build()
 }

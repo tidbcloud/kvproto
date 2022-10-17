@@ -2243,6 +2243,7 @@ pub struct Peer {
     pub id: u64,
     pub store_id: u64,
     pub role: PeerRole,
+    pub is_witness: bool,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -2303,6 +2304,21 @@ impl Peer {
     pub fn set_role(&mut self, v: PeerRole) {
         self.role = v;
     }
+
+    // bool is_witness = 4;
+
+
+    pub fn get_is_witness(&self) -> bool {
+        self.is_witness
+    }
+    pub fn clear_is_witness(&mut self) {
+        self.is_witness = false;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_is_witness(&mut self, v: bool) {
+        self.is_witness = v;
+    }
 }
 
 impl ::protobuf::Message for Peer {
@@ -2331,6 +2347,13 @@ impl ::protobuf::Message for Peer {
                 3 => {
                     if wire_type == ::protobuf::wire_format::WireTypeVarint {self.role = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
                 },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.is_witness = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -2352,6 +2375,9 @@ impl ::protobuf::Message for Peer {
         if self.role != PeerRole::Voter {
             my_size += ::protobuf::rt::enum_size(3, self.role);
         }
+        if self.is_witness != false {
+            my_size += 2;
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -2366,6 +2392,9 @@ impl ::protobuf::Message for Peer {
         }
         if self.role != PeerRole::Voter {
             os.write_enum(3, self.role.value())?;
+        }
+        if self.is_witness != false {
+            os.write_bool(4, self.is_witness)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2417,6 +2446,7 @@ impl ::protobuf::Clear for Peer {
         self.id = 0;
         self.store_id = 0;
         self.role = PeerRole::Voter;
+        self.is_witness = false;
         self.unknown_fields.clear();
     }
 }
@@ -2429,6 +2459,7 @@ impl ::protobuf::PbPrint for Peer {
         ::protobuf::PbPrint::fmt(&self.id, "id", buf);
         ::protobuf::PbPrint::fmt(&self.store_id, "store_id", buf);
         ::protobuf::PbPrint::fmt(&self.role, "role", buf);
+        ::protobuf::PbPrint::fmt(&self.is_witness, "is_witness", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -2442,6 +2473,7 @@ impl ::std::fmt::Debug for Peer {
         ::protobuf::PbPrint::fmt(&self.id, "id", &mut s);
         ::protobuf::PbPrint::fmt(&self.store_id, "store_id", &mut s);
         ::protobuf::PbPrint::fmt(&self.role, "role", &mut s);
+        ::protobuf::PbPrint::fmt(&self.is_witness, "is_witness", &mut s);
         write!(f, "{}", s)
     }
 }
