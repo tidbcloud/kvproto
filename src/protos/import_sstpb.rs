@@ -2844,7 +2844,7 @@ impl DownloadRequest {
         self.cipher_info.take().unwrap_or_else(|| super::brpb::CipherInfo::new())
     }
 
-    // .import_sstpb.DownloadRequestType request_type = 17;
+    // .import_sstpb.DownloadRequestType request_type = 18;
 
 
     pub fn get_request_type(&self) -> DownloadRequestType {
@@ -2911,7 +2911,7 @@ impl ::protobuf::Message for DownloadRequest {
                 16 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.cipher_info)?;
                 },
-                17 => {
+                18 => {
                     if wire_type == ::protobuf::wire_format::WireTypeVarint {self.request_type = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
                 },
                 _ => {
@@ -2949,7 +2949,7 @@ impl ::protobuf::Message for DownloadRequest {
             my_size += 2 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         if self.request_type != DownloadRequestType::Legacy {
-            my_size += ::protobuf::rt::enum_size(17, self.request_type);
+            my_size += ::protobuf::rt::enum_size(18, self.request_type);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -2984,7 +2984,7 @@ impl ::protobuf::Message for DownloadRequest {
             v.write_to_with_cached_sizes(os)?;
         }
         if self.request_type != DownloadRequestType::Legacy {
-            os.write_enum(17, self.request_type.value())?;
+            os.write_enum(18, self.request_type.value())?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
