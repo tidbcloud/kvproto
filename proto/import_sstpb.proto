@@ -178,6 +178,8 @@ message DownloadRequest {
 
     // The type of the download request.
     DownloadRequestType request_type = 17;
+    // The type of the download request, for upgrade compatibility.
+    DownloadRequestType request_type_tmp = 18;
 }
 
 enum DownloadRequestType {
