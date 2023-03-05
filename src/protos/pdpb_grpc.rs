@@ -191,6 +191,34 @@ const METHOD_PD_UPDATE_SERVICE_GC_SAFE_POINT: ::grpcio::Method<super::pdpb::Upda
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_PD_GET_GC_SAFE_POINT_V2: ::grpcio::Method<super::pdpb::GetGcSafePointV2Request, super::pdpb::GetGcSafePointV2Response> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/pdpb.PD/GetGCSafePointV2",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+const METHOD_PD_WATCH_GC_SAFE_POINT_V2: ::grpcio::Method<super::pdpb::WatchGcSafePointV2Request, super::pdpb::WatchGcSafePointV2Response> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::ServerStreaming,
+    name: "/pdpb.PD/WatchGCSafePointV2",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+const METHOD_PD_UPDATE_GC_SAFE_POINT_V2: ::grpcio::Method<super::pdpb::UpdateGcSafePointV2Request, super::pdpb::UpdateGcSafePointV2Response> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/pdpb.PD/UpdateGCSafePointV2",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+const METHOD_PD_UPDATE_SERVICE_SAFE_POINT_V2: ::grpcio::Method<super::pdpb::UpdateServiceSafePointV2Request, super::pdpb::UpdateServiceSafePointV2Response> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/pdpb.PD/UpdateServiceSafePointV2",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 const METHOD_PD_SYNC_REGIONS: ::grpcio::Method<super::pdpb::SyncRegionRequest, super::pdpb::SyncRegionResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Duplex,
     name: "/pdpb.PD/SyncRegions",
@@ -284,7 +312,7 @@ const METHOD_PD_GET_EXTERNAL_TIMESTAMP: ::grpcio::Method<super::pdpb::GetExterna
 
 #[derive(Clone)]
 pub struct PdClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl PdClient {
@@ -678,6 +706,62 @@ impl PdClient {
         self.update_service_gc_safe_point_async_opt(req, ::grpcio::CallOption::default())
     }
 
+    pub fn get_gc_safe_point_v2_opt(&self, req: &super::pdpb::GetGcSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::GetGcSafePointV2Response> {
+        self.client.unary_call(&METHOD_PD_GET_GC_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn get_gc_safe_point_v2(&self, req: &super::pdpb::GetGcSafePointV2Request) -> ::grpcio::Result<super::pdpb::GetGcSafePointV2Response> {
+        self.get_gc_safe_point_v2_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn get_gc_safe_point_v2_async_opt(&self, req: &super::pdpb::GetGcSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::GetGcSafePointV2Response>> {
+        self.client.unary_call_async(&METHOD_PD_GET_GC_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn get_gc_safe_point_v2_async(&self, req: &super::pdpb::GetGcSafePointV2Request) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::GetGcSafePointV2Response>> {
+        self.get_gc_safe_point_v2_async_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn watch_gc_safe_point_v2_opt(&self, req: &super::pdpb::WatchGcSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::pdpb::WatchGcSafePointV2Response>> {
+        self.client.server_streaming(&METHOD_PD_WATCH_GC_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn watch_gc_safe_point_v2(&self, req: &super::pdpb::WatchGcSafePointV2Request) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::pdpb::WatchGcSafePointV2Response>> {
+        self.watch_gc_safe_point_v2_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn update_gc_safe_point_v2_opt(&self, req: &super::pdpb::UpdateGcSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::UpdateGcSafePointV2Response> {
+        self.client.unary_call(&METHOD_PD_UPDATE_GC_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn update_gc_safe_point_v2(&self, req: &super::pdpb::UpdateGcSafePointV2Request) -> ::grpcio::Result<super::pdpb::UpdateGcSafePointV2Response> {
+        self.update_gc_safe_point_v2_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn update_gc_safe_point_v2_async_opt(&self, req: &super::pdpb::UpdateGcSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::UpdateGcSafePointV2Response>> {
+        self.client.unary_call_async(&METHOD_PD_UPDATE_GC_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn update_gc_safe_point_v2_async(&self, req: &super::pdpb::UpdateGcSafePointV2Request) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::UpdateGcSafePointV2Response>> {
+        self.update_gc_safe_point_v2_async_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn update_service_safe_point_v2_opt(&self, req: &super::pdpb::UpdateServiceSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::UpdateServiceSafePointV2Response> {
+        self.client.unary_call(&METHOD_PD_UPDATE_SERVICE_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn update_service_safe_point_v2(&self, req: &super::pdpb::UpdateServiceSafePointV2Request) -> ::grpcio::Result<super::pdpb::UpdateServiceSafePointV2Response> {
+        self.update_service_safe_point_v2_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn update_service_safe_point_v2_async_opt(&self, req: &super::pdpb::UpdateServiceSafePointV2Request, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::UpdateServiceSafePointV2Response>> {
+        self.client.unary_call_async(&METHOD_PD_UPDATE_SERVICE_SAFE_POINT_V2, req, opt)
+    }
+
+    pub fn update_service_safe_point_v2_async(&self, req: &super::pdpb::UpdateServiceSafePointV2Request) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::UpdateServiceSafePointV2Response>> {
+        self.update_service_safe_point_v2_async_opt(req, ::grpcio::CallOption::default())
+    }
+
     pub fn sync_regions_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::pdpb::SyncRegionRequest>, ::grpcio::ClientDuplexReceiver<super::pdpb::SyncRegionResponse>)> {
         self.client.duplex_streaming(&METHOD_PD_SYNC_REGIONS, opt)
     }
@@ -942,6 +1026,18 @@ pub trait Pd {
     fn update_service_gc_safe_point(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::UpdateServiceGcSafePointRequest, sink: ::grpcio::UnarySink<super::pdpb::UpdateServiceGcSafePointResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
+    fn get_gc_safe_point_v2(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::GetGcSafePointV2Request, sink: ::grpcio::UnarySink<super::pdpb::GetGcSafePointV2Response>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
+    fn watch_gc_safe_point_v2(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::WatchGcSafePointV2Request, sink: ::grpcio::ServerStreamingSink<super::pdpb::WatchGcSafePointV2Response>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
+    fn update_gc_safe_point_v2(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::UpdateGcSafePointV2Request, sink: ::grpcio::UnarySink<super::pdpb::UpdateGcSafePointV2Response>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
+    fn update_service_safe_point_v2(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::UpdateServiceSafePointV2Request, sink: ::grpcio::UnarySink<super::pdpb::UpdateServiceSafePointV2Response>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
     fn sync_regions(&mut self, ctx: ::grpcio::RpcContext, _stream: ::grpcio::RequestStream<super::pdpb::SyncRegionRequest>, sink: ::grpcio::DuplexSink<super::pdpb::SyncRegionResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
@@ -1084,6 +1180,22 @@ pub fn create_pd<S: Pd + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_PD_UPDATE_SERVICE_GC_SAFE_POINT, move |ctx, req, resp| {
         instance.update_service_gc_safe_point(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_PD_GET_GC_SAFE_POINT_V2, move |ctx, req, resp| {
+        instance.get_gc_safe_point_v2(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_server_streaming_handler(&METHOD_PD_WATCH_GC_SAFE_POINT_V2, move |ctx, req, resp| {
+        instance.watch_gc_safe_point_v2(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_PD_UPDATE_GC_SAFE_POINT_V2, move |ctx, req, resp| {
+        instance.update_gc_safe_point_v2(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_PD_UPDATE_SERVICE_SAFE_POINT_V2, move |ctx, req, resp| {
+        instance.update_service_safe_point_v2(ctx, req, resp)
     });
     let mut instance = s.clone();
     builder = builder.add_duplex_streaming_handler(&METHOD_PD_SYNC_REGIONS, move |ctx, req, resp| {

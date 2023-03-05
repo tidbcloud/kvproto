@@ -32,7 +32,7 @@ const METHOD_DIAGNOSTICS_SERVER_INFO: ::grpcio::Method<super::diagnosticspb::Ser
 
 #[derive(Clone)]
 pub struct DiagnosticsClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl DiagnosticsClient {

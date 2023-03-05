@@ -137,7 +137,7 @@ const METHOD_DEBUG_RESET_TO_VERSION: ::grpcio::Method<super::debugpb::ResetToVer
 
 #[derive(Clone)]
 pub struct DebugClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl DebugClient {

@@ -53,7 +53,7 @@ const METHOD_CONFIG_DELETE: ::grpcio::Method<super::configpb::DeleteRequest, sup
 
 #[derive(Clone)]
 pub struct ConfigClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ConfigClient {

@@ -25,7 +25,7 @@ const METHOD_TRACE_RECORD_PUB_SUB_SUBSCRIBE: ::grpcio::Method<super::tracepb::Tr
 
 #[derive(Clone)]
 pub struct TraceRecordPubSubClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl TraceRecordPubSubClient {

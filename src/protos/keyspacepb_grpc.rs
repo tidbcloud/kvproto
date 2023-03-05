@@ -39,7 +39,7 @@ const METHOD_KEYSPACE_UPDATE_KEYSPACE_STATE: ::grpcio::Method<super::keyspacepb:
 
 #[derive(Clone)]
 pub struct KeyspaceClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl KeyspaceClient {

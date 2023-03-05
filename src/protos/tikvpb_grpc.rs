@@ -417,7 +417,7 @@ const METHOD_TIKV_GET_LOCK_WAIT_HISTORY: ::grpcio::Method<super::kvrpcpb::GetLoc
 
 #[derive(Clone)]
 pub struct TikvClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl TikvClient {

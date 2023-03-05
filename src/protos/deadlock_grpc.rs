@@ -32,7 +32,7 @@ const METHOD_DEADLOCK_DETECT: ::grpcio::Method<super::deadlock::DeadlockRequest,
 
 #[derive(Clone)]
 pub struct DeadlockClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl DeadlockClient {

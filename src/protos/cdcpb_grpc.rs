@@ -25,7 +25,7 @@ const METHOD_CHANGE_DATA_EVENT_FEED: ::grpcio::Method<super::cdcpb::ChangeDataRe
 
 #[derive(Clone)]
 pub struct ChangeDataClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ChangeDataClient {
