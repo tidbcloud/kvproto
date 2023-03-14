@@ -75,13 +75,13 @@ service PD {
 
     rpc UpdateServiceGCSafePoint(UpdateServiceGCSafePointRequest) returns (UpdateServiceGCSafePointResponse) {}
 
-    rpc GetGCSafePointV2(GetGCSafePointV2Request) returns (GetGCSafePointV2Response) {}
+    rpc GetGCSafePointV2(GetGCSafePointV2Request) returns (GetGCSafePointResponse) {}
 
     rpc WatchGCSafePointV2(WatchGCSafePointV2Request) returns (stream WatchGCSafePointV2Response) {}
 
-    rpc UpdateGCSafePointV2(UpdateGCSafePointV2Request) returns (UpdateGCSafePointV2Response) {}
+    rpc UpdateGCSafePointV2(UpdateGCSafePointV2Request) returns (UpdateGCSafePointResponse) {}
 
-    rpc UpdateServiceSafePointV2(UpdateServiceSafePointV2Request) returns (UpdateServiceSafePointV2Response) {}
+    rpc UpdateServiceSafePointV2(UpdateServiceSafePointV2Request) returns (UpdateServiceGCSafePointResponse) {}
 
     rpc SyncRegions(stream SyncRegionRequest) returns (stream SyncRegionResponse) {}
 
@@ -805,13 +805,6 @@ message GetGCSafePointV2Request {
     uint32 keyspace_id = 2;
 }
 
-message GetGCSafePointV2Response {
-    ResponseHeader header = 1;
-
-    uint32 keyspace_id = 2;
-    uint64 safe_point = 3;
-}
-
 message WatchGCSafePointV2Request {
     RequestHeader header = 1;
 }
@@ -835,10 +828,6 @@ message UpdateGCSafePointV2Request {
     uint64 safe_point = 3;
 }
 
-message UpdateGCSafePointV2Response {
-    ResponseHeader header = 1;
-}
-
 message UpdateServiceSafePointV2Request {
     RequestHeader header = 1;
 
@@ -851,10 +840,6 @@ message UpdateServiceSafePointV2Request {
     // This should be set by component that may crash unexpectedly so that it doesn't block
     // cluster garbage collection.
     int64 ttl = 5;
-}
-
-message UpdateServiceSafePointV2Response {
-    ResponseHeader header = 1;
 }
 
 message RegionStat {
