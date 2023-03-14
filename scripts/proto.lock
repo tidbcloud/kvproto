@@ -15202,6 +15202,16 @@
             ]
           },
           {
+            "name": "CustomRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "data",
+                "type": "bytes"
+              }
+            ]
+          },
+          {
             "name": "RaftCmdRequest",
             "fields": [
               {
@@ -15224,6 +15234,11 @@
                 "id": 4,
                 "name": "status_request",
                 "type": "StatusRequest"
+              },
+              {
+                "id": 5,
+                "name": "custom_request",
+                "type": "CustomRequest"
               }
             ]
           },
