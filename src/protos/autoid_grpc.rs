@@ -73,18 +73,14 @@ impl AutoIdAllocClient {
     pub fn rebase_async(&self, req: &super::autoid::RebaseRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::autoid::RebaseResponse>> {
         self.rebase_async_opt(req, ::grpcio::CallOption::default())
     }
-    pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
+    pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
 }
 
 pub trait AutoIdAlloc {
-    fn alloc_auto_id(&mut self, ctx: ::grpcio::RpcContext, _req: super::autoid::AutoIdRequest, sink: ::grpcio::UnarySink<super::autoid::AutoIdResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn rebase(&mut self, ctx: ::grpcio::RpcContext, _req: super::autoid::RebaseRequest, sink: ::grpcio::UnarySink<super::autoid::RebaseResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
+    fn alloc_auto_id(&mut self, ctx: ::grpcio::RpcContext, req: super::autoid::AutoIdRequest, sink: ::grpcio::UnarySink<super::autoid::AutoIdResponse>);
+    fn rebase(&mut self, ctx: ::grpcio::RpcContext, req: super::autoid::RebaseRequest, sink: ::grpcio::UnarySink<super::autoid::RebaseResponse>);
 }
 
 pub fn create_auto_id_alloc<S: AutoIdAlloc + Send + Clone + 'static>(s: S) -> ::grpcio::Service {

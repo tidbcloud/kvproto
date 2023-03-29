@@ -116,3 +116,17 @@ message StoreBatchTaskResponse {
     uint64 task_id = 5;
     kvrpcpb.ExecDetailsV2 exec_details_v2 = 6;
 }
+
+message DelegateRequest {
+    kvrpcpb.Context context = 1;
+    uint64 start_ts = 2;
+    repeated KeyRange ranges = 3;
+}
+
+message DelegateResponse {
+    bytes mem_table_data = 1;
+    bytes snapshot = 2;
+    errorpb.Error region_error = 3;
+    kvrpcpb.LockInfo locked = 4;
+    string other_error = 5;
+}

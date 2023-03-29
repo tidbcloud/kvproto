@@ -157,30 +157,18 @@ impl ResourceManagerClient {
     pub fn acquire_token_buckets(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::resource_manager::TokenBucketsRequest>, ::grpcio::ClientDuplexReceiver<super::resource_manager::TokenBucketsResponse>)> {
         self.acquire_token_buckets_opt(::grpcio::CallOption::default())
     }
-    pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
+    pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
 }
 
 pub trait ResourceManager {
-    fn list_resource_groups(&mut self, ctx: ::grpcio::RpcContext, _req: super::resource_manager::ListResourceGroupsRequest, sink: ::grpcio::UnarySink<super::resource_manager::ListResourceGroupsResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn get_resource_group(&mut self, ctx: ::grpcio::RpcContext, _req: super::resource_manager::GetResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::GetResourceGroupResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn add_resource_group(&mut self, ctx: ::grpcio::RpcContext, _req: super::resource_manager::PutResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::PutResourceGroupResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn modify_resource_group(&mut self, ctx: ::grpcio::RpcContext, _req: super::resource_manager::PutResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::PutResourceGroupResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn delete_resource_group(&mut self, ctx: ::grpcio::RpcContext, _req: super::resource_manager::DeleteResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::DeleteResourceGroupResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn acquire_token_buckets(&mut self, ctx: ::grpcio::RpcContext, _stream: ::grpcio::RequestStream<super::resource_manager::TokenBucketsRequest>, sink: ::grpcio::DuplexSink<super::resource_manager::TokenBucketsResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
+    fn list_resource_groups(&mut self, ctx: ::grpcio::RpcContext, req: super::resource_manager::ListResourceGroupsRequest, sink: ::grpcio::UnarySink<super::resource_manager::ListResourceGroupsResponse>);
+    fn get_resource_group(&mut self, ctx: ::grpcio::RpcContext, req: super::resource_manager::GetResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::GetResourceGroupResponse>);
+    fn add_resource_group(&mut self, ctx: ::grpcio::RpcContext, req: super::resource_manager::PutResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::PutResourceGroupResponse>);
+    fn modify_resource_group(&mut self, ctx: ::grpcio::RpcContext, req: super::resource_manager::PutResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::PutResourceGroupResponse>);
+    fn delete_resource_group(&mut self, ctx: ::grpcio::RpcContext, req: super::resource_manager::DeleteResourceGroupRequest, sink: ::grpcio::UnarySink<super::resource_manager::DeleteResourceGroupResponse>);
+    fn acquire_token_buckets(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::resource_manager::TokenBucketsRequest>, sink: ::grpcio::DuplexSink<super::resource_manager::TokenBucketsResponse>);
 }
 
 pub fn create_resource_manager<S: ResourceManager + Send + Clone + 'static>(s: S) -> ::grpcio::Service {

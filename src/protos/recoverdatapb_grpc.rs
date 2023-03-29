@@ -95,24 +95,16 @@ impl RecoverDataClient {
     pub fn resolve_kv_data(&self, req: &super::recoverdatapb::ResolveKvDataRequest) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::recoverdatapb::ResolveKvDataResponse>> {
         self.resolve_kv_data_opt(req, ::grpcio::CallOption::default())
     }
-    pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
+    pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
 }
 
 pub trait RecoverData {
-    fn read_region_meta(&mut self, ctx: ::grpcio::RpcContext, _req: super::recoverdatapb::ReadRegionMetaRequest, sink: ::grpcio::ServerStreamingSink<super::recoverdatapb::RegionMeta>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn recover_region(&mut self, ctx: ::grpcio::RpcContext, _stream: ::grpcio::RequestStream<super::recoverdatapb::RecoverRegionRequest>, sink: ::grpcio::ClientStreamingSink<super::recoverdatapb::RecoverRegionResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn wait_apply(&mut self, ctx: ::grpcio::RpcContext, _req: super::recoverdatapb::WaitApplyRequest, sink: ::grpcio::UnarySink<super::recoverdatapb::WaitApplyResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
-    fn resolve_kv_data(&mut self, ctx: ::grpcio::RpcContext, _req: super::recoverdatapb::ResolveKvDataRequest, sink: ::grpcio::ServerStreamingSink<super::recoverdatapb::ResolveKvDataResponse>) {
-        grpcio::unimplemented_call!(ctx, sink)
-    }
+    fn read_region_meta(&mut self, ctx: ::grpcio::RpcContext, req: super::recoverdatapb::ReadRegionMetaRequest, sink: ::grpcio::ServerStreamingSink<super::recoverdatapb::RegionMeta>);
+    fn recover_region(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::recoverdatapb::RecoverRegionRequest>, sink: ::grpcio::ClientStreamingSink<super::recoverdatapb::RecoverRegionResponse>);
+    fn wait_apply(&mut self, ctx: ::grpcio::RpcContext, req: super::recoverdatapb::WaitApplyRequest, sink: ::grpcio::UnarySink<super::recoverdatapb::WaitApplyResponse>);
+    fn resolve_kv_data(&mut self, ctx: ::grpcio::RpcContext, req: super::recoverdatapb::ResolveKvDataRequest, sink: ::grpcio::ServerStreamingSink<super::recoverdatapb::ResolveKvDataResponse>);
 }
 
 pub fn create_recover_data<S: RecoverData + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
