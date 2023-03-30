@@ -21705,6 +21705,175 @@ impl ::protobuf::reflect::ProtobufValue for SyncRegionRequest {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct PeersStats {
+    // message fields
+    pub peers: ::protobuf::RepeatedField<PeerStats>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a PeersStats {
+    fn default() -> &'a PeersStats {
+        <PeersStats as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl PeersStats {
+    pub fn new() -> PeersStats {
+        ::std::default::Default::default()
+    }
+
+    // repeated .pdpb.PeerStats peers = 1;
+
+
+    pub fn get_peers(&self) -> &[PeerStats] {
+        &self.peers
+    }
+    pub fn clear_peers(&mut self) {
+        self.peers.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_peers(&mut self, v: ::protobuf::RepeatedField<PeerStats>) {
+        self.peers = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_peers(&mut self) -> &mut ::protobuf::RepeatedField<PeerStats> {
+        &mut self.peers
+    }
+
+    // Take field
+    pub fn take_peers(&mut self) -> ::protobuf::RepeatedField<PeerStats> {
+        ::std::mem::replace(&mut self.peers, ::protobuf::RepeatedField::new())
+    }
+}
+
+impl ::protobuf::Message for PeersStats {
+    fn is_initialized(&self) -> bool {
+        for v in &self.peers {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.peers)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        for value in &self.peers {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        for v in &self.peers {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> PeersStats {
+        PeersStats::new()
+    }
+
+    fn default_instance() -> &'static PeersStats {
+        static mut instance: ::protobuf::lazy::Lazy<PeersStats> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const PeersStats,
+        };
+        unsafe {
+            instance.get(PeersStats::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for PeersStats {
+    fn clear(&mut self) {
+        self.peers.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for PeersStats {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.peers, "peers", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for PeersStats {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.peers, "peers", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for PeersStats {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct Peers {
     // message fields
     pub peers: ::protobuf::RepeatedField<super::metapb::Peer>,
@@ -21882,7 +22051,7 @@ pub struct SyncRegionResponse {
     pub region_stats: ::protobuf::RepeatedField<RegionStat>,
     pub region_leaders: ::protobuf::RepeatedField<super::metapb::Peer>,
     pub buckets: ::protobuf::RepeatedField<super::metapb::Buckets>,
-    pub down_peers: ::protobuf::RepeatedField<Peers>,
+    pub down_peers: ::protobuf::RepeatedField<PeersStats>,
     pub pending_peers: ::protobuf::RepeatedField<Peers>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -22048,10 +22217,10 @@ impl SyncRegionResponse {
         ::std::mem::replace(&mut self.buckets, ::protobuf::RepeatedField::new())
     }
 
-    // repeated .pdpb.Peers down_peers = 16;
+    // repeated .pdpb.PeersStats down_peers = 16;
 
 
-    pub fn get_down_peers(&self) -> &[Peers] {
+    pub fn get_down_peers(&self) -> &[PeersStats] {
         &self.down_peers
     }
     pub fn clear_down_peers(&mut self) {
@@ -22059,17 +22228,17 @@ impl SyncRegionResponse {
     }
 
     // Param is passed by value, moved
-    pub fn set_down_peers(&mut self, v: ::protobuf::RepeatedField<Peers>) {
+    pub fn set_down_peers(&mut self, v: ::protobuf::RepeatedField<PeersStats>) {
         self.down_peers = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_down_peers(&mut self) -> &mut ::protobuf::RepeatedField<Peers> {
+    pub fn mut_down_peers(&mut self) -> &mut ::protobuf::RepeatedField<PeersStats> {
         &mut self.down_peers
     }
 
     // Take field
-    pub fn take_down_peers(&mut self) -> ::protobuf::RepeatedField<Peers> {
+    pub fn take_down_peers(&mut self) -> ::protobuf::RepeatedField<PeersStats> {
         ::std::mem::replace(&mut self.down_peers, ::protobuf::RepeatedField::new())
     }
 

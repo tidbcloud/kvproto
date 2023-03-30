@@ -33,19 +33,17 @@ mod logbackuppb;
 pub 
 mod recoverdatapb;
 pub 
-mod import_sstpb;
-pub 
-mod tikvpb;
-pub 
-mod brpb;
-pub 
 mod errorpb;
 pub 
 mod keyspacepb;
 pub 
-mod kvrpcpb;
-pub 
 mod metapb;
+pub 
+mod brpb;
+pub 
+mod import_sstpb;
+pub 
+mod kvrpcpb;
 pub 
 mod mpp;
 pub 
@@ -56,6 +54,8 @@ pub
 mod raft_serverpb;
 pub 
 mod resource_manager;
+pub 
+mod tikvpb;
 pub 
 mod configpb_grpc;
 pub 
@@ -83,14 +83,14 @@ mod logbackuppb_grpc;
 pub 
 mod recoverdatapb_grpc;
 pub 
-mod import_sstpb_grpc;
-pub 
-mod tikvpb_grpc;
+mod keyspacepb_grpc;
 pub 
 mod brpb_grpc;
 pub 
-mod keyspacepb_grpc;
+mod import_sstpb_grpc;
 pub 
 mod pdpb_grpc;
 pub 
 mod resource_manager_grpc;
+pub 
+mod tikvpb_grpc;
