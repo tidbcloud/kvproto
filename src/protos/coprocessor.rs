@@ -3346,6 +3346,7 @@ pub struct DelegateRequest {
     pub context: ::protobuf::SingularPtrField<super::kvrpcpb::Context>,
     pub start_ts: u64,
     pub ranges: ::protobuf::RepeatedField<KeyRange>,
+    pub mem_table_version: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -3434,6 +3435,21 @@ impl DelegateRequest {
     pub fn take_ranges(&mut self) -> ::protobuf::RepeatedField<KeyRange> {
         ::std::mem::replace(&mut self.ranges, ::protobuf::RepeatedField::new())
     }
+
+    // uint64 mem_table_version = 4;
+
+
+    pub fn get_mem_table_version(&self) -> u64 {
+        self.mem_table_version
+    }
+    pub fn clear_mem_table_version(&mut self) {
+        self.mem_table_version = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_mem_table_version(&mut self, v: u64) {
+        self.mem_table_version = v;
+    }
 }
 
 impl ::protobuf::Message for DelegateRequest {
@@ -3468,6 +3484,13 @@ impl ::protobuf::Message for DelegateRequest {
                 3 => {
                     ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.ranges)?;
                 },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.mem_table_version = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -3491,6 +3514,9 @@ impl ::protobuf::Message for DelegateRequest {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
+        if self.mem_table_version != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.mem_table_version, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -3510,6 +3536,9 @@ impl ::protobuf::Message for DelegateRequest {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         };
+        if self.mem_table_version != 0 {
+            os.write_uint64(4, self.mem_table_version)?;
+        }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -3560,6 +3589,7 @@ impl ::protobuf::Clear for DelegateRequest {
         self.context.clear();
         self.start_ts = 0;
         self.ranges.clear();
+        self.mem_table_version = 0;
         self.unknown_fields.clear();
     }
 }
@@ -3572,6 +3602,7 @@ impl ::protobuf::PbPrint for DelegateRequest {
         ::protobuf::PbPrint::fmt(&self.context, "context", buf);
         ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", buf);
         ::protobuf::PbPrint::fmt(&self.ranges, "ranges", buf);
+        ::protobuf::PbPrint::fmt(&self.mem_table_version, "mem_table_version", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -3585,6 +3616,7 @@ impl ::std::fmt::Debug for DelegateRequest {
         ::protobuf::PbPrint::fmt(&self.context, "context", &mut s);
         ::protobuf::PbPrint::fmt(&self.start_ts, "start_ts", &mut s);
         ::protobuf::PbPrint::fmt(&self.ranges, "ranges", &mut s);
+        ::protobuf::PbPrint::fmt(&self.mem_table_version, "mem_table_version", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -3603,6 +3635,7 @@ pub struct DelegateResponse {
     pub region_error: ::protobuf::SingularPtrField<super::errorpb::Error>,
     pub locked: ::protobuf::SingularPtrField<super::kvrpcpb::LockInfo>,
     pub other_error: ::std::string::String,
+    pub codec_version: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -3762,6 +3795,21 @@ impl DelegateResponse {
     pub fn take_other_error(&mut self) -> ::std::string::String {
         ::std::mem::replace(&mut self.other_error, ::std::string::String::new())
     }
+
+    // uint64 codec_version = 6;
+
+
+    pub fn get_codec_version(&self) -> u64 {
+        self.codec_version
+    }
+    pub fn clear_codec_version(&mut self) {
+        self.codec_version = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_codec_version(&mut self, v: u64) {
+        self.codec_version = v;
+    }
 }
 
 impl ::protobuf::Message for DelegateResponse {
@@ -3798,6 +3846,13 @@ impl ::protobuf::Message for DelegateResponse {
                 5 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.other_error)?;
                 },
+                6 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.codec_version = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -3827,6 +3882,9 @@ impl ::protobuf::Message for DelegateResponse {
         if !self.other_error.is_empty() {
             my_size += ::protobuf::rt::string_size(5, &self.other_error);
         }
+        if self.codec_version != 0 {
+            my_size += ::protobuf::rt::value_size(6, self.codec_version, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -3851,6 +3909,9 @@ impl ::protobuf::Message for DelegateResponse {
         }
         if !self.other_error.is_empty() {
             os.write_string(5, &self.other_error)?;
+        }
+        if self.codec_version != 0 {
+            os.write_uint64(6, self.codec_version)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -3904,6 +3965,7 @@ impl ::protobuf::Clear for DelegateResponse {
         self.region_error.clear();
         self.locked.clear();
         self.other_error.clear();
+        self.codec_version = 0;
         self.unknown_fields.clear();
     }
 }
@@ -3918,6 +3980,7 @@ impl ::protobuf::PbPrint for DelegateResponse {
         ::protobuf::PbPrint::fmt(&self.region_error, "region_error", buf);
         ::protobuf::PbPrint::fmt(&self.locked, "locked", buf);
         ::protobuf::PbPrint::fmt(&self.other_error, "other_error", buf);
+        ::protobuf::PbPrint::fmt(&self.codec_version, "codec_version", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -3933,6 +3996,7 @@ impl ::std::fmt::Debug for DelegateResponse {
         ::protobuf::PbPrint::fmt(&self.region_error, "region_error", &mut s);
         ::protobuf::PbPrint::fmt(&self.locked, "locked", &mut s);
         ::protobuf::PbPrint::fmt(&self.other_error, "other_error", &mut s);
+        ::protobuf::PbPrint::fmt(&self.codec_version, "codec_version", &mut s);
         write!(f, "{}", s)
     }
 }
