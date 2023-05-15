@@ -32,7 +32,7 @@ const METHOD_ENGINE_APPLY_SNAPSHOT: ::grpcio::Method<super::enginepb::SnapshotRe
 
 #[derive(Clone)]
 pub struct EngineClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl EngineClient {

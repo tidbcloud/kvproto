@@ -32,7 +32,7 @@ const METHOD_AUTO_ID_ALLOC_REBASE: ::grpcio::Method<super::autoid::RebaseRequest
 
 #[derive(Clone)]
 pub struct AutoIdAllocClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl AutoIdAllocClient {

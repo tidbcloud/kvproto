@@ -32,7 +32,7 @@ const METHOD_LOG_BACKUP_SUBSCRIBE_FLUSH_EVENT: ::grpcio::Method<super::logbackup
 
 #[derive(Clone)]
 pub struct LogBackupClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl LogBackupClient {

@@ -88,7 +88,7 @@ const METHOD_IMPORT_KV_GET_METRICS: ::grpcio::Method<super::import_kvpb::GetMetr
 
 #[derive(Clone)]
 pub struct ImportKvClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ImportKvClient {

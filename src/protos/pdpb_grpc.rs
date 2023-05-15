@@ -282,9 +282,16 @@ const METHOD_PD_GET_EXTERNAL_TIMESTAMP: ::grpcio::Method<super::pdpb::GetExterna
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_PD_GET_MIN_TIMESTAMP: ::grpcio::Method<super::pdpb::GetMinTimestampRequest, super::pdpb::GetMinTimestampResponse> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/pdpb.PD/GetMinTimestamp",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 #[derive(Clone)]
 pub struct PdClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl PdClient {
@@ -861,6 +868,22 @@ impl PdClient {
     pub fn get_external_timestamp_async(&self, req: &super::pdpb::GetExternalTimestampRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::GetExternalTimestampResponse>> {
         self.get_external_timestamp_async_opt(req, ::grpcio::CallOption::default())
     }
+
+    pub fn get_min_timestamp_opt(&self, req: &super::pdpb::GetMinTimestampRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::pdpb::GetMinTimestampResponse> {
+        self.client.unary_call(&METHOD_PD_GET_MIN_TIMESTAMP, req, opt)
+    }
+
+    pub fn get_min_timestamp(&self, req: &super::pdpb::GetMinTimestampRequest) -> ::grpcio::Result<super::pdpb::GetMinTimestampResponse> {
+        self.get_min_timestamp_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn get_min_timestamp_async_opt(&self, req: &super::pdpb::GetMinTimestampRequest, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::GetMinTimestampResponse>> {
+        self.client.unary_call_async(&METHOD_PD_GET_MIN_TIMESTAMP, req, opt)
+    }
+
+    pub fn get_min_timestamp_async(&self, req: &super::pdpb::GetMinTimestampRequest) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::pdpb::GetMinTimestampResponse>> {
+        self.get_min_timestamp_async_opt(req, ::grpcio::CallOption::default())
+    }
     pub fn spawn<F>(&self, f: F) where F: ::std::future::Future<Output = ()> + Send + 'static {
         self.client.spawn(f)
     }
@@ -979,6 +1002,9 @@ pub trait Pd {
         grpcio::unimplemented_call!(ctx, sink)
     }
     fn get_external_timestamp(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::GetExternalTimestampRequest, sink: ::grpcio::UnarySink<super::pdpb::GetExternalTimestampResponse>) {
+        grpcio::unimplemented_call!(ctx, sink)
+    }
+    fn get_min_timestamp(&mut self, ctx: ::grpcio::RpcContext, _req: super::pdpb::GetMinTimestampRequest, sink: ::grpcio::UnarySink<super::pdpb::GetMinTimestampResponse>) {
         grpcio::unimplemented_call!(ctx, sink)
     }
 }
@@ -1133,9 +1159,13 @@ pub fn create_pd<S: Pd + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     builder = builder.add_unary_handler(&METHOD_PD_SET_EXTERNAL_TIMESTAMP, move |ctx, req, resp| {
         instance.set_external_timestamp(ctx, req, resp)
     });
-    let mut instance = s;
+    let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_PD_GET_EXTERNAL_TIMESTAMP, move |ctx, req, resp| {
         instance.get_external_timestamp(ctx, req, resp)
+    });
+    let mut instance = s;
+    builder = builder.add_unary_handler(&METHOD_PD_GET_MIN_TIMESTAMP, move |ctx, req, resp| {
+        instance.get_min_timestamp(ctx, req, resp)
     });
     builder.build()
 }

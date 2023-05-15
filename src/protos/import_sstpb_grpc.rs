@@ -102,7 +102,7 @@ const METHOD_IMPORT_SST_CLEAR_FILES: ::grpcio::Method<super::import_sstpb::Clear
 
 #[derive(Clone)]
 pub struct ImportSstClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ImportSstClient {
