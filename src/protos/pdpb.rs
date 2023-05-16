@@ -27249,7 +27249,7 @@ impl ::protobuf::reflect::ProtobufValue for GetExternalTimestampResponse {
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct GetMinTimestampRequest {
+pub struct GetMinTsRequest {
     // message fields
     pub header: ::protobuf::SingularPtrField<RequestHeader>,
     // special fields
@@ -27257,14 +27257,14 @@ pub struct GetMinTimestampRequest {
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a GetMinTimestampRequest {
-    fn default() -> &'a GetMinTimestampRequest {
-        <GetMinTimestampRequest as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a GetMinTsRequest {
+    fn default() -> &'a GetMinTsRequest {
+        <GetMinTsRequest as ::protobuf::Message>::default_instance()
     }
 }
 
-impl GetMinTimestampRequest {
-    pub fn new() -> GetMinTimestampRequest {
+impl GetMinTsRequest {
+    pub fn new() -> GetMinTsRequest {
         ::std::default::Default::default()
     }
 
@@ -27302,7 +27302,7 @@ impl GetMinTimestampRequest {
     }
 }
 
-impl ::protobuf::Message for GetMinTimestampRequest {
+impl ::protobuf::Message for GetMinTsRequest {
     fn is_initialized(&self) -> bool {
         for v in &self.header {
             if !v.is_initialized() {
@@ -27376,29 +27376,29 @@ impl ::protobuf::Message for GetMinTimestampRequest {
         Self::descriptor_static()
     }
 
-    fn new() -> GetMinTimestampRequest {
-        GetMinTimestampRequest::new()
+    fn new() -> GetMinTsRequest {
+        GetMinTsRequest::new()
     }
 
-    fn default_instance() -> &'static GetMinTimestampRequest {
-        static mut instance: ::protobuf::lazy::Lazy<GetMinTimestampRequest> = ::protobuf::lazy::Lazy {
+    fn default_instance() -> &'static GetMinTsRequest {
+        static mut instance: ::protobuf::lazy::Lazy<GetMinTsRequest> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const GetMinTimestampRequest,
+            ptr: 0 as *const GetMinTsRequest,
         };
         unsafe {
-            instance.get(GetMinTimestampRequest::new)
+            instance.get(GetMinTsRequest::new)
         }
     }
 }
 
-impl ::protobuf::Clear for GetMinTimestampRequest {
+impl ::protobuf::Clear for GetMinTsRequest {
     fn clear(&mut self) {
         self.header.clear();
         self.unknown_fields.clear();
     }
 }
 
-impl ::protobuf::PbPrint for GetMinTimestampRequest {
+impl ::protobuf::PbPrint for GetMinTsRequest {
     #[allow(unused_variables)]
     fn fmt(&self, name: &str, buf: &mut String) {
         ::protobuf::push_message_start(name, buf);
@@ -27410,7 +27410,7 @@ impl ::protobuf::PbPrint for GetMinTimestampRequest {
         buf.push('}');
     }
 }
-impl ::std::fmt::Debug for GetMinTimestampRequest {
+impl ::std::fmt::Debug for GetMinTsRequest {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
@@ -27419,14 +27419,14 @@ impl ::std::fmt::Debug for GetMinTimestampRequest {
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for GetMinTimestampRequest {
+impl ::protobuf::reflect::ProtobufValue for GetMinTsRequest {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct GetMinTimestampResponse {
+pub struct GetMinTsResponse {
     // message fields
     pub header: ::protobuf::SingularPtrField<ResponseHeader>,
     pub timestamp: ::protobuf::SingularPtrField<Timestamp>,
@@ -27435,14 +27435,14 @@ pub struct GetMinTimestampResponse {
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a GetMinTimestampResponse {
-    fn default() -> &'a GetMinTimestampResponse {
-        <GetMinTimestampResponse as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a GetMinTsResponse {
+    fn default() -> &'a GetMinTsResponse {
+        <GetMinTsResponse as ::protobuf::Message>::default_instance()
     }
 }
 
-impl GetMinTimestampResponse {
-    pub fn new() -> GetMinTimestampResponse {
+impl GetMinTsResponse {
+    pub fn new() -> GetMinTsResponse {
         ::std::default::Default::default()
     }
 
@@ -27513,7 +27513,7 @@ impl GetMinTimestampResponse {
     }
 }
 
-impl ::protobuf::Message for GetMinTimestampResponse {
+impl ::protobuf::Message for GetMinTsResponse {
     fn is_initialized(&self) -> bool {
         for v in &self.header {
             if !v.is_initialized() {
@@ -27604,22 +27604,22 @@ impl ::protobuf::Message for GetMinTimestampResponse {
         Self::descriptor_static()
     }
 
-    fn new() -> GetMinTimestampResponse {
-        GetMinTimestampResponse::new()
+    fn new() -> GetMinTsResponse {
+        GetMinTsResponse::new()
     }
 
-    fn default_instance() -> &'static GetMinTimestampResponse {
-        static mut instance: ::protobuf::lazy::Lazy<GetMinTimestampResponse> = ::protobuf::lazy::Lazy {
+    fn default_instance() -> &'static GetMinTsResponse {
+        static mut instance: ::protobuf::lazy::Lazy<GetMinTsResponse> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const GetMinTimestampResponse,
+            ptr: 0 as *const GetMinTsResponse,
         };
         unsafe {
-            instance.get(GetMinTimestampResponse::new)
+            instance.get(GetMinTsResponse::new)
         }
     }
 }
 
-impl ::protobuf::Clear for GetMinTimestampResponse {
+impl ::protobuf::Clear for GetMinTsResponse {
     fn clear(&mut self) {
         self.header.clear();
         self.timestamp.clear();
@@ -27627,7 +27627,7 @@ impl ::protobuf::Clear for GetMinTimestampResponse {
     }
 }
 
-impl ::protobuf::PbPrint for GetMinTimestampResponse {
+impl ::protobuf::PbPrint for GetMinTsResponse {
     #[allow(unused_variables)]
     fn fmt(&self, name: &str, buf: &mut String) {
         ::protobuf::push_message_start(name, buf);
@@ -27640,7 +27640,7 @@ impl ::protobuf::PbPrint for GetMinTimestampResponse {
         buf.push('}');
     }
 }
-impl ::std::fmt::Debug for GetMinTimestampResponse {
+impl ::std::fmt::Debug for GetMinTsResponse {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
@@ -27650,7 +27650,7 @@ impl ::std::fmt::Debug for GetMinTimestampResponse {
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for GetMinTimestampResponse {
+impl ::protobuf::reflect::ProtobufValue for GetMinTsResponse {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
