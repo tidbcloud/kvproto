@@ -46,7 +46,7 @@ const METHOD_RECOVER_DATA_RESOLVE_KV_DATA: ::grpcio::Method<super::recoverdatapb
 
 #[derive(Clone)]
 pub struct RecoverDataClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl RecoverDataClient {

@@ -60,7 +60,7 @@ const METHOD_RESOURCE_MANAGER_ACQUIRE_TOKEN_BUCKETS: ::grpcio::Method<super::res
 
 #[derive(Clone)]
 pub struct ResourceManagerClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ResourceManagerClient {

@@ -27248,6 +27248,414 @@ impl ::protobuf::reflect::ProtobufValue for GetExternalTimestampResponse {
     }
 }
 
+#[derive(PartialEq,Clone,Default)]
+pub struct GetMinTsRequest {
+    // message fields
+    pub header: ::protobuf::SingularPtrField<RequestHeader>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a GetMinTsRequest {
+    fn default() -> &'a GetMinTsRequest {
+        <GetMinTsRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl GetMinTsRequest {
+    pub fn new() -> GetMinTsRequest {
+        ::std::default::Default::default()
+    }
+
+    // .pdpb.RequestHeader header = 1;
+
+
+    pub fn get_header(&self) -> &RequestHeader {
+        self.header.as_ref().unwrap_or_else(|| RequestHeader::default_instance())
+    }
+    pub fn clear_header(&mut self) {
+        self.header.clear();
+    }
+
+    pub fn has_header(&self) -> bool {
+        self.header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_header(&mut self, v: RequestHeader) {
+        self.header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_header(&mut self) -> &mut RequestHeader {
+        if self.header.is_none() {
+            self.header.set_default();
+        }
+        self.header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_header(&mut self) -> RequestHeader {
+        self.header.take().unwrap_or_else(|| RequestHeader::new())
+    }
+}
+
+impl ::protobuf::Message for GetMinTsRequest {
+    fn is_initialized(&self) -> bool {
+        for v in &self.header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.header.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> GetMinTsRequest {
+        GetMinTsRequest::new()
+    }
+
+    fn default_instance() -> &'static GetMinTsRequest {
+        static mut instance: ::protobuf::lazy::Lazy<GetMinTsRequest> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const GetMinTsRequest,
+        };
+        unsafe {
+            instance.get(GetMinTsRequest::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for GetMinTsRequest {
+    fn clear(&mut self) {
+        self.header.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for GetMinTsRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for GetMinTsRequest {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for GetMinTsRequest {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct GetMinTsResponse {
+    // message fields
+    pub header: ::protobuf::SingularPtrField<ResponseHeader>,
+    pub timestamp: ::protobuf::SingularPtrField<Timestamp>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a GetMinTsResponse {
+    fn default() -> &'a GetMinTsResponse {
+        <GetMinTsResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl GetMinTsResponse {
+    pub fn new() -> GetMinTsResponse {
+        ::std::default::Default::default()
+    }
+
+    // .pdpb.ResponseHeader header = 1;
+
+
+    pub fn get_header(&self) -> &ResponseHeader {
+        self.header.as_ref().unwrap_or_else(|| ResponseHeader::default_instance())
+    }
+    pub fn clear_header(&mut self) {
+        self.header.clear();
+    }
+
+    pub fn has_header(&self) -> bool {
+        self.header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_header(&mut self, v: ResponseHeader) {
+        self.header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_header(&mut self) -> &mut ResponseHeader {
+        if self.header.is_none() {
+            self.header.set_default();
+        }
+        self.header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_header(&mut self) -> ResponseHeader {
+        self.header.take().unwrap_or_else(|| ResponseHeader::new())
+    }
+
+    // .pdpb.Timestamp timestamp = 2;
+
+
+    pub fn get_timestamp(&self) -> &Timestamp {
+        self.timestamp.as_ref().unwrap_or_else(|| Timestamp::default_instance())
+    }
+    pub fn clear_timestamp(&mut self) {
+        self.timestamp.clear();
+    }
+
+    pub fn has_timestamp(&self) -> bool {
+        self.timestamp.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_timestamp(&mut self, v: Timestamp) {
+        self.timestamp = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_timestamp(&mut self) -> &mut Timestamp {
+        if self.timestamp.is_none() {
+            self.timestamp.set_default();
+        }
+        self.timestamp.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_timestamp(&mut self) -> Timestamp {
+        self.timestamp.take().unwrap_or_else(|| Timestamp::new())
+    }
+}
+
+impl ::protobuf::Message for GetMinTsResponse {
+    fn is_initialized(&self) -> bool {
+        for v in &self.header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.timestamp {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.timestamp)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if let Some(ref v) = self.timestamp.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.header.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if let Some(ref v) = self.timestamp.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> GetMinTsResponse {
+        GetMinTsResponse::new()
+    }
+
+    fn default_instance() -> &'static GetMinTsResponse {
+        static mut instance: ::protobuf::lazy::Lazy<GetMinTsResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const GetMinTsResponse,
+        };
+        unsafe {
+            instance.get(GetMinTsResponse::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for GetMinTsResponse {
+    fn clear(&mut self) {
+        self.header.clear();
+        self.timestamp.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::protobuf::PbPrint for GetMinTsResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, name: &str, buf: &mut String) {
+        ::protobuf::push_message_start(name, buf);
+        let old_len = buf.len();
+        ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        ::protobuf::PbPrint::fmt(&self.timestamp, "timestamp", buf);
+        if old_len < buf.len() {
+          buf.push(' ');
+        }
+        buf.push('}');
+    }
+}
+impl ::std::fmt::Debug for GetMinTsResponse {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        let mut s = String::new();
+        ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        ::protobuf::PbPrint::fmt(&self.timestamp, "timestamp", &mut s);
+        write!(f, "{}", s)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for GetMinTsResponse {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
 #[derive(Clone,PartialEq,Eq,Debug,Hash)]
 pub enum EventType {
     Put = 0,

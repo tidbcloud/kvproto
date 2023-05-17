@@ -46,7 +46,7 @@ const METHOD_GC_UPDATE_SERVICE_SAFE_POINT: ::grpcio::Method<super::gcpb::UpdateS
 
 #[derive(Clone)]
 pub struct GcClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl GcClient {

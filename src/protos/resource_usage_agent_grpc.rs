@@ -25,7 +25,7 @@ const METHOD_RESOURCE_USAGE_AGENT_REPORT: ::grpcio::Method<super::resource_usage
 
 #[derive(Clone)]
 pub struct ResourceUsageAgentClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ResourceUsageAgentClient {
@@ -71,7 +71,7 @@ const METHOD_RESOURCE_METERING_PUB_SUB_SUBSCRIBE: ::grpcio::Method<super::resour
 
 #[derive(Clone)]
 pub struct ResourceMeteringPubSubClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ResourceMeteringPubSubClient {

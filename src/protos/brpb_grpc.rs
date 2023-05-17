@@ -32,7 +32,7 @@ const METHOD_BACKUP_CHECK_PENDING_ADMIN_OP: ::grpcio::Method<super::brpb::CheckA
 
 #[derive(Clone)]
 pub struct BackupClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl BackupClient {
@@ -100,7 +100,7 @@ const METHOD_EXTERNAL_STORAGE_SAVE: ::grpcio::Method<super::brpb::ExternalStorag
 
 #[derive(Clone)]
 pub struct ExternalStorageClient {
-    client: ::grpcio::Client,
+    pub client: ::grpcio::Client,
 }
 
 impl ExternalStorageClient {
