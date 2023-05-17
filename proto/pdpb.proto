@@ -777,8 +777,6 @@ message UpdateGCSafePointRequest {
     uint64 safe_point = 2;
 }
 
-
-
 message UpdateGCSafePointResponse {
     ResponseHeader header = 1;
 
