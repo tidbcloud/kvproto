@@ -1,4 +1,3 @@
-proto/pdpb.proto
 syntax = "proto3";
 package pdpb;
 
