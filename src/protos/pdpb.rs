@@ -21403,7 +21403,6 @@ impl ::protobuf::reflect::ProtobufValue for GetGcSafePointV2Request {
 pub struct GetGcSafePointV2Response {
     // message fields
     pub header: ::protobuf::SingularPtrField<ResponseHeader>,
-    pub keyspace_id: u32,
     pub safe_point: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -21454,22 +21453,7 @@ impl GetGcSafePointV2Response {
         self.header.take().unwrap_or_else(|| ResponseHeader::new())
     }
 
-    // uint32 keyspace_id = 2;
-
-
-    pub fn get_keyspace_id(&self) -> u32 {
-        self.keyspace_id
-    }
-    pub fn clear_keyspace_id(&mut self) {
-        self.keyspace_id = 0;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_keyspace_id(&mut self, v: u32) {
-        self.keyspace_id = v;
-    }
-
-    // uint64 safe_point = 3;
+    // uint64 safe_point = 2;
 
 
     pub fn get_safe_point(&self) -> u64 {
@@ -21506,13 +21490,6 @@ impl ::protobuf::Message for GetGcSafePointV2Response {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
-                    let tmp = is.read_uint32()?;
-                    self.keyspace_id = tmp;
-                },
-                3 => {
-                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
-                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
-                    }
                     let tmp = is.read_uint64()?;
                     self.safe_point = tmp;
                 },
@@ -21532,11 +21509,8 @@ impl ::protobuf::Message for GetGcSafePointV2Response {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
-        if self.keyspace_id != 0 {
-            my_size += ::protobuf::rt::value_size(2, self.keyspace_id, ::protobuf::wire_format::WireTypeVarint);
-        }
         if self.safe_point != 0 {
-            my_size += ::protobuf::rt::value_size(3, self.safe_point, ::protobuf::wire_format::WireTypeVarint);
+            my_size += ::protobuf::rt::value_size(2, self.safe_point, ::protobuf::wire_format::WireTypeVarint);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -21549,11 +21523,8 @@ impl ::protobuf::Message for GetGcSafePointV2Response {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
-        if self.keyspace_id != 0 {
-            os.write_uint32(2, self.keyspace_id)?;
-        }
         if self.safe_point != 0 {
-            os.write_uint64(3, self.safe_point)?;
+            os.write_uint64(2, self.safe_point)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -21603,7 +21574,6 @@ impl ::protobuf::Message for GetGcSafePointV2Response {
 impl ::protobuf::Clear for GetGcSafePointV2Response {
     fn clear(&mut self) {
         self.header.clear();
-        self.keyspace_id = 0;
         self.safe_point = 0;
         self.unknown_fields.clear();
     }
@@ -21615,7 +21585,6 @@ impl ::protobuf::PbPrint for GetGcSafePointV2Response {
         ::protobuf::push_message_start(name, buf);
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.header, "header", buf);
-        ::protobuf::PbPrint::fmt(&self.keyspace_id, "keyspace_id", buf);
         ::protobuf::PbPrint::fmt(&self.safe_point, "safe_point", buf);
         if old_len < buf.len() {
           buf.push(' ');
@@ -21628,7 +21597,6 @@ impl ::std::fmt::Debug for GetGcSafePointV2Response {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
-        ::protobuf::PbPrint::fmt(&self.keyspace_id, "keyspace_id", &mut s);
         ::protobuf::PbPrint::fmt(&self.safe_point, "safe_point", &mut s);
         write!(f, "{}", s)
     }
@@ -22500,6 +22468,7 @@ impl ::protobuf::reflect::ProtobufValue for UpdateGcSafePointV2Request {
 pub struct UpdateGcSafePointV2Response {
     // message fields
     pub header: ::protobuf::SingularPtrField<ResponseHeader>,
+    pub new_safe_point: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -22548,6 +22517,21 @@ impl UpdateGcSafePointV2Response {
     pub fn take_header(&mut self) -> ResponseHeader {
         self.header.take().unwrap_or_else(|| ResponseHeader::new())
     }
+
+    // uint64 new_safe_point = 2;
+
+
+    pub fn get_new_safe_point(&self) -> u64 {
+        self.new_safe_point
+    }
+    pub fn clear_new_safe_point(&mut self) {
+        self.new_safe_point = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_new_safe_point(&mut self, v: u64) {
+        self.new_safe_point = v;
+    }
 }
 
 impl ::protobuf::Message for UpdateGcSafePointV2Response {
@@ -22567,6 +22551,13 @@ impl ::protobuf::Message for UpdateGcSafePointV2Response {
                 1 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
                 },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.new_safe_point = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -22583,6 +22574,9 @@ impl ::protobuf::Message for UpdateGcSafePointV2Response {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
+        if self.new_safe_point != 0 {
+            my_size += ::protobuf::rt::value_size(2, self.new_safe_point, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -22593,6 +22587,9 @@ impl ::protobuf::Message for UpdateGcSafePointV2Response {
             os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
+        }
+        if self.new_safe_point != 0 {
+            os.write_uint64(2, self.new_safe_point)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -22642,6 +22639,7 @@ impl ::protobuf::Message for UpdateGcSafePointV2Response {
 impl ::protobuf::Clear for UpdateGcSafePointV2Response {
     fn clear(&mut self) {
         self.header.clear();
+        self.new_safe_point = 0;
         self.unknown_fields.clear();
     }
 }
@@ -22652,6 +22650,7 @@ impl ::protobuf::PbPrint for UpdateGcSafePointV2Response {
         ::protobuf::push_message_start(name, buf);
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        ::protobuf::PbPrint::fmt(&self.new_safe_point, "new_safe_point", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -22663,6 +22662,7 @@ impl ::std::fmt::Debug for UpdateGcSafePointV2Response {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        ::protobuf::PbPrint::fmt(&self.new_safe_point, "new_safe_point", &mut s);
         write!(f, "{}", s)
     }
 }
@@ -22989,6 +22989,9 @@ impl ::protobuf::reflect::ProtobufValue for UpdateServiceSafePointV2Request {
 pub struct UpdateServiceSafePointV2Response {
     // message fields
     pub header: ::protobuf::SingularPtrField<ResponseHeader>,
+    pub service_id: ::std::vec::Vec<u8>,
+    pub ttl: i64,
+    pub min_safe_point: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -23037,6 +23040,62 @@ impl UpdateServiceSafePointV2Response {
     pub fn take_header(&mut self) -> ResponseHeader {
         self.header.take().unwrap_or_else(|| ResponseHeader::new())
     }
+
+    // bytes service_id = 2;
+
+
+    pub fn get_service_id(&self) -> &[u8] {
+        &self.service_id
+    }
+    pub fn clear_service_id(&mut self) {
+        self.service_id.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_service_id(&mut self, v: ::std::vec::Vec<u8>) {
+        self.service_id = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_service_id(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.service_id
+    }
+
+    // Take field
+    pub fn take_service_id(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.service_id, ::std::vec::Vec::new())
+    }
+
+    // int64 TTL = 3;
+
+
+    pub fn get_ttl(&self) -> i64 {
+        self.ttl
+    }
+    pub fn clear_ttl(&mut self) {
+        self.ttl = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_ttl(&mut self, v: i64) {
+        self.ttl = v;
+    }
+
+    // uint64 min_safe_point = 4;
+
+
+    pub fn get_min_safe_point(&self) -> u64 {
+        self.min_safe_point
+    }
+    pub fn clear_min_safe_point(&mut self) {
+        self.min_safe_point = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_min_safe_point(&mut self, v: u64) {
+        self.min_safe_point = v;
+    }
 }
 
 impl ::protobuf::Message for UpdateServiceSafePointV2Response {
@@ -23056,6 +23115,23 @@ impl ::protobuf::Message for UpdateServiceSafePointV2Response {
                 1 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
                 },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.service_id)?;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.ttl = tmp;
+                },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.min_safe_point = tmp;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -23072,6 +23148,15 @@ impl ::protobuf::Message for UpdateServiceSafePointV2Response {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
+        if !self.service_id.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.service_id);
+        }
+        if self.ttl != 0 {
+            my_size += ::protobuf::rt::value_size(3, self.ttl, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.min_safe_point != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.min_safe_point, ::protobuf::wire_format::WireTypeVarint);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -23082,6 +23167,15 @@ impl ::protobuf::Message for UpdateServiceSafePointV2Response {
             os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
+        }
+        if !self.service_id.is_empty() {
+            os.write_bytes(2, &self.service_id)?;
+        }
+        if self.ttl != 0 {
+            os.write_int64(3, self.ttl)?;
+        }
+        if self.min_safe_point != 0 {
+            os.write_uint64(4, self.min_safe_point)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -23131,6 +23225,9 @@ impl ::protobuf::Message for UpdateServiceSafePointV2Response {
 impl ::protobuf::Clear for UpdateServiceSafePointV2Response {
     fn clear(&mut self) {
         self.header.clear();
+        self.service_id.clear();
+        self.ttl = 0;
+        self.min_safe_point = 0;
         self.unknown_fields.clear();
     }
 }
@@ -23141,6 +23238,9 @@ impl ::protobuf::PbPrint for UpdateServiceSafePointV2Response {
         ::protobuf::push_message_start(name, buf);
         let old_len = buf.len();
         ::protobuf::PbPrint::fmt(&self.header, "header", buf);
+        ::protobuf::PbPrint::fmt(&self.service_id, "service_id", buf);
+        ::protobuf::PbPrint::fmt(&self.ttl, "ttl", buf);
+        ::protobuf::PbPrint::fmt(&self.min_safe_point, "min_safe_point", buf);
         if old_len < buf.len() {
           buf.push(' ');
         }
@@ -23152,6 +23252,9 @@ impl ::std::fmt::Debug for UpdateServiceSafePointV2Response {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         let mut s = String::new();
         ::protobuf::PbPrint::fmt(&self.header, "header", &mut s);
+        ::protobuf::PbPrint::fmt(&self.service_id, "service_id", &mut s);
+        ::protobuf::PbPrint::fmt(&self.ttl, "ttl", &mut s);
+        ::protobuf::PbPrint::fmt(&self.min_safe_point, "min_safe_point", &mut s);
         write!(f, "{}", s)
     }
 }
