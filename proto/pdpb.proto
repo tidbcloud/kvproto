@@ -803,7 +803,6 @@ message UpdateServiceGCSafePointResponse {
     int64 TTL = 3;
     uint64 min_safe_point = 4;
 }
-
 message GetGCSafePointV2Request {
     RequestHeader header = 1;
 
@@ -818,8 +817,11 @@ message GetGCSafePointV2Response {
 
 message WatchGCSafePointV2Request {
     RequestHeader header = 1;
+    int64 revision = 2;
+
 }
 
+// SafePointEvent is for the rpc WatchGCSafePointV2.
 message SafePointEvent {
     uint32 keyspace_id = 1;
     uint64 safe_point = 2;
@@ -828,8 +830,8 @@ message SafePointEvent {
 
 message WatchGCSafePointV2Response {
     ResponseHeader header = 1;
-
     repeated SafePointEvent events = 2;
+    int64 revision = 3;
 }
 
 message UpdateGCSafePointV2Request {
@@ -863,7 +865,7 @@ message UpdateServiceSafePointV2Response {
     ResponseHeader header = 1;
 
     bytes service_id = 2;
-    int64 TTL = 3;
+    int64 ttl = 3;
     uint64 min_safe_point = 4;
 }
 
