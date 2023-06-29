@@ -883,6 +883,7 @@ message GCSafePointV2 {
 message GetAllGCSafePointV2Response {
     ResponseHeader header = 1;
     repeated GCSafePointV2 gc_safe_points = 2;
+    int64 revision = 3;
 }
 
 message RegionStat {
