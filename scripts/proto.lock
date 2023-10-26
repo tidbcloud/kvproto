@@ -16193,12 +16193,16 @@
               },
               {
                 "id": 4,
-                "name": "source_state",
-                "type": "raft_serverpb.RegionLocalState"
+                "name": "old_source_meta",
+                "type": "bytes"
+              },
+              {
+                "id": 100,
+                "name": "source_meta",
+                "type": "bytes"
               }
             ],
             "reserved_ids": [
-              100,
               101,
               102,
               103,
