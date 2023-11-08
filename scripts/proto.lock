@@ -16259,8 +16259,8 @@
               },
               {
                 "id": 4,
-                "name": "old_source_meta",
-                "type": "bytes"
+                "name": "source_state",
+                "type": "raft_serverpb.RegionLocalState"
               },
               {
                 "id": 100,
