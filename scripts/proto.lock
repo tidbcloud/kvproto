@@ -7748,6 +7748,10 @@
               {
                 "name": "CheckNotExists",
                 "integer": 6
+              },
+              {
+                "name": "BatchFile",
+                "integer": 100
               }
             ]
           },
