@@ -258,7 +258,7 @@ message PessimisticRollbackRequest {
     uint64 start_version = 2;
     uint64 for_update_ts = 3;
     repeated bytes keys = 4;
-    bytes txn_file_ref = 100;
+    bool is_txn_file = 100;
 }
 
 message PessimisticRollbackResponse {
