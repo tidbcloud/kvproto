@@ -494,6 +494,7 @@ message ResolveLockRequest {
     repeated TxnInfo txn_infos = 4;
     // Only resolve specified keys.
     repeated bytes keys = 5;
+    bool is_txn_file = 100;
 }
 
 message ResolveLockResponse {
