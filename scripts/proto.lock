@@ -7748,10 +7748,6 @@
               {
                 "name": "CheckNotExists",
                 "integer": 6
-              },
-              {
-                "name": "BatchFile",
-                "integer": 100
               }
             ]
           },
@@ -8041,6 +8037,12 @@
                 "id": 16,
                 "name": "for_update_ts_constraints",
                 "type": "ForUpdateTSConstraint",
+                "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "txn_file_chunks",
+                "type": "uint32",
                 "is_repeated": true
               }
             ],
@@ -8335,6 +8337,11 @@
                 "id": 4,
                 "name": "advise_lock_ttl",
                 "type": "uint64"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -8409,6 +8416,11 @@
               {
                 "id": 9,
                 "name": "verify_is_primary",
+                "type": "bool"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
                 "type": "bool"
               }
             ]
@@ -8528,6 +8540,11 @@
                 "id": 4,
                 "name": "commit_version",
                 "type": "uint64"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ],
             "reserved_ids": [
@@ -8706,6 +8723,11 @@
                 "name": "keys",
                 "type": "bytes",
                 "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -8814,6 +8836,11 @@
                 "name": "keys",
                 "type": "bytes",
                 "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -10031,6 +10058,11 @@
                 "id": 11,
                 "name": "duration_to_last_update_ms",
                 "type": "uint64"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },

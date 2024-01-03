@@ -203,9 +203,6 @@ message PessimisticLockRequest {
     bool lock_only_if_exists = 13;
     // Specifies the behavior when the request is woken up after wating for lock of another transaction.
     PessimisticLockWakeUpMode wake_up_mode = 14;
-
-    // TxnFileRef indicates the request is a txn file transaction.
-    repeated uint32 txn_file_chunks = 100;
 }
 
 enum PessimisticLockKeyResultType {
@@ -258,7 +255,6 @@ message PessimisticRollbackRequest {
     uint64 start_version = 2;
     uint64 for_update_ts = 3;
     repeated bytes keys = 4;
-    bool is_txn_file = 100;
 }
 
 message PessimisticRollbackResponse {
