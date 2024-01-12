@@ -8042,7 +8042,7 @@
               {
                 "id": 100,
                 "name": "txn_file_chunks",
-                "type": "uint32",
+                "type": "uint64",
                 "is_repeated": true
               }
             ],

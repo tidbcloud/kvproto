@@ -133,7 +133,7 @@ message PrewriteRequest {
     // See https://github.com/tikv/tikv/issues/14311
     repeated ForUpdateTSConstraint for_update_ts_constraints = 16;
 
-    repeated uint32 txn_file_chunks = 100;
+    repeated uint64 txn_file_chunks = 100;
 }
 
 message PrewriteResponse {
