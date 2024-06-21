@@ -21,7 +21,7 @@ check-protos-compatible() {
 
     if [ ! -f "$GOPATH/bin/protolock" ]; then
         go install github.com/nilslice/protolock/cmd/protolock@latest
-	fi
+    fi
 
     if protolock status -lockdir=scripts -protoroot=proto; then
         protolock commit -lockdir=scripts -protoroot=proto
