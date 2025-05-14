@@ -1002,12 +1002,6 @@ message KeyError {
     CommitTsTooLarge commit_ts_too_large = 9; // Calculated commit TS exceeds the limit given by the user.
     AssertionFailed assertion_failed = 10; // Assertion of a `Mutation` is evaluated as a failure.
     PrimaryMismatch primary_mismatch = 11; // CheckTxnStatus is sent to a lock that's not the primary.
-    // 12 reserved for TxnLockNotFound: https://github.com/pingcap/kvproto/blob/1174a93e506769402da7dfa67996a063b6eda89a/proto/kvrpcpb.proto#L1039
-    reserved 12;
-    UndeterminedResult undetermined_result = 13; // UndeterminedResult indicates the result of the request is undetermined.
-
-    // 100 reserved for DebugInfo: https://github.com/pingcap/kvproto/blob/1174a93e506769402da7dfa67996a063b6eda89a/proto/kvrpcpb.proto#L1042C5-L1042C14
-    reserved 100;
 }
 
 message WriteConflict {
@@ -1065,10 +1059,6 @@ message AssertionFailed {
 
 message PrimaryMismatch {
     LockInfo lock_info = 1;
-}
-
-message UndeterminedResult {
-    string message = 1;
 }
 
 enum CommandPri {

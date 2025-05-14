@@ -5648,6 +5648,16 @@
             ]
           },
           {
+            "name": "UndeterminedResult",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "Error",
             "fields": [
               {
@@ -5754,6 +5764,11 @@
                 "id": 21,
                 "name": "bucket_version_not_match",
                 "type": "BucketVersionNotMatch"
+              },
+              {
+                "id": 22,
+                "name": "undetermined_result",
+                "type": "UndeterminedResult"
               }
             ],
             "reserved_names": [
@@ -10249,16 +10264,7 @@
                 "id": 11,
                 "name": "primary_mismatch",
                 "type": "PrimaryMismatch"
-              },
-              {
-                "id": 13,
-                "name": "undetermined_result",
-                "type": "UndeterminedResult"
               }
-            ],
-            "reserved_ids": [
-              12,
-              100
             ]
           },
           {
@@ -10419,16 +10425,6 @@
                 "id": 1,
                 "name": "lock_info",
                 "type": "LockInfo"
-              }
-            ]
-          },
-          {
-            "name": "UndeterminedResult",
-            "fields": [
-              {
-                "id": 1,
-                "name": "message",
-                "type": "string"
               }
             ]
           },
