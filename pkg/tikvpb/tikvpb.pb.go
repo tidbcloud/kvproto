@@ -1589,6 +1589,8 @@ type TikvClient interface {
 	BatchCoprocessor(ctx context.Context, in *coprocessor.BatchRequest, opts ...grpc.CallOption) (Tikv_BatchCoprocessorClient, error)
 	// Command send by remote coprocessor to TiKV for executing coprocessor request.
 	DelegateCoprocessor(ctx context.Context, in *coprocessor.DelegateRequest, opts ...grpc.CallOption) (*coprocessor.DelegateResponse, error)
+	// Command send by remote coprocessor to TiKV for executing coprocessor request.
+	DelegateCoprocessor(ctx context.Context, in *coprocessor.DelegateRequest, opts ...grpc.CallOption) (*coprocessor.DelegateResponse, error)
 	// Command for executing custom user requests in TiKV coprocessor_v2.
 	RawCoprocessor(ctx context.Context, in *kvrpcpb.RawCoprocessorRequest, opts ...grpc.CallOption) (*kvrpcpb.RawCoprocessorResponse, error)
 	// Raft commands (sent between TiKV nodes).
@@ -2081,6 +2083,15 @@ func (c *tikvClient) DelegateCoprocessor(ctx context.Context, in *coprocessor.De
 	return out, nil
 }
 
+func (c *tikvClient) DelegateCoprocessor(ctx context.Context, in *coprocessor.DelegateRequest, opts ...grpc.CallOption) (*coprocessor.DelegateResponse, error) {
+	out := new(coprocessor.DelegateResponse)
+	err := c.cc.Invoke(ctx, "/tikvpb.Tikv/DelegateCoprocessor", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *tikvClient) RawCoprocessor(ctx context.Context, in *kvrpcpb.RawCoprocessorRequest, opts ...grpc.CallOption) (*kvrpcpb.RawCoprocessorResponse, error) {
 	out := new(kvrpcpb.RawCoprocessorResponse)
 	err := c.cc.Invoke(ctx, "/tikvpb.Tikv/RawCoprocessor", in, out, opts...)
@@ -2559,6 +2570,8 @@ type TikvServer interface {
 	BatchCoprocessor(*coprocessor.BatchRequest, Tikv_BatchCoprocessorServer) error
 	// Command send by remote coprocessor to TiKV for executing coprocessor request.
 	DelegateCoprocessor(context.Context, *coprocessor.DelegateRequest) (*coprocessor.DelegateResponse, error)
+	// Command send by remote coprocessor to TiKV for executing coprocessor request.
+	DelegateCoprocessor(context.Context, *coprocessor.DelegateRequest) (*coprocessor.DelegateResponse, error)
 	// Command for executing custom user requests in TiKV coprocessor_v2.
 	RawCoprocessor(context.Context, *kvrpcpb.RawCoprocessorRequest) (*kvrpcpb.RawCoprocessorResponse, error)
 	// Raft commands (sent between TiKV nodes).
@@ -2745,6 +2758,9 @@ func (*UnimplementedTikvServer) CoprocessorStream(req *coprocessor.Request, srv 
 }
 func (*UnimplementedTikvServer) BatchCoprocessor(req *coprocessor.BatchRequest, srv Tikv_BatchCoprocessorServer) error {
 	return status.Errorf(codes.Unimplemented, "method BatchCoprocessor not implemented")
+}
+func (*UnimplementedTikvServer) DelegateCoprocessor(ctx context.Context, req *coprocessor.DelegateRequest) (*coprocessor.DelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegateCoprocessor not implemented")
 }
 func (*UnimplementedTikvServer) DelegateCoprocessor(ctx context.Context, req *coprocessor.DelegateRequest) (*coprocessor.DelegateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegateCoprocessor not implemented")
@@ -3603,6 +3619,24 @@ func _Tikv_DelegateCoprocessor_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Tikv_DelegateCoprocessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(coprocessor.DelegateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TikvServer).DelegateCoprocessor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tikvpb.Tikv/DelegateCoprocessor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TikvServer).DelegateCoprocessor(ctx, req.(*coprocessor.DelegateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Tikv_RawCoprocessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(kvrpcpb.RawCoprocessorRequest)
 	if err := dec(in); err != nil {
@@ -4330,6 +4364,10 @@ var _Tikv_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Coprocessor",
 			Handler:    _Tikv_Coprocessor_Handler,
+		},
+		{
+			MethodName: "DelegateCoprocessor",
+			Handler:    _Tikv_DelegateCoprocessor_Handler,
 		},
 		{
 			MethodName: "DelegateCoprocessor",

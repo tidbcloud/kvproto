@@ -202,6 +202,34 @@
             ]
           },
           {
+            "name": "PrepareSnapshotBackupRequestType",
+            "enum_fields": [
+              {
+                "name": "UpdateLease"
+              },
+              {
+                "name": "WaitApply",
+                "integer": 1
+              },
+              {
+                "name": "Finish",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "PrepareSnapshotBackupEventType",
+            "enum_fields": [
+              {
+                "name": "WaitApplyDone"
+              },
+              {
+                "name": "UpdateLeaseResult",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "CompressionType",
             "enum_fields": [
               {
@@ -275,6 +303,52 @@
           }
         ],
         "messages": [
+          {
+            "name": "PrepareSnapshotBackupRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ty",
+                "type": "PrepareSnapshotBackupRequestType"
+              },
+              {
+                "id": 2,
+                "name": "regions",
+                "type": "metapb.Region",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "lease_in_seconds",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "PrepareSnapshotBackupResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ty",
+                "type": "PrepareSnapshotBackupEventType"
+              },
+              {
+                "id": 2,
+                "name": "region",
+                "type": "metapb.Region"
+              },
+              {
+                "id": 3,
+                "name": "error",
+                "type": "errorpb.Error"
+              },
+              {
+                "id": 4,
+                "name": "last_lease_is_valid",
+                "type": "bool"
+              }
+            ]
+          },
           {
             "name": "PrepareSnapshotBackupRequest",
             "fields": [
@@ -848,10 +922,14 @@
                 "name": "cluster_id_error",
                 "type": "ClusterIDError",
                 "oneof_parent": "detail"
+                "type": "ClusterIDError",
+                "oneof_parent": "detail"
               },
               {
                 "id": 4,
                 "name": "kv_error",
+                "type": "kvrpcpb.KeyError",
+                "oneof_parent": "detail"
                 "type": "kvrpcpb.KeyError",
                 "oneof_parent": "detail"
               },
@@ -1089,10 +1167,14 @@
                 "name": "noop",
                 "type": "Noop",
                 "oneof_parent": "backend"
+                "type": "Noop",
+                "oneof_parent": "backend"
               },
               {
                 "id": 2,
                 "name": "local",
+                "type": "Local",
+                "oneof_parent": "backend"
                 "type": "Local",
                 "oneof_parent": "backend"
               },
@@ -1101,10 +1183,14 @@
                 "name": "s3",
                 "type": "S3",
                 "oneof_parent": "backend"
+                "type": "S3",
+                "oneof_parent": "backend"
               },
               {
                 "id": 4,
                 "name": "gcs",
+                "type": "GCS",
+                "oneof_parent": "backend"
                 "type": "GCS",
                 "oneof_parent": "backend"
               },
@@ -1113,16 +1199,22 @@
                 "name": "cloud_dynamic",
                 "type": "CloudDynamic",
                 "oneof_parent": "backend"
+                "type": "CloudDynamic",
+                "oneof_parent": "backend"
               },
               {
                 "id": 6,
                 "name": "hdfs",
                 "type": "HDFS",
                 "oneof_parent": "backend"
+                "type": "HDFS",
+                "oneof_parent": "backend"
               },
               {
                 "id": 7,
                 "name": "azure_blob_storage",
+                "type": "AzureBlobStorage",
+                "oneof_parent": "backend"
                 "type": "AzureBlobStorage",
                 "oneof_parent": "backend"
               }
@@ -2154,6 +2246,13 @@
                 "out_streamed": true
               },
               {
+                "name": "PrepareSnapshotBackup",
+                "in_type": "PrepareSnapshotBackupRequest",
+                "out_type": "PrepareSnapshotBackupResponse",
+                "in_streamed": true,
+                "out_streamed": true
+              },
+              {
                 "name": "prepare",
                 "in_type": "PrepareRequest",
                 "out_type": "PrepareResponse"
@@ -2474,16 +2573,22 @@
                 "name": "entries",
                 "type": "Entries",
                 "oneof_parent": "event"
+                "type": "Entries",
+                "oneof_parent": "event"
               },
               {
                 "id": 4,
                 "name": "admin",
                 "type": "Admin",
                 "oneof_parent": "event"
+                "type": "Admin",
+                "oneof_parent": "event"
               },
               {
                 "id": 5,
                 "name": "error",
+                "type": "Error",
+                "oneof_parent": "event"
                 "type": "Error",
                 "oneof_parent": "event"
               },
@@ -2498,10 +2603,14 @@
                   }
                 ],
                 "oneof_parent": "event"
+                ],
+                "oneof_parent": "event"
               },
               {
                 "id": 8,
                 "name": "long_txn",
+                "type": "LongTxn",
+                "oneof_parent": "event"
                 "type": "LongTxn",
                 "oneof_parent": "event"
               }
@@ -2686,16 +2795,22 @@
                 "name": "register",
                 "type": "Register",
                 "oneof_parent": "request"
+                "type": "Register",
+                "oneof_parent": "request"
               },
               {
                 "id": 10,
                 "name": "notify_txn_status",
                 "type": "NotifyTxnStatus",
                 "oneof_parent": "request"
+                "type": "NotifyTxnStatus",
+                "oneof_parent": "request"
               },
               {
                 "id": 13,
                 "name": "deregister",
+                "type": "Deregister",
+                "oneof_parent": "request"
                 "type": "Deregister",
                 "oneof_parent": "request"
               },
@@ -2903,10 +3018,14 @@
                 "name": "local",
                 "type": "Local",
                 "oneof_parent": "kind"
+                "type": "Local",
+                "oneof_parent": "kind"
               },
               {
                 "id": 2,
                 "name": "global",
+                "type": "Global",
+                "oneof_parent": "kind"
                 "type": "Global",
                 "oneof_parent": "kind"
               }
@@ -3678,6 +3797,72 @@
                 "id": 6,
                 "name": "exec_details_v2",
                 "type": "kvrpcpb.ExecDetailsV2"
+              }
+            ]
+          },
+          {
+            "name": "DelegateRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "context",
+                "type": "kvrpcpb.Context"
+              },
+              {
+                "id": 2,
+                "name": "start_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "ranges",
+                "type": "KeyRange",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "mem_table_sequence",
+                "type": "uint64"
+              },
+              {
+                "id": 5,
+                "name": "snapshot_sequence",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "DelegateResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "mem_table_data",
+                "type": "bytes"
+              },
+              {
+                "id": 2,
+                "name": "snapshot",
+                "type": "bytes"
+              },
+              {
+                "id": 3,
+                "name": "region_error",
+                "type": "errorpb.Error"
+              },
+              {
+                "id": 4,
+                "name": "locked",
+                "type": "kvrpcpb.LockInfo"
+              },
+              {
+                "id": 5,
+                "name": "other_error",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "mem_table_sequence",
+                "type": "uint64"
               }
             ]
           },
@@ -5209,16 +5394,22 @@
                 "name": "success",
                 "type": "Success",
                 "oneof_parent": "error"
+                "type": "Success",
+                "oneof_parent": "error"
               },
               {
                 "id": 2,
                 "name": "not_owner",
                 "type": "NotOwner",
                 "oneof_parent": "error"
+                "type": "NotOwner",
+                "oneof_parent": "error"
               },
               {
                 "id": 3,
                 "name": "conflict",
+                "type": "Conflict",
+                "oneof_parent": "error"
                 "type": "Conflict",
                 "oneof_parent": "error"
               }
@@ -5406,16 +5597,22 @@
                 "name": "error_region",
                 "type": "ErrorRegion",
                 "oneof_parent": "errors"
+                "type": "ErrorRegion",
+                "oneof_parent": "errors"
               },
               {
                 "id": 2,
                 "name": "error_locked",
                 "type": "ErrorLocked",
                 "oneof_parent": "errors"
+                "type": "ErrorLocked",
+                "oneof_parent": "errors"
               },
               {
                 "id": 99,
                 "name": "error_other",
+                "type": "ErrorOther",
+                "oneof_parent": "errors"
                 "type": "ErrorOther",
                 "oneof_parent": "errors"
               }
@@ -5860,16 +6057,22 @@
                 "name": "plaintext",
                 "type": "MasterKeyPlaintext",
                 "oneof_parent": "backend"
+                "type": "MasterKeyPlaintext",
+                "oneof_parent": "backend"
               },
               {
                 "id": 2,
                 "name": "file",
                 "type": "MasterKeyFile",
                 "oneof_parent": "backend"
+                "type": "MasterKeyFile",
+                "oneof_parent": "backend"
               },
               {
                 "id": 3,
                 "name": "kms",
+                "type": "MasterKeyKms",
+                "oneof_parent": "backend"
                 "type": "MasterKeyKms",
                 "oneof_parent": "backend"
               }
@@ -6303,10 +6506,14 @@
                 "name": "state",
                 "type": "SnapshotState",
                 "oneof_parent": "chunk"
+                "type": "SnapshotState",
+                "oneof_parent": "chunk"
               },
               {
                 "id": 2,
                 "name": "data",
+                "type": "SnapshotData",
+                "oneof_parent": "chunk"
                 "type": "SnapshotData",
                 "oneof_parent": "chunk"
               }
@@ -7280,10 +7487,14 @@
                 "name": "head",
                 "type": "WriteHead",
                 "oneof_parent": "chunk"
+                "type": "WriteHead",
+                "oneof_parent": "chunk"
               },
               {
                 "id": 2,
                 "name": "batch",
+                "type": "WriteBatch",
+                "oneof_parent": "chunk"
                 "type": "WriteBatch",
                 "oneof_parent": "chunk"
               }
@@ -7788,10 +7999,14 @@
                 "name": "meta",
                 "type": "SSTMeta",
                 "oneof_parent": "chunk"
+                "type": "SSTMeta",
+                "oneof_parent": "chunk"
               },
               {
                 "id": 2,
                 "name": "data",
+                "type": "bytes",
+                "oneof_parent": "chunk"
                 "type": "bytes",
                 "oneof_parent": "chunk"
               }
@@ -8067,10 +8282,14 @@
                 "name": "meta",
                 "type": "SSTMeta",
                 "oneof_parent": "chunk"
+                "type": "SSTMeta",
+                "oneof_parent": "chunk"
               },
               {
                 "id": 2,
                 "name": "batch",
+                "type": "WriteBatch",
+                "oneof_parent": "chunk"
                 "type": "WriteBatch",
                 "oneof_parent": "chunk"
               },
@@ -8126,10 +8345,14 @@
                 "name": "meta",
                 "type": "SSTMeta",
                 "oneof_parent": "chunk"
+                "type": "SSTMeta",
+                "oneof_parent": "chunk"
               },
               {
                 "id": 2,
                 "name": "batch",
+                "type": "RawWriteBatch",
+                "oneof_parent": "chunk"
                 "type": "RawWriteBatch",
                 "oneof_parent": "chunk"
               },
@@ -9299,6 +9522,12 @@
                 "name": "txn_file_chunks",
                 "type": "uint64",
                 "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "txn_file_chunks",
+                "type": "uint64",
+                "is_repeated": true
               }
             ],
             "messages": [
@@ -9682,6 +9911,11 @@
                 "id": 100,
                 "name": "is_txn_file",
                 "type": "bool"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -9998,6 +10232,11 @@
                 "id": 100,
                 "name": "is_txn_file",
                 "type": "bool"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -10106,6 +10345,11 @@
                 "name": "keys",
                 "type": "bytes",
                 "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               },
               {
                 "id": 100,
@@ -10953,6 +11197,12 @@
                 "name": "errors",
                 "type": "KeyError",
                 "is_repeated": true
+              },
+              {
+                "id": 100,
+                "name": "errors",
+                "type": "KeyError",
+                "is_repeated": true
               }
             ]
           },
@@ -11339,6 +11589,11 @@
                 "id": 11,
                 "name": "duration_to_last_update_ms",
                 "type": "uint64"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               },
               {
                 "id": 100,
@@ -12144,6 +12399,11 @@
                 "id": 100,
                 "name": "is_txn_file",
                 "type": "bool"
+              },
+              {
+                "id": 100,
+                "name": "is_txn_file",
+                "type": "bool"
               }
             ]
           },
@@ -12546,10 +12806,14 @@
                 "name": "err_invalid_start_key",
                 "type": "CompactErrorInvalidStartKey",
                 "oneof_parent": "error"
+                "type": "CompactErrorInvalidStartKey",
+                "oneof_parent": "error"
               },
               {
                 "id": 2,
                 "name": "err_physical_table_not_exist",
+                "type": "CompactErrorPhysicalTableNotExist",
+                "oneof_parent": "error"
                 "type": "CompactErrorPhysicalTableNotExist",
                 "oneof_parent": "error"
               },
@@ -12558,10 +12822,14 @@
                 "name": "err_compact_in_progress",
                 "type": "CompactErrorCompactInProgress",
                 "oneof_parent": "error"
+                "type": "CompactErrorCompactInProgress",
+                "oneof_parent": "error"
               },
               {
                 "id": 4,
                 "name": "err_too_many_pending_tasks",
+                "type": "CompactErrorTooManyPendingTasks",
+                "oneof_parent": "error"
                 "type": "CompactErrorTooManyPendingTasks",
                 "oneof_parent": "error"
               }
@@ -18562,6 +18830,11 @@
                 "id": 100,
                 "name": "source_meta",
                 "type": "bytes"
+              },
+              {
+                "id": 100,
+                "name": "source_meta",
+                "type": "bytes"
               }
             ],
             "reserved_ids": [
@@ -19067,6 +19340,16 @@
             ]
           },
           {
+            "name": "CustomRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "data",
+                "type": "bytes"
+              }
+            ]
+          },
+          {
             "name": "RaftCmdRequest",
             "fields": [
               {
@@ -19089,6 +19372,11 @@
                 "id": 4,
                 "name": "status_request",
                 "type": "StatusRequest"
+              },
+              {
+                "id": 5,
+                "name": "custom_request",
+                "type": "CustomRequest"
               },
               {
                 "id": 5,
@@ -19665,10 +19953,14 @@
                 "name": "head",
                 "type": "TabletSnapshotHead",
                 "oneof_parent": "payload"
+                "type": "TabletSnapshotHead",
+                "oneof_parent": "payload"
               },
               {
                 "id": 2,
                 "name": "preview",
+                "type": "TabletSnapshotPreview",
+                "oneof_parent": "payload"
                 "type": "TabletSnapshotPreview",
                 "oneof_parent": "payload"
               },
@@ -19677,10 +19969,14 @@
                 "name": "chunk",
                 "type": "TabletSnapshotFileChunk",
                 "oneof_parent": "payload"
+                "type": "TabletSnapshotFileChunk",
+                "oneof_parent": "payload"
               },
               {
                 "id": 4,
                 "name": "end",
+                "type": "TabletSnapshotEnd",
+                "oneof_parent": "payload"
                 "type": "TabletSnapshotEnd",
                 "oneof_parent": "payload"
               }
@@ -20875,10 +21171,14 @@
                 "name": "ru_items",
                 "type": "RequestRU",
                 "oneof_parent": "request"
+                "type": "RequestRU",
+                "oneof_parent": "request"
               },
               {
                 "id": 3,
                 "name": "raw_resource_items",
+                "type": "RequestRawResource",
+                "oneof_parent": "request"
                 "type": "RequestRawResource",
                 "oneof_parent": "request"
               },
@@ -21412,6 +21712,8 @@
               {
                 "id": 1,
                 "name": "record",
+                "type": "GroupTagRecord",
+                "oneof_parent": "record_oneof"
                 "type": "GroupTagRecord",
                 "oneof_parent": "record_oneof"
               }
@@ -22083,10 +22385,14 @@
                     "name": "Get",
                     "type": "kvrpcpb.GetRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.GetRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 2,
                     "name": "Scan",
+                    "type": "kvrpcpb.ScanRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.ScanRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22095,10 +22401,14 @@
                     "name": "Prewrite",
                     "type": "kvrpcpb.PrewriteRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.PrewriteRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 4,
                     "name": "Commit",
+                    "type": "kvrpcpb.CommitRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.CommitRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22107,10 +22417,14 @@
                     "name": "Import",
                     "type": "kvrpcpb.ImportRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.ImportRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 6,
                     "name": "Cleanup",
+                    "type": "kvrpcpb.CleanupRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.CleanupRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22119,10 +22433,14 @@
                     "name": "BatchGet",
                     "type": "kvrpcpb.BatchGetRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.BatchGetRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 8,
                     "name": "BatchRollback",
+                    "type": "kvrpcpb.BatchRollbackRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.BatchRollbackRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22131,10 +22449,14 @@
                     "name": "ScanLock",
                     "type": "kvrpcpb.ScanLockRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.ScanLockRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 10,
                     "name": "ResolveLock",
+                    "type": "kvrpcpb.ResolveLockRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.ResolveLockRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22143,10 +22465,14 @@
                     "name": "GC",
                     "type": "kvrpcpb.GCRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.GCRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 12,
                     "name": "DeleteRange",
+                    "type": "kvrpcpb.DeleteRangeRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.DeleteRangeRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22155,10 +22481,14 @@
                     "name": "RawGet",
                     "type": "kvrpcpb.RawGetRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawGetRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 14,
                     "name": "RawBatchGet",
+                    "type": "kvrpcpb.RawBatchGetRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchGetRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22167,10 +22497,14 @@
                     "name": "RawPut",
                     "type": "kvrpcpb.RawPutRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawPutRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 16,
                     "name": "RawBatchPut",
+                    "type": "kvrpcpb.RawBatchPutRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchPutRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22179,10 +22513,14 @@
                     "name": "RawDelete",
                     "type": "kvrpcpb.RawDeleteRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawDeleteRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 18,
                     "name": "RawBatchDelete",
+                    "type": "kvrpcpb.RawBatchDeleteRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchDeleteRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22191,10 +22529,14 @@
                     "name": "RawScan",
                     "type": "kvrpcpb.RawScanRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawScanRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 20,
                     "name": "RawDeleteRange",
+                    "type": "kvrpcpb.RawDeleteRangeRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawDeleteRangeRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22203,10 +22545,14 @@
                     "name": "RawBatchScan",
                     "type": "kvrpcpb.RawBatchScanRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawBatchScanRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 22,
                     "name": "Coprocessor",
+                    "type": "coprocessor.Request",
+                    "oneof_parent": "cmd"
                     "type": "coprocessor.Request",
                     "oneof_parent": "cmd"
                   },
@@ -22215,10 +22561,14 @@
                     "name": "PessimisticLock",
                     "type": "kvrpcpb.PessimisticLockRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.PessimisticLockRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 24,
                     "name": "PessimisticRollback",
+                    "type": "kvrpcpb.PessimisticRollbackRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.PessimisticRollbackRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22227,10 +22577,14 @@
                     "name": "CheckTxnStatus",
                     "type": "kvrpcpb.CheckTxnStatusRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.CheckTxnStatusRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 26,
                     "name": "TxnHeartBeat",
+                    "type": "kvrpcpb.TxnHeartBeatRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.TxnHeartBeatRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22239,16 +22593,22 @@
                     "name": "CheckSecondaryLocks",
                     "type": "kvrpcpb.CheckSecondaryLocksRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.CheckSecondaryLocksRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 34,
                     "name": "RawCoprocessor",
                     "type": "kvrpcpb.RawCoprocessorRequest",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawCoprocessorRequest",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 35,
                     "name": "FlashbackToVersion",
+                    "type": "kvrpcpb.FlashbackToVersionRequest",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.FlashbackToVersionRequest",
                     "oneof_parent": "cmd"
                   },
@@ -22285,6 +22645,8 @@
                   {
                     "id": 255,
                     "name": "Empty",
+                    "type": "BatchCommandsEmptyRequest",
+                    "oneof_parent": "cmd"
                     "type": "BatchCommandsEmptyRequest",
                     "oneof_parent": "cmd"
                   }
@@ -22335,10 +22697,14 @@
                     "name": "Get",
                     "type": "kvrpcpb.GetResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.GetResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 2,
                     "name": "Scan",
+                    "type": "kvrpcpb.ScanResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.ScanResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22347,10 +22713,14 @@
                     "name": "Prewrite",
                     "type": "kvrpcpb.PrewriteResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.PrewriteResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 4,
                     "name": "Commit",
+                    "type": "kvrpcpb.CommitResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.CommitResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22359,10 +22729,14 @@
                     "name": "Import",
                     "type": "kvrpcpb.ImportResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.ImportResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 6,
                     "name": "Cleanup",
+                    "type": "kvrpcpb.CleanupResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.CleanupResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22371,10 +22745,14 @@
                     "name": "BatchGet",
                     "type": "kvrpcpb.BatchGetResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.BatchGetResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 8,
                     "name": "BatchRollback",
+                    "type": "kvrpcpb.BatchRollbackResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.BatchRollbackResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22383,10 +22761,14 @@
                     "name": "ScanLock",
                     "type": "kvrpcpb.ScanLockResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.ScanLockResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 10,
                     "name": "ResolveLock",
+                    "type": "kvrpcpb.ResolveLockResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.ResolveLockResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22395,10 +22777,14 @@
                     "name": "GC",
                     "type": "kvrpcpb.GCResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.GCResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 12,
                     "name": "DeleteRange",
+                    "type": "kvrpcpb.DeleteRangeResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.DeleteRangeResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22407,10 +22793,14 @@
                     "name": "RawGet",
                     "type": "kvrpcpb.RawGetResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawGetResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 14,
                     "name": "RawBatchGet",
+                    "type": "kvrpcpb.RawBatchGetResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchGetResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22419,10 +22809,14 @@
                     "name": "RawPut",
                     "type": "kvrpcpb.RawPutResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawPutResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 16,
                     "name": "RawBatchPut",
+                    "type": "kvrpcpb.RawBatchPutResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchPutResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22431,10 +22825,14 @@
                     "name": "RawDelete",
                     "type": "kvrpcpb.RawDeleteResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawDeleteResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 18,
                     "name": "RawBatchDelete",
+                    "type": "kvrpcpb.RawBatchDeleteResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawBatchDeleteResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22443,10 +22841,14 @@
                     "name": "RawScan",
                     "type": "kvrpcpb.RawScanResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawScanResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 20,
                     "name": "RawDeleteRange",
+                    "type": "kvrpcpb.RawDeleteRangeResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.RawDeleteRangeResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22455,10 +22857,14 @@
                     "name": "RawBatchScan",
                     "type": "kvrpcpb.RawBatchScanResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawBatchScanResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 22,
                     "name": "Coprocessor",
+                    "type": "coprocessor.Response",
+                    "oneof_parent": "cmd"
                     "type": "coprocessor.Response",
                     "oneof_parent": "cmd"
                   },
@@ -22467,10 +22873,14 @@
                     "name": "PessimisticLock",
                     "type": "kvrpcpb.PessimisticLockResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.PessimisticLockResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 24,
                     "name": "PessimisticRollback",
+                    "type": "kvrpcpb.PessimisticRollbackResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.PessimisticRollbackResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22479,10 +22889,14 @@
                     "name": "CheckTxnStatus",
                     "type": "kvrpcpb.CheckTxnStatusResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.CheckTxnStatusResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 26,
                     "name": "TxnHeartBeat",
+                    "type": "kvrpcpb.TxnHeartBeatResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.TxnHeartBeatResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22491,16 +22905,22 @@
                     "name": "CheckSecondaryLocks",
                     "type": "kvrpcpb.CheckSecondaryLocksResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.CheckSecondaryLocksResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 34,
                     "name": "RawCoprocessor",
                     "type": "kvrpcpb.RawCoprocessorResponse",
                     "oneof_parent": "cmd"
+                    "type": "kvrpcpb.RawCoprocessorResponse",
+                    "oneof_parent": "cmd"
                   },
                   {
                     "id": 35,
                     "name": "FlashbackToVersion",
+                    "type": "kvrpcpb.FlashbackToVersionResponse",
+                    "oneof_parent": "cmd"
                     "type": "kvrpcpb.FlashbackToVersionResponse",
                     "oneof_parent": "cmd"
                   },
@@ -22537,6 +22957,8 @@
                   {
                     "id": 255,
                     "name": "Empty",
+                    "type": "BatchCommandsEmptyResponse",
+                    "oneof_parent": "cmd"
                     "type": "BatchCommandsEmptyResponse",
                     "oneof_parent": "cmd"
                   }
@@ -22811,6 +23233,11 @@
                 "out_type": "coprocessor.DelegateResponse"
               },
               {
+                "name": "DelegateCoprocessor",
+                "in_type": "coprocessor.DelegateRequest",
+                "out_type": "coprocessor.DelegateResponse"
+              },
+              {
                 "name": "RawCoprocessor",
                 "in_type": "kvrpcpb.RawCoprocessorRequest",
                 "out_type": "kvrpcpb.RawCoprocessorResponse"
@@ -23044,10 +23471,14 @@
                 "name": "report",
                 "type": "Report",
                 "oneof_parent": "record_oneof"
+                "type": "Report",
+                "oneof_parent": "record_oneof"
               },
               {
                 "id": 2,
                 "name": "notify_collect",
+                "type": "NotifyCollect",
+                "oneof_parent": "record_oneof"
                 "type": "NotifyCollect",
                 "oneof_parent": "record_oneof"
               }

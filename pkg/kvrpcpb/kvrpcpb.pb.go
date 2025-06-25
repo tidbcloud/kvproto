@@ -1053,6 +1053,13 @@ func (m *PrewriteRequest) GetTxnFileChunks() []uint64 {
 	return nil
 }
 
+func (m *PrewriteRequest) GetTxnFileChunks() []uint64 {
+	if m != nil {
+		return m.TxnFileChunks
+	}
+	return nil
+}
+
 // for_update_ts constriants that should be checked when prewriting a pessimistic transaction.
 type PrewriteRequest_ForUpdateTSConstraint struct {
 	// The index of key in the prewrite request that should be checked.
@@ -1992,14 +1999,20 @@ func (m *CheckTxnStatusRequest) GetIsTxnFile() bool {
 	return false
 }
 
+func (m *CheckTxnStatusRequest) GetIsTxnFile() bool {
+	if m != nil {
+		return m.IsTxnFile
+	}
+	return false
+}
+
 type CheckTxnStatusResponse struct {
 	RegionError *errorpb.Error `protobuf:"bytes,1,opt,name=region_error,json=regionError,proto3" json:"region_error,omitempty"`
 	Error       *KeyError      `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	// Three kinds of transaction status:
-	//
-	//	locked: lock_ttl > 0
-	//	committed: commit_version > 0
-	//	rollbacked: lock_ttl = 0 && commit_version = 0
+	//   locked: lock_ttl > 0
+	//   committed: commit_version > 0
+	//   rollbacked: lock_ttl = 0 && commit_version = 0
 	LockTtl       uint64 `protobuf:"varint,3,opt,name=lock_ttl,json=lockTtl,proto3" json:"lock_ttl,omitempty"`
 	CommitVersion uint64 `protobuf:"varint,4,opt,name=commit_version,json=commitVersion,proto3" json:"commit_version,omitempty"`
 	// The action performed by TiKV (and why if the action is to rollback).
@@ -2854,6 +2867,13 @@ func (m *BatchRollbackRequest) GetIsTxnFile() bool {
 	return false
 }
 
+func (m *BatchRollbackRequest) GetIsTxnFile() bool {
+	if m != nil {
+		return m.IsTxnFile
+	}
+	return false
+}
+
 type BatchRollbackResponse struct {
 	RegionError *errorpb.Error `protobuf:"bytes,1,opt,name=region_error,json=regionError,proto3" json:"region_error,omitempty"`
 	Error       *KeyError      `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
@@ -3148,6 +3168,13 @@ func (m *ResolveLockRequest) GetKeys() [][]byte {
 		return m.Keys
 	}
 	return nil
+}
+
+func (m *ResolveLockRequest) GetIsTxnFile() bool {
+	if m != nil {
+		return m.IsTxnFile
+	}
+	return false
 }
 
 func (m *ResolveLockRequest) GetIsTxnFile() bool {
@@ -5567,6 +5594,13 @@ func (m *SplitRegionResponse) GetErrors() []*KeyError {
 	return nil
 }
 
+func (m *SplitRegionResponse) GetErrors() []*KeyError {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
 // Sent from TiFlash to a TiKV node.
 type ReadIndexRequest struct {
 	Context *Context `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
@@ -6494,6 +6528,13 @@ func (m *LockInfo) GetDurationToLastUpdateMs() uint64 {
 		return m.DurationToLastUpdateMs
 	}
 	return 0
+}
+
+func (m *LockInfo) GetIsTxnFile() bool {
+	if m != nil {
+		return m.IsTxnFile
+	}
+	return false
 }
 
 func (m *LockInfo) GetIsTxnFile() bool {
@@ -8596,6 +8637,13 @@ func (m *TxnInfo) GetIsTxnFile() bool {
 	return false
 }
 
+func (m *TxnInfo) GetIsTxnFile() bool {
+	if m != nil {
+		return m.IsTxnFile
+	}
+	return false
+}
+
 type KeyRange struct {
 	StartKey []byte `protobuf:"bytes,1,opt,name=start_key,json=startKey,proto3" json:"start_key,omitempty"`
 	EndKey   []byte `protobuf:"bytes,2,opt,name=end_key,json=endKey,proto3" json:"end_key,omitempty"`
@@ -9752,7 +9800,6 @@ func (m *RawChecksumResponse) GetTotalBytes() uint64 {
 
 type CompactError struct {
 	// Types that are valid to be assigned to Error:
-	//
 	//	*CompactError_ErrInvalidStartKey
 	//	*CompactError_ErrPhysicalTableNotExist
 	//	*CompactError_ErrCompactInProgress
@@ -11897,15 +11944,24 @@ func (m *PrewriteRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if len(m.PessimisticActions) > 0 {
 		dAtA11 := make([]byte, len(m.PessimisticActions)*10)
 		var j10 int
+		dAtA11 := make([]byte, len(m.PessimisticActions)*10)
+		var j10 int
 		for _, num := range m.PessimisticActions {
 			for num >= 1<<7 {
 				dAtA11[j10] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA11[j10] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
+				j10++
 				j10++
 			}
 			dAtA11[j10] = uint8(num)
 			j10++
+			dAtA11[j10] = uint8(num)
+			j10++
 		}
+		i -= j10
+		copy(dAtA[i:], dAtA11[:j10])
+		i = encodeVarintKvrpcpb(dAtA, i, uint64(j10))
 		i -= j10
 		copy(dAtA[i:], dAtA11[:j10])
 		i = encodeVarintKvrpcpb(dAtA, i, uint64(j10))
@@ -14529,15 +14585,24 @@ func (m *RawBatchPutRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if len(m.Ttls) > 0 {
 		dAtA74 := make([]byte, len(m.Ttls)*10)
 		var j73 int
+		dAtA74 := make([]byte, len(m.Ttls)*10)
+		var j73 int
 		for _, num := range m.Ttls {
 			for num >= 1<<7 {
 				dAtA74[j73] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA74[j73] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
+				j73++
 				j73++
 			}
 			dAtA74[j73] = uint8(num)
 			j73++
+			dAtA74[j73] = uint8(num)
+			j73++
 		}
+		i -= j73
+		copy(dAtA[i:], dAtA74[:j73])
+		i = encodeVarintKvrpcpb(dAtA, i, uint64(j73))
 		i -= j73
 		copy(dAtA[i:], dAtA74[:j73])
 		i = encodeVarintKvrpcpb(dAtA, i, uint64(j73))
@@ -16182,15 +16247,24 @@ func (m *Context) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if len(m.CommittedLocks) > 0 {
 		dAtA110 := make([]byte, len(m.CommittedLocks)*10)
 		var j109 int
+		dAtA110 := make([]byte, len(m.CommittedLocks)*10)
+		var j109 int
 		for _, num := range m.CommittedLocks {
 			for num >= 1<<7 {
 				dAtA110[j109] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA110[j109] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
+				j109++
 				j109++
 			}
 			dAtA110[j109] = uint8(num)
 			j109++
+			dAtA110[j109] = uint8(num)
+			j109++
 		}
+		i -= j109
+		copy(dAtA[i:], dAtA110[:j109])
+		i = encodeVarintKvrpcpb(dAtA, i, uint64(j109))
 		i -= j109
 		copy(dAtA[i:], dAtA110[:j109])
 		i = encodeVarintKvrpcpb(dAtA, i, uint64(j109))
@@ -16266,15 +16340,24 @@ func (m *Context) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if len(m.ResolvedLocks) > 0 {
 		dAtA112 := make([]byte, len(m.ResolvedLocks)*10)
 		var j111 int
+		dAtA112 := make([]byte, len(m.ResolvedLocks)*10)
+		var j111 int
 		for _, num := range m.ResolvedLocks {
 			for num >= 1<<7 {
 				dAtA112[j111] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA112[j111] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
+				j111++
 				j111++
 			}
 			dAtA112[j111] = uint8(num)
 			j111++
+			dAtA112[j111] = uint8(num)
+			j111++
 		}
+		i -= j111
+		copy(dAtA[i:], dAtA112[:j111])
+		i = encodeVarintKvrpcpb(dAtA, i, uint64(j111))
 		i -= j111
 		copy(dAtA[i:], dAtA112[:j111])
 		i = encodeVarintKvrpcpb(dAtA, i, uint64(j111))
@@ -24838,6 +24921,82 @@ func (m *PrewriteRequest) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field TxnFileChunks", wireType)
 			}
+		case 100:
+			if wireType == 0 {
+				var v uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowKvrpcpb
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.TxnFileChunks = append(m.TxnFileChunks, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowKvrpcpb
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthKvrpcpb
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthKvrpcpb
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.TxnFileChunks) == 0 {
+					m.TxnFileChunks = make([]uint64, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowKvrpcpb
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.TxnFileChunks = append(m.TxnFileChunks, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field TxnFileChunks", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipKvrpcpb(dAtA[iNdEx:])
@@ -26958,6 +27117,26 @@ func (m *CheckTxnStatusRequest) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.IsTxnFile = bool(v != 0)
+		case 100:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsTxnFile = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipKvrpcpb(dAtA[iNdEx:])
@@ -28969,6 +29148,26 @@ func (m *BatchRollbackRequest) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.IsTxnFile = bool(v != 0)
+		case 100:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsTxnFile = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipKvrpcpb(dAtA[iNdEx:])
@@ -29701,6 +29900,26 @@ func (m *ResolveLockRequest) Unmarshal(dAtA []byte) error {
 			m.Keys = append(m.Keys, make([]byte, postIndex-iNdEx))
 			copy(m.Keys[len(m.Keys)-1], dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 100:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsTxnFile = bool(v != 0)
 		case 100:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
@@ -35496,6 +35715,40 @@ func (m *SplitRegionResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthKvrpcpb
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthKvrpcpb
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Errors = append(m.Errors, &KeyError{})
+			if err := m.Errors[len(m.Errors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipKvrpcpb(dAtA[iNdEx:])
@@ -37776,6 +38029,26 @@ func (m *LockInfo) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 100:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsTxnFile = bool(v != 0)
 		case 100:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
@@ -42453,6 +42726,26 @@ func (m *TxnInfo) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 100:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowKvrpcpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.IsTxnFile = bool(v != 0)
 		case 100:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field IsTxnFile", wireType)

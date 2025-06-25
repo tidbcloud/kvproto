@@ -3,17 +3,21 @@ on:
   push:
     branches:
       - master
+      - release-7.5
       - release-6.0
       - release-5.0
       - release-4.0
       - release-3.0
+      - release-7.5-serverless
   pull_request:
     branches:
       - master
+      - release-7.5
       - release-6.0
       - release-5.0
       - release-4.0
       - release-3.0
+      - release-7.5-serverless
 jobs:
   rust-test:
     runs-on: ubuntu-22.04

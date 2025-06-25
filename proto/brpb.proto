@@ -629,6 +629,10 @@ service Backup {
     // Check the defination of `PrepareSnapshotBackupRequest` for more.
     rpc PrepareSnapshotBackup(stream PrepareSnapshotBackupRequest) returns (stream PrepareSnapshotBackupResponse);
 
+    // PrepareSnapshotBackup is an advanced version of preparing snapshot backup.
+    // Check the defination of `PrepareSnapshotBackupRequest` for more.
+    rpc PrepareSnapshotBackup(stream PrepareSnapshotBackupRequest) returns (stream PrepareSnapshotBackupResponse);
+
     // prepare is used for file-copy backup. before we start the backup for a TiKV.
     // we need invoke this function to generate the SST files map. or we get nothing to backup.
     rpc prepare(PrepareRequest) returns (PrepareResponse) {}

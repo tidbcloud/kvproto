@@ -2214,6 +2214,13 @@ func (m *CommitMergeRequest) GetSourceMeta() []byte {
 	return nil
 }
 
+func (m *CommitMergeRequest) GetSourceMeta() []byte {
+	if m != nil {
+		return m.SourceMeta
+	}
+	return nil
+}
+
 type CommitMergeResponse struct {
 }
 
@@ -3381,6 +3388,7 @@ func (m *RaftCmdRequest) String() string { return proto.CompactTextString(m) }
 func (*RaftCmdRequest) ProtoMessage()    {}
 func (*RaftCmdRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_661741b5e7485333, []int{58}
+	return fileDescriptor_661741b5e7485333, []int{58}
 }
 func (m *RaftCmdRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3444,6 +3452,13 @@ func (m *RaftCmdRequest) GetCustomRequest() *CustomRequest {
 	return nil
 }
 
+func (m *RaftCmdRequest) GetCustomRequest() *CustomRequest {
+	if m != nil {
+		return m.CustomRequest
+	}
+	return nil
+}
+
 type RaftCmdResponse struct {
 	Header         *RaftResponseHeader `protobuf:"bytes,1,opt,name=header,proto3" json:"header,omitempty"`
 	Responses      []*Response         `protobuf:"bytes,2,rep,name=responses,proto3" json:"responses,omitempty"`
@@ -3455,6 +3470,7 @@ func (m *RaftCmdResponse) Reset()         { *m = RaftCmdResponse{} }
 func (m *RaftCmdResponse) String() string { return proto.CompactTextString(m) }
 func (*RaftCmdResponse) ProtoMessage()    {}
 func (*RaftCmdResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_661741b5e7485333, []int{59}
 	return fileDescriptor_661741b5e7485333, []int{59}
 }
 func (m *RaftCmdResponse) XXX_Unmarshal(b []byte) error {
@@ -3573,6 +3589,7 @@ func init() {
 	proto.RegisterType((*StatusResponse)(nil), "raft_cmdpb.StatusResponse")
 	proto.RegisterType((*RaftRequestHeader)(nil), "raft_cmdpb.RaftRequestHeader")
 	proto.RegisterType((*RaftResponseHeader)(nil), "raft_cmdpb.RaftResponseHeader")
+	proto.RegisterType((*CustomRequest)(nil), "raft_cmdpb.CustomRequest")
 	proto.RegisterType((*CustomRequest)(nil), "raft_cmdpb.CustomRequest")
 	proto.RegisterType((*RaftCmdRequest)(nil), "raft_cmdpb.RaftCmdRequest")
 	proto.RegisterType((*RaftCmdResponse)(nil), "raft_cmdpb.RaftCmdResponse")
@@ -11935,6 +11952,40 @@ func (m *CommitMergeRequest) Unmarshal(dAtA []byte) error {
 				m.SourceMeta = []byte{}
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SourceMeta", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRaftCmdpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SourceMeta = append(m.SourceMeta[:0], dAtA[iNdEx:postIndex]...)
+			if m.SourceMeta == nil {
+				m.SourceMeta = []byte{}
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipRaftCmdpb(dAtA[iNdEx:])
@@ -14810,6 +14861,174 @@ func (m *CustomRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *CustomRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRaftCmdpb
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRaftCmdpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
+			if m.Data == nil {
+				m.Data = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRaftCmdpb(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRaftCmdpb
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRaftCmdpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
+			if m.Data == nil {
+				m.Data = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRaftCmdpb(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *RaftCmdRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -14978,6 +15197,42 @@ func (m *RaftCmdRequest) Unmarshal(dAtA []byte) error {
 				m.StatusRequest = &StatusRequest{}
 			}
 			if err := m.StatusRequest.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomRequest", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRaftCmdpb
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRaftCmdpb
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CustomRequest == nil {
+				m.CustomRequest = &CustomRequest{}
+			}
+			if err := m.CustomRequest.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

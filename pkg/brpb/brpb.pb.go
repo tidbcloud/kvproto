@@ -95,6 +95,69 @@ func (PrepareSnapshotBackupEventType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_483d1f48d58a4885, []int{1}
 }
 
+type PrepareSnapshotBackupRequestType int32
+
+const (
+	// Update the lease of suspending some commands (Which may impact the
+	// disk snapshot backup) to be proposed.
+	// As long as the lease is kept, those commands may not be proposed.
+	// If the client has gone, the lease will be destroyed after its TTL.
+	PrepareSnapshotBackupRequestType_UpdateLease PrepareSnapshotBackupRequestType = 0
+	// Wait a region apply to the last index.
+	PrepareSnapshotBackupRequestType_WaitApply PrepareSnapshotBackupRequestType = 1
+	// Hint before closing the stream. Server will go back to normal after this.
+	// This should also return a final "UpdateLeaseResult" to the client, which
+	// indices whether the last lease is valid.
+	PrepareSnapshotBackupRequestType_Finish PrepareSnapshotBackupRequestType = 2
+)
+
+var PrepareSnapshotBackupRequestType_name = map[int32]string{
+	0: "UpdateLease",
+	1: "WaitApply",
+	2: "Finish",
+}
+
+var PrepareSnapshotBackupRequestType_value = map[string]int32{
+	"UpdateLease": 0,
+	"WaitApply":   1,
+	"Finish":      2,
+}
+
+func (x PrepareSnapshotBackupRequestType) String() string {
+	return proto.EnumName(PrepareSnapshotBackupRequestType_name, int32(x))
+}
+
+func (PrepareSnapshotBackupRequestType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_483d1f48d58a4885, []int{0}
+}
+
+type PrepareSnapshotBackupEventType int32
+
+const (
+	// A region has finished wait apply.
+	PrepareSnapshotBackupEventType_WaitApplyDone PrepareSnapshotBackupEventType = 0
+	// A lease has been updated.
+	PrepareSnapshotBackupEventType_UpdateLeaseResult PrepareSnapshotBackupEventType = 1
+)
+
+var PrepareSnapshotBackupEventType_name = map[int32]string{
+	0: "WaitApplyDone",
+	1: "UpdateLeaseResult",
+}
+
+var PrepareSnapshotBackupEventType_value = map[string]int32{
+	"WaitApplyDone":     0,
+	"UpdateLeaseResult": 1,
+}
+
+func (x PrepareSnapshotBackupEventType) String() string {
+	return proto.EnumName(PrepareSnapshotBackupEventType_name, int32(x))
+}
+
+func (PrepareSnapshotBackupEventType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_483d1f48d58a4885, []int{1}
+}
+
 // sst files or log files compression algorithm
 // for log files, unknown means not use compression algorithm
 type CompressionType int32
@@ -125,6 +188,7 @@ func (x CompressionType) String() string {
 }
 
 func (CompressionType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_483d1f48d58a4885, []int{2}
 	return fileDescriptor_483d1f48d58a4885, []int{2}
 }
 
@@ -159,6 +223,7 @@ func (x BackupMode) String() string {
 
 func (BackupMode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_483d1f48d58a4885, []int{3}
+	return fileDescriptor_483d1f48d58a4885, []int{3}
 }
 
 type MetaVersion int32
@@ -183,6 +248,7 @@ func (x MetaVersion) String() string {
 }
 
 func (MetaVersion) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_483d1f48d58a4885, []int{4}
 	return fileDescriptor_483d1f48d58a4885, []int{4}
 }
 
@@ -447,6 +513,7 @@ func (m *BackupMeta) String() string { return proto.CompactTextString(m) }
 func (*BackupMeta) ProtoMessage()    {}
 func (*BackupMeta) Descriptor() ([]byte, []int) {
 	return fileDescriptor_483d1f48d58a4885, []int{2}
+	return fileDescriptor_483d1f48d58a4885, []int{2}
 }
 func (m *BackupMeta) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -653,6 +720,7 @@ func (m *BackupRange) Reset()         { *m = BackupRange{} }
 func (m *BackupRange) String() string { return proto.CompactTextString(m) }
 func (*BackupRange) ProtoMessage()    {}
 func (*BackupRange) Descriptor() ([]byte, []int) {
+	return fileDescriptor_483d1f48d58a4885, []int{3}
 	return fileDescriptor_483d1f48d58a4885, []int{3}
 }
 func (m *BackupRange) XXX_Unmarshal(b []byte) error {
@@ -5233,6 +5301,8 @@ func (m *Migration) GetIngestedSstPaths() []string {
 func init() {
 	proto.RegisterEnum("backup.PrepareSnapshotBackupRequestType", PrepareSnapshotBackupRequestType_name, PrepareSnapshotBackupRequestType_value)
 	proto.RegisterEnum("backup.PrepareSnapshotBackupEventType", PrepareSnapshotBackupEventType_name, PrepareSnapshotBackupEventType_value)
+	proto.RegisterEnum("backup.PrepareSnapshotBackupRequestType", PrepareSnapshotBackupRequestType_name, PrepareSnapshotBackupRequestType_value)
+	proto.RegisterEnum("backup.PrepareSnapshotBackupEventType", PrepareSnapshotBackupEventType_name, PrepareSnapshotBackupEventType_value)
 	proto.RegisterEnum("backup.CompressionType", CompressionType_name, CompressionType_value)
 	proto.RegisterEnum("backup.BackupMode", BackupMode_name, BackupMode_value)
 	proto.RegisterEnum("backup.MetaVersion", MetaVersion_name, MetaVersion_value)
@@ -5633,6 +5703,9 @@ type BackupClient interface {
 	// PrepareSnapshotBackup is an advanced version of preparing snapshot backup.
 	// Check the defination of `PrepareSnapshotBackupRequest` for more.
 	PrepareSnapshotBackup(ctx context.Context, opts ...grpc.CallOption) (Backup_PrepareSnapshotBackupClient, error)
+	// PrepareSnapshotBackup is an advanced version of preparing snapshot backup.
+	// Check the defination of `PrepareSnapshotBackupRequest` for more.
+	PrepareSnapshotBackup(ctx context.Context, opts ...grpc.CallOption) (Backup_PrepareSnapshotBackupClient, error)
 	// prepare is used for file-copy backup. before we start the backup for a TiKV.
 	// we need invoke this function to generate the SST files map. or we get nothing to backup.
 	Prepare(ctx context.Context, in *PrepareRequest, opts ...grpc.CallOption) (*PrepareResponse, error)
@@ -5744,6 +5817,37 @@ func (x *backupPrepareSnapshotBackupClient) Recv() (*PrepareSnapshotBackupRespon
 	return m, nil
 }
 
+func (c *backupClient) PrepareSnapshotBackup(ctx context.Context, opts ...grpc.CallOption) (Backup_PrepareSnapshotBackupClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Backup_serviceDesc.Streams[2], "/backup.Backup/PrepareSnapshotBackup", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &backupPrepareSnapshotBackupClient{stream}
+	return x, nil
+}
+
+type Backup_PrepareSnapshotBackupClient interface {
+	Send(*PrepareSnapshotBackupRequest) error
+	Recv() (*PrepareSnapshotBackupResponse, error)
+	grpc.ClientStream
+}
+
+type backupPrepareSnapshotBackupClient struct {
+	grpc.ClientStream
+}
+
+func (x *backupPrepareSnapshotBackupClient) Send(m *PrepareSnapshotBackupRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *backupPrepareSnapshotBackupClient) Recv() (*PrepareSnapshotBackupResponse, error) {
+	m := new(PrepareSnapshotBackupResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *backupClient) Prepare(ctx context.Context, in *PrepareRequest, opts ...grpc.CallOption) (*PrepareResponse, error) {
 	out := new(PrepareResponse)
 	err := c.cc.Invoke(ctx, "/backup.Backup/prepare", in, out, opts...)
@@ -5772,6 +5876,9 @@ type BackupServer interface {
 	// PrepareSnapshotBackup is an advanced version of preparing snapshot backup.
 	// Check the defination of `PrepareSnapshotBackupRequest` for more.
 	PrepareSnapshotBackup(Backup_PrepareSnapshotBackupServer) error
+	// PrepareSnapshotBackup is an advanced version of preparing snapshot backup.
+	// Check the defination of `PrepareSnapshotBackupRequest` for more.
+	PrepareSnapshotBackup(Backup_PrepareSnapshotBackupServer) error
 	// prepare is used for file-copy backup. before we start the backup for a TiKV.
 	// we need invoke this function to generate the SST files map. or we get nothing to backup.
 	Prepare(context.Context, *PrepareRequest) (*PrepareResponse, error)
@@ -5789,6 +5896,9 @@ func (*UnimplementedBackupServer) Backup(req *BackupRequest, srv Backup_BackupSe
 }
 func (*UnimplementedBackupServer) CheckPendingAdminOp(req *CheckAdminRequest, srv Backup_CheckPendingAdminOpServer) error {
 	return status.Errorf(codes.Unimplemented, "method CheckPendingAdminOp not implemented")
+}
+func (*UnimplementedBackupServer) PrepareSnapshotBackup(srv Backup_PrepareSnapshotBackupServer) error {
+	return status.Errorf(codes.Unimplemented, "method PrepareSnapshotBackup not implemented")
 }
 func (*UnimplementedBackupServer) PrepareSnapshotBackup(srv Backup_PrepareSnapshotBackupServer) error {
 	return status.Errorf(codes.Unimplemented, "method PrepareSnapshotBackup not implemented")
@@ -5844,6 +5954,32 @@ type backupCheckPendingAdminOpServer struct {
 
 func (x *backupCheckPendingAdminOpServer) Send(m *CheckAdminResponse) error {
 	return x.ServerStream.SendMsg(m)
+}
+
+func _Backup_PrepareSnapshotBackup_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BackupServer).PrepareSnapshotBackup(&backupPrepareSnapshotBackupServer{stream})
+}
+
+type Backup_PrepareSnapshotBackupServer interface {
+	Send(*PrepareSnapshotBackupResponse) error
+	Recv() (*PrepareSnapshotBackupRequest, error)
+	grpc.ServerStream
+}
+
+type backupPrepareSnapshotBackupServer struct {
+	grpc.ServerStream
+}
+
+func (x *backupPrepareSnapshotBackupServer) Send(m *PrepareSnapshotBackupResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *backupPrepareSnapshotBackupServer) Recv() (*PrepareSnapshotBackupRequest, error) {
+	m := new(PrepareSnapshotBackupRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func _Backup_PrepareSnapshotBackup_Handler(srv interface{}, stream grpc.ServerStream) error {
@@ -5931,6 +6067,12 @@ var _Backup_serviceDesc = grpc.ServiceDesc{
 			StreamName:    "CheckPendingAdminOp",
 			Handler:       _Backup_CheckPendingAdminOp_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "PrepareSnapshotBackup",
+			Handler:       _Backup_PrepareSnapshotBackup_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 		{
 			StreamName:    "PrepareSnapshotBackup",
