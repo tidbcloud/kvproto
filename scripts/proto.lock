@@ -11748,36 +11748,31 @@
               },
               {
                 "id": 2,
-                "name": "resource_manager_write_cnt",
-                "type": "uint64"
-              },
-              {
-                "id": 3,
                 "name": "executor_inputs",
                 "type": "ExecutorInputs"
               },
               {
-                "id": 4,
+                "id": 3,
                 "name": "coprocessor_executor_iterations",
                 "type": "uint64"
               },
               {
-                "id": 5,
+                "id": 4,
                 "name": "coprocessor_response_bytes",
                 "type": "uint64"
               },
               {
-                "id": 6,
+                "id": 5,
                 "name": "raftstore_store_write_trigger_wb_bytes",
                 "type": "uint64"
               },
               {
-                "id": 7,
+                "id": 6,
                 "name": "storage_processed_keys_batch_get",
                 "type": "uint64"
               },
               {
-                "id": 8,
+                "id": 7,
                 "name": "storage_processed_keys_get",
                 "type": "uint64"
               }

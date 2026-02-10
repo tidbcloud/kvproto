@@ -1239,13 +1239,12 @@ message ExecDetailsV2 {
 
 message RUV2 {
     uint64 kv_engine_cache_miss = 1;
-    uint64 resource_manager_write_cnt = 2;
-    ExecutorInputs executor_inputs = 3;
-    uint64 coprocessor_executor_iterations = 4;
-    uint64 coprocessor_response_bytes = 5;
-    uint64 raftstore_store_write_trigger_wb_bytes = 6;
-    uint64 storage_processed_keys_batch_get = 7;
-    uint64 storage_processed_keys_get = 8;
+    ExecutorInputs executor_inputs = 2;
+    uint64 coprocessor_executor_iterations = 3;
+    uint64 coprocessor_response_bytes = 4;
+    uint64 raftstore_store_write_trigger_wb_bytes = 5;
+    uint64 storage_processed_keys_batch_get = 6;
+    uint64 storage_processed_keys_get = 7;
 }
 
 message ExecutorInputs {
