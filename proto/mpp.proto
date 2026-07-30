@@ -1,11 +1,11 @@
 syntax = "proto3";
 package mpp;
 
+import "apipb.proto";
 import "coprocessor.proto";
 import "metapb.proto";
 import "kvrpcpb.proto";
 
-import "apipb.proto";
 import "gogoproto/gogo.proto";
 import "rustproto.proto";
 

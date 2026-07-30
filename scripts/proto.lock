@@ -165,6 +165,18 @@
                 "id": 5,
                 "name": "force",
                 "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "keyspaceID",
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 7,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -198,10 +210,10 @@
         ],
         "imports": [
           {
-            "path": "gogoproto/gogo.proto"
+            "path": "apipb.proto"
           },
           {
-            "path": "apipb.proto"
+            "path": "gogoproto/gogo.proto"
           },
           {
             "path": "rustproto.proto"
@@ -5714,13 +5726,13 @@
         ],
         "imports": [
           {
+            "path": "apipb.proto"
+          },
+          {
             "path": "coprocessor.proto"
           },
           {
             "path": "kvrpcpb.proto"
-          },
-          {
-            "path": "apipb.proto"
           },
           {
             "path": "gogoproto/gogo.proto"
@@ -8994,7 +9006,14 @@
               {
                 "id": 2,
                 "name": "id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 3,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -9163,7 +9182,7 @@
         ],
         "services": [
           {
-            "name": "Keyspace",
+            "name": "Namespace",
             "rpcs": [
               {
                 "name": "CreateNamespace",
@@ -9184,21 +9203,26 @@
                 "name": "UpdateNamespaceState",
                 "in_type": "UpdateNamespaceStateRequest",
                 "out_type": "UpdateNamespaceStateResponse"
-              },
+              }
+            ]
+          },
+          {
+            "name": "Keyspace",
+            "rpcs": [
               {
                 "name": "LoadKeyspace",
                 "in_type": "LoadKeyspaceRequest",
                 "out_type": "LoadKeyspaceResponse"
               },
               {
-                "name": "LoadKeyspaceByID",
-                "in_type": "LoadKeyspaceByIDRequest",
-                "out_type": "LoadKeyspaceResponse"
-              },
-              {
                 "name": "LookupKeyspace",
                 "in_type": "LookupKeyspaceRequest",
                 "out_type": "LookupKeyspaceResponse"
+              },
+              {
+                "name": "LoadKeyspaceByID",
+                "in_type": "LoadKeyspaceByIDRequest",
+                "out_type": "LoadKeyspaceResponse"
               },
               {
                 "name": "WatchKeyspaces",
@@ -14893,6 +14917,9 @@
         ],
         "imports": [
           {
+            "path": "apipb.proto"
+          },
+          {
             "path": "coprocessor.proto"
           },
           {
@@ -14900,9 +14927,6 @@
           },
           {
             "path": "kvrpcpb.proto"
-          },
-          {
-            "path": "apipb.proto"
           },
           {
             "path": "gogoproto/gogo.proto"

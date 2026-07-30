@@ -1,10 +1,10 @@
 syntax = "proto3";
 package disaggregated;
 
+import "apipb.proto";
 import "coprocessor.proto";
 import "kvrpcpb.proto";
 
-import "apipb.proto";
 import "gogoproto/gogo.proto";
 import "rustproto.proto";
 
