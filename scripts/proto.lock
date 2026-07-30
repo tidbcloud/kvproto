@@ -3516,6 +3516,88 @@
             ]
           },
           {
+            "name": "ShardInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "shard_id",
+                "type": "uint64"
+              },
+              {
+                "id": 2,
+                "name": "shard_epoch",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "ranges",
+                "type": "KeyRange",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "TiCIEstimateCountRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "context",
+                "type": "kvrpcpb.Context"
+              },
+              {
+                "id": 2,
+                "name": "start_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "table_id",
+                "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "index_id",
+                "type": "int64"
+              },
+              {
+                "id": 5,
+                "name": "fts_query_info",
+                "type": "bytes"
+              },
+              {
+                "id": 6,
+                "name": "time_zone_name",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "time_zone_offset",
+                "type": "int64"
+              },
+              {
+                "id": 8,
+                "name": "shard_infos",
+                "type": "ShardInfo",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "TiCIEstimateCountResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "est_count",
+                "type": "uint64"
+              },
+              {
+                "id": 2,
+                "name": "other_error",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "TableRegions",
             "fields": [
               {
@@ -9239,6 +9321,34 @@
             ]
           },
           {
+            "name": "CommitRole",
+            "enum_fields": [
+              {
+                "name": "Unknown"
+              },
+              {
+                "name": "Primary",
+                "integer": 1
+              },
+              {
+                "name": "Secondary",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "RequestOrigin",
+            "enum_fields": [
+              {
+                "name": "RequestOriginUnknown"
+              },
+              {
+                "name": "RequestOriginTiDB",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "APIVersion",
             "enum_fields": [
               {
@@ -10178,6 +10288,16 @@
                 "id": 4,
                 "name": "commit_version",
                 "type": "uint64"
+              },
+              {
+                "id": 6,
+                "name": "commit_role",
+                "type": "CommitRole"
+              },
+              {
+                "id": 7,
+                "name": "primary_key",
+                "type": "bytes"
               },
               {
                 "id": 8,
@@ -11591,6 +11711,16 @@
                 "type": "ResourceControlContext"
               },
               {
+                "id": 29,
+                "name": "request_origin",
+                "type": "RequestOrigin"
+              },
+              {
+                "id": 31,
+                "name": "keyspace_name",
+                "type": "string"
+              },
+              {
                 "id": 32,
                 "name": "keyspace_id",
                 "type": "uint32",
@@ -11615,6 +11745,16 @@
               {
                 "id": 35,
                 "name": "cluster_id",
+                "type": "uint64"
+              },
+              {
+                "id": 36,
+                "name": "trace_id",
+                "type": "bytes"
+              },
+              {
+                "id": 37,
+                "name": "trace_control_flags",
                 "type": "uint64"
               }
             ],
@@ -11800,6 +11940,16 @@
                 "id": 11,
                 "name": "primary_mismatch",
                 "type": "PrimaryMismatch"
+              },
+              {
+                "id": 12,
+                "name": "txn_lock_not_found",
+                "type": "TxnLockNotFound"
+              },
+              {
+                "id": 100,
+                "name": "debug_info",
+                "type": "DebugInfo"
               }
             ]
           },
@@ -11966,6 +12116,42 @@
                 "id": 1,
                 "name": "lock_info",
                 "type": "LockInfo"
+              }
+            ]
+          },
+          {
+            "name": "TxnLockNotFound",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "bytes"
+              }
+            ]
+          },
+          {
+            "name": "MvccDebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "bytes"
+              },
+              {
+                "id": 2,
+                "name": "mvcc",
+                "type": "MvccInfo"
+              }
+            ]
+          },
+          {
+            "name": "DebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "mvcc_info",
+                "type": "MvccDebugInfo",
+                "is_repeated": true
               }
             ]
           },
@@ -17258,7 +17444,14 @@
               {
                 "id": 1,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -21714,6 +21907,16 @@
                 "type": "double"
               },
               {
+                "id": 9,
+                "name": "read_cross_az_traffic_bytes",
+                "type": "uint64"
+              },
+              {
+                "id": 10,
+                "name": "write_cross_az_traffic_bytes",
+                "type": "uint64"
+              },
+              {
                 "id": 11,
                 "name": "tikv_r_u_v2",
                 "type": "double"
@@ -21728,10 +21931,6 @@
                 "name": "tiflash_r_u_v2",
                 "type": "double"
               }
-            ],
-            "reserved_ids": [
-              9,
-              10
             ]
           },
           {
@@ -23702,6 +23901,11 @@
                 "name": "GetTiFlashSystemTable",
                 "in_type": "kvrpcpb.TiFlashSystemTableRequest",
                 "out_type": "kvrpcpb.TiFlashSystemTableResponse"
+              },
+              {
+                "name": "GetEstimateTiCICount",
+                "in_type": "coprocessor.TiCIEstimateCountRequest",
+                "out_type": "coprocessor.TiCIEstimateCountResponse"
               },
               {
                 "name": "tryAddLock",
