@@ -1,6 +1,7 @@
 syntax = "proto3";
 package kvrpcpb;
 
+import "apipb.proto";
 import "metapb.proto";
 import "errorpb.proto";
 import "deadlock.proto";
@@ -31,6 +32,8 @@ message GetRequest {
     Context context = 1;
     bytes key = 2;
     uint64 version = 3;
+    // If true, the response will include the commit ts of the key.
+    bool need_commit_ts = 4;
 }
 
 message GetResponse {
@@ -46,6 +49,9 @@ message GetResponse {
     reserved 5;
     // Time and scan details when processing the request.
     ExecDetailsV2 exec_details_v2 = 6;
+    // The commit timestamp of the key.
+    // If it is zero, it means the commit timestamp is unknown.
+    uint64 commit_ts = 7;
 }
 
 // Scan fetches values for a range of keys; it is part of the transaction with
@@ -374,6 +380,16 @@ message CheckSecondaryLocksResponse {
     ExecDetailsV2 exec_details_v2 = 5;
 }
 
+// CommitRole indicates the current commit request is a primary commit or a secondary commit.
+enum CommitRole {
+    // Unknown about the current request is a primary commit or a secondary commit;
+    Unknown = 0;
+    // Current request is a primary commit;
+    Primary = 1;
+    // Current request is a secondary commit;
+    Secondary = 2;
+}
+
 // The second phase of writing to TiKV. If there are no errors or conflicts, then this request
 // commits a transaction so that its data can be read by other transactions.
 message CommitRequest {
@@ -386,6 +402,12 @@ message CommitRequest {
     repeated bytes keys = 3;
     // Timestamp for the end of the transaction. Must be greater than `start_version`.
     uint64 commit_version = 4;
+    // commit_role indicates the current commit request is a primary commit or a secondary commit.
+    // It's value maybe `Unknown` when using a client with an old version.
+    CommitRole commit_role = 6;
+    // primary_key indicates the primary key of the transaction.
+    // Its value may be empty when using an old version client.
+    bytes primary_key = 7;
 
     // Whether committing an `use_async_commit` (i.e. should be treated as committed) prewrite.
     bool use_async_commit = 8;
@@ -438,6 +460,8 @@ message BatchGetRequest {
     Context context = 1;
     repeated bytes keys = 2;
     uint64 version = 3;
+    // If true, the response will include the commit ts of the key.
+    bool need_commit_ts = 4;
 }
 
 message BatchGetResponse {
@@ -506,6 +530,9 @@ message ResolveLockRequest {
     repeated TxnInfo txn_infos = 4;
     // Only resolve specified keys.
     repeated bytes keys = 5;
+
+    // If true, the resolve lock action is performed asynchronously and the response may be returned before it's finished.
+    bool is_async = 6;
 
     // Reserved for file based transaction.
     bool is_txn_file = 100;
@@ -827,6 +854,11 @@ message MvccGetByStartTsResponse {
 
 // Helper messages.
 
+enum RequestOrigin {
+  RequestOriginUnknown = 0;
+  RequestOriginTiDB = 1;
+}
+
 // Miscellaneous metadata attached to most requests.
 message Context {
     reserved 4;
@@ -897,9 +929,27 @@ message Context {
     // Some information used for resource control.
     ResourceControlContext resource_control_context = 28;
 
+    // The declared origin of the request. TiDB server requests set this to TIDB.
+    // This field is client-provided metadata; consumers should rely on it only when
+    // the caller is authenticated/authorized by the transport or deployment boundary.
+    // UNKNOWN means the origin is unset or not recognized by this protocol version.
+    // Other components should add dedicated enum variants when they need origin-specific behavior.
+    RequestOrigin request_origin = 29;
+
     // The keyspace that the request is sent to.
     // NOTE: This field is only meaningful while the api_version is V2.
-    uint32 keyspace_id = 32;
+    string keyspace_name = 31;
+
+    oneof keyspace {
+        // The keyspace that the request is sent to.
+        // NOTE: This field is only meaningful while the api_version is V2.
+        // V3 uses keyspace_identity and must not read this legacy field as the full identity.
+        uint32 keyspace_id = 32;
+        // The V3 keyspace identity that the request is sent to.
+        // V3 RPC key fields carry user key bytes; TiKV encodes the physical
+        // mode + namespace + keyspace prefix at the serving boundary.
+        apipb.KeyspaceIdentity keyspace_identity = 38;
+    }
 
     // The buckets version that the request is sent to.
     // NOTE: This field is only meaningful while enable buckets.
@@ -911,6 +961,18 @@ message Context {
 
     // The cluster id of the request
     uint64 cluster_id = 35;
+
+    // The trace id of the request, will be used for tracing the request's execution's inner steps.
+    bytes trace_id = 36;
+
+    // Control flags for trace logging behavior.
+    // Bit 0: immediate_log - Force immediate logging without buffering
+    // Bit 1: category_req_resp - Enable request/response tracing
+    // Bit 2: category_write_details - Enable detailed write tracing
+    // Bit 3: category_read_details - Enable detailed read tracing
+    // Bits 4-63: Reserved for future use
+    // This field is set by client-go based on an extractor function provided by TiDB.
+    uint64 trace_control_flags = 37;
 }
 
 message ResourceControlContext {
@@ -979,6 +1041,12 @@ enum APIVersion {
     // V2 server accpets V2 requests and V1 transactional requests that statrts with TiDB key
     // prefix (`m` and `t`).
     V2 = 2;
+    //
+    // `V3` uses user-key wire semantics for normal KV RPCs. Servers encode an
+    // 8-byte physical prefix at the serving boundary:
+    // mode(1) + namespace_id(4 bytes, big endian) + keyspace_id(3 bytes, big endian).
+    // The keyspace identity is carried by Context.keyspace_identity.
+    V3 = 3;
 }
 
 message SourceStmt {
@@ -1006,6 +1074,13 @@ message LockInfo {
     // It's used in timeout errors. 0 means unknown or not applicable.
     // It can be used to help the client decide whether to try resolving the lock.
     uint64 duration_to_last_update_ms = 11;
+    // When lock_type is SharedLock, this describes transactions holding the shared lock.
+    // Important: when lock_type is SharedLock, all shared locks must use shared_lock_infos;
+    // DO NOT read from the wrapper LockInfo.
+    // TODO(slock): tidb should send requests with a feature flag to indicate whether it
+    // supports shared locks, so that tikv can fail the requests from old tidb versions
+    // when needed.
+    repeated LockInfo shared_lock_infos = 12;
 
     // Reserved for file based transaction.
     bool is_txn_file = 100;
@@ -1023,6 +1098,10 @@ message KeyError {
     CommitTsTooLarge commit_ts_too_large = 9; // Calculated commit TS exceeds the limit given by the user.
     AssertionFailed assertion_failed = 10; // Assertion of a `Mutation` is evaluated as a failure.
     PrimaryMismatch primary_mismatch = 11; // CheckTxnStatus is sent to a lock that's not the primary.
+    TxnLockNotFound txn_lock_not_found = 12; // TxnLockNotFound indicates the txn lock is not found.
+
+    // Extra information for error debugging
+    DebugInfo debug_info = 100;
 }
 
 message WriteConflict {
@@ -1050,7 +1129,7 @@ message AlreadyExist {
 message Deadlock {
     uint64 lock_ts = 1;
     bytes lock_key = 2;
-    
+
     // The hash of `deadlock_key` field.
     uint64 deadlock_key_hash = 3;
     repeated deadlock.WaitForEntry wait_chain = 4;
@@ -1085,6 +1164,19 @@ message AssertionFailed {
 
 message PrimaryMismatch {
     LockInfo lock_info = 1;
+}
+
+message TxnLockNotFound {
+    bytes key = 1;
+}
+
+message MvccDebugInfo {
+    bytes key = 1;
+    MvccInfo mvcc = 2;
+}
+
+message DebugInfo {
+    repeated MvccDebugInfo mvcc_info = 1;
 }
 
 enum CommandPri {
@@ -1341,6 +1433,9 @@ message KvPair {
     KeyError error = 1;
     bytes key = 2;
     bytes value = 3;
+    // The commit timestamp of the key.
+    // If it is zero, it means the commit timestamp is unknown.
+    uint64 commit_ts = 4;
 }
 
 enum Op {
@@ -1350,8 +1445,13 @@ enum Op {
     Rollback = 3;
     // insert operation has a constraint that key should not exist before.
     Insert = 4;
+    // PessimisticLock is exclusive lock acquired in pessimistic transaction.
     PessimisticLock = 5;
     CheckNotExists = 6;
+    // SharedLock likes Lock but in shared mode.
+    SharedLock = 7;
+    // SharedPessimisticLock is shared lock acquired in pessimistic transaction.
+    SharedPessimisticLock = 8;
 }
 
 enum Assertion {
@@ -1608,8 +1708,14 @@ message CompactRequest {
 
     // API version of the request
     APIVersion api_version = 7;
-    // Keyspace of the table located in.
-    uint32 keyspace_id = 8;
+    oneof keyspace {
+        // Keyspace of the table located in.
+        // NOTE: This field is only meaningful for V1/V2 compatibility. V3 uses
+        // keyspace_identity and must not read this field as the full identity.
+        uint32 keyspace_id = 8;
+        // V3 keyspace identity of the table located in.
+        apipb.KeyspaceIdentity keyspace_identity = 9;
+    }
 }
 
 message CompactResponse {
@@ -1631,7 +1737,7 @@ message TiFlashSystemTableResponse {
     bytes data = 1 [(gogoproto.customtype) = "github.com/pingcap/kvproto/pkg/sharedbytes.SharedBytes", (gogoproto.nullable) = false];
 }
 
-// Flush is introduced from the pipelined DML protocol. 
+// Flush is introduced from the pipelined DML protocol.
 // A Flush request writes some keys and values to TiKV, storing in LOCK and DEFAULT CF, just like a Prewrite request.
 message FlushRequest {
     Context context = 1;

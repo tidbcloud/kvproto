@@ -1,6 +1,73 @@
 {
   "definitions": [
     {
+      "protopath": "apipb.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "KeyspaceIdentity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "namespace_id",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_id",
+                "type": "uint32"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "gogoproto/gogo.proto"
+          },
+          {
+            "path": "rustproto.proto"
+          }
+        ],
+        "package": {
+          "name": "apipb"
+        },
+        "options": [
+          {
+            "name": "java_package",
+            "value": "org.tikv.kvproto"
+          },
+          {
+            "name": "(gogoproto.goproto_sizecache_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.goproto_unkeyed_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.goproto_unrecognized_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.marshaler_all)",
+            "value": "true"
+          },
+          {
+            "name": "(gogoproto.sizer_all)",
+            "value": "true"
+          },
+          {
+            "name": "(gogoproto.unmarshaler_all)",
+            "value": "true"
+          },
+          {
+            "name": "(rustproto.lite_runtime_all)",
+            "value": "true"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "autoid.proto",
       "def": {
         "messages": [
@@ -40,7 +107,14 @@
               {
                 "id": 7,
                 "name": "keyspaceID",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 8,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -91,6 +165,18 @@
                 "id": 5,
                 "name": "force",
                 "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "keyspaceID",
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 7,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -123,6 +209,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "gogoproto/gogo.proto"
           },
@@ -3439,6 +3528,88 @@
             ]
           },
           {
+            "name": "ShardInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "shard_id",
+                "type": "uint64"
+              },
+              {
+                "id": 2,
+                "name": "shard_epoch",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "ranges",
+                "type": "KeyRange",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "TiCIEstimateCountRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "context",
+                "type": "kvrpcpb.Context"
+              },
+              {
+                "id": 2,
+                "name": "start_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "table_id",
+                "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "index_id",
+                "type": "int64"
+              },
+              {
+                "id": 5,
+                "name": "fts_query_info",
+                "type": "bytes"
+              },
+              {
+                "id": 6,
+                "name": "time_zone_name",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "time_zone_offset",
+                "type": "int64"
+              },
+              {
+                "id": 8,
+                "name": "shard_infos",
+                "type": "ShardInfo",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "TiCIEstimateCountResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "est_count",
+                "type": "uint64"
+              },
+              {
+                "id": 2,
+                "name": "other_error",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "TableRegions",
             "fields": [
               {
@@ -5306,7 +5477,14 @@
               {
                 "id": 7,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 12,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 8,
@@ -5547,6 +5725,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "coprocessor.proto"
           },
@@ -6604,6 +6785,16 @@
             ]
           },
           {
+            "name": "UndeterminedResult",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "Error",
             "fields": [
               {
@@ -6710,6 +6901,11 @@
                 "id": 21,
                 "name": "bucket_version_not_match",
                 "type": "BucketVersionNotMatch"
+              },
+              {
+                "id": 22,
+                "name": "undetermined_result",
+                "type": "UndeterminedResult"
               }
             ],
             "reserved_names": [
@@ -8540,6 +8736,53 @@
               {
                 "id": 1,
                 "name": "id",
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 8,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "state",
+                "type": "KeyspaceState"
+              },
+              {
+                "id": 4,
+                "name": "created_at",
+                "type": "int64"
+              },
+              {
+                "id": 5,
+                "name": "state_changed_at",
+                "type": "int64"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 7,
+                  "name": "config",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "NamespaceMeta",
+            "fields": [
+              {
+                "id": 1,
+                "name": "id",
                 "type": "uint32"
               },
               {
@@ -8575,6 +8818,164 @@
             ]
           },
           {
+            "name": "NamespaceRef",
+            "fields": [
+              {
+                "id": 1,
+                "name": "namespace_id",
+                "type": "uint32",
+                "oneof_parent": "namespace"
+              },
+              {
+                "id": 2,
+                "name": "namespace_name",
+                "type": "string",
+                "oneof_parent": "namespace"
+              }
+            ]
+          },
+          {
+            "name": "CreateNamespaceRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "config",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "CreateNamespaceResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "NamespaceMeta"
+              }
+            ]
+          },
+          {
+            "name": "LoadNamespaceRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "NamespaceRef"
+              }
+            ]
+          },
+          {
+            "name": "LoadNamespaceResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "NamespaceMeta"
+              }
+            ]
+          },
+          {
+            "name": "GetAllNamespacesRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "start_id",
+                "type": "uint32"
+              },
+              {
+                "id": 3,
+                "name": "limit",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "GetAllNamespacesResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespaces",
+                "type": "NamespaceMeta",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "UpdateNamespaceStateRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "NamespaceRef"
+              },
+              {
+                "id": 3,
+                "name": "state",
+                "type": "KeyspaceState"
+              }
+            ]
+          },
+          {
+            "name": "UpdateNamespaceStateResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "NamespaceMeta"
+              }
+            ]
+          },
+          {
             "name": "LoadKeyspaceRequest",
             "fields": [
               {
@@ -8586,6 +8987,11 @@
                 "id": 2,
                 "name": "name",
                 "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "namespace",
+                "type": "NamespaceRef"
               }
             ]
           },
@@ -8600,7 +9006,14 @@
               {
                 "id": 2,
                 "name": "id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 3,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -8616,6 +9029,37 @@
                 "id": 2,
                 "name": "keyspace",
                 "type": "KeyspaceMeta"
+              }
+            ]
+          },
+          {
+            "name": "LookupKeyspaceRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "LookupKeyspaceResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "pdpb.ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspaces",
+                "type": "KeyspaceMeta",
+                "is_repeated": true
               }
             ]
           },
@@ -8656,7 +9100,14 @@
               {
                 "id": 2,
                 "name": "id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 4,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 3,
@@ -8691,12 +9142,24 @@
               {
                 "id": 2,
                 "name": "start_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "start_keyspace"
+              },
+              {
+                "id": 5,
+                "name": "start_keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "start_keyspace"
               },
               {
                 "id": 3,
                 "name": "limit",
                 "type": "uint32"
+              },
+              {
+                "id": 4,
+                "name": "namespace",
+                "type": "NamespaceRef"
               }
             ]
           },
@@ -8719,12 +9182,42 @@
         ],
         "services": [
           {
+            "name": "Namespace",
+            "rpcs": [
+              {
+                "name": "CreateNamespace",
+                "in_type": "CreateNamespaceRequest",
+                "out_type": "CreateNamespaceResponse"
+              },
+              {
+                "name": "LoadNamespace",
+                "in_type": "LoadNamespaceRequest",
+                "out_type": "LoadNamespaceResponse"
+              },
+              {
+                "name": "GetAllNamespaces",
+                "in_type": "GetAllNamespacesRequest",
+                "out_type": "GetAllNamespacesResponse"
+              },
+              {
+                "name": "UpdateNamespaceState",
+                "in_type": "UpdateNamespaceStateRequest",
+                "out_type": "UpdateNamespaceStateResponse"
+              }
+            ]
+          },
+          {
             "name": "Keyspace",
             "rpcs": [
               {
                 "name": "LoadKeyspace",
                 "in_type": "LoadKeyspaceRequest",
                 "out_type": "LoadKeyspaceResponse"
+              },
+              {
+                "name": "LookupKeyspace",
+                "in_type": "LookupKeyspaceRequest",
+                "out_type": "LookupKeyspaceResponse"
               },
               {
                 "name": "LoadKeyspaceByID",
@@ -8751,6 +9244,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "pdpb.proto"
           },
@@ -8849,6 +9345,34 @@
             ]
           },
           {
+            "name": "CommitRole",
+            "enum_fields": [
+              {
+                "name": "Unknown"
+              },
+              {
+                "name": "Primary",
+                "integer": 1
+              },
+              {
+                "name": "Secondary",
+                "integer": 2
+              }
+            ]
+          },
+          {
+            "name": "RequestOrigin",
+            "enum_fields": [
+              {
+                "name": "RequestOriginUnknown"
+              },
+              {
+                "name": "RequestOriginTiDB",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "APIVersion",
             "enum_fields": [
               {
@@ -8861,6 +9385,10 @@
               {
                 "name": "V2",
                 "integer": 2
+              },
+              {
+                "name": "V3",
+                "integer": 3
               }
             ]
           },
@@ -8969,6 +9497,14 @@
               {
                 "name": "CheckNotExists",
                 "integer": 6
+              },
+              {
+                "name": "SharedLock",
+                "integer": 7
+              },
+              {
+                "name": "SharedPessimisticLock",
+                "integer": 8
               }
             ]
           },
@@ -9071,6 +9607,11 @@
                 "id": 3,
                 "name": "version",
                 "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "need_commit_ts",
+                "type": "bool"
               }
             ]
           },
@@ -9101,6 +9642,11 @@
                 "id": 6,
                 "name": "exec_details_v2",
                 "type": "ExecDetailsV2"
+              },
+              {
+                "id": 7,
+                "name": "commit_ts",
+                "type": "uint64"
               }
             ],
             "reserved_ids": [
@@ -9768,6 +10314,16 @@
                 "type": "uint64"
               },
               {
+                "id": 6,
+                "name": "commit_role",
+                "type": "CommitRole"
+              },
+              {
+                "id": 7,
+                "name": "primary_key",
+                "type": "bytes"
+              },
+              {
                 "id": 8,
                 "name": "use_async_commit",
                 "type": "bool"
@@ -9904,6 +10460,11 @@
                 "id": 3,
                 "name": "version",
                 "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "need_commit_ts",
+                "type": "bool"
               }
             ]
           },
@@ -10067,6 +10628,11 @@
                 "name": "keys",
                 "type": "bytes",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "is_async",
+                "type": "bool"
               },
               {
                 "id": 100,
@@ -11169,9 +11735,26 @@
                 "type": "ResourceControlContext"
               },
               {
+                "id": 29,
+                "name": "request_origin",
+                "type": "RequestOrigin"
+              },
+              {
+                "id": 31,
+                "name": "keyspace_name",
+                "type": "string"
+              },
+              {
                 "id": 32,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 38,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 33,
@@ -11186,6 +11769,16 @@
               {
                 "id": 35,
                 "name": "cluster_id",
+                "type": "uint64"
+              },
+              {
+                "id": 36,
+                "name": "trace_id",
+                "type": "bytes"
+              },
+              {
+                "id": 37,
+                "name": "trace_control_flags",
                 "type": "uint64"
               }
             ],
@@ -11302,6 +11895,12 @@
                 "type": "uint64"
               },
               {
+                "id": 12,
+                "name": "shared_lock_infos",
+                "type": "LockInfo",
+                "is_repeated": true
+              },
+              {
                 "id": 100,
                 "name": "is_txn_file",
                 "type": "bool"
@@ -11365,6 +11964,16 @@
                 "id": 11,
                 "name": "primary_mismatch",
                 "type": "PrimaryMismatch"
+              },
+              {
+                "id": 12,
+                "name": "txn_lock_not_found",
+                "type": "TxnLockNotFound"
+              },
+              {
+                "id": 100,
+                "name": "debug_info",
+                "type": "DebugInfo"
               }
             ]
           },
@@ -11531,6 +12140,42 @@
                 "id": 1,
                 "name": "lock_info",
                 "type": "LockInfo"
+              }
+            ]
+          },
+          {
+            "name": "TxnLockNotFound",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "bytes"
+              }
+            ]
+          },
+          {
+            "name": "MvccDebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "bytes"
+              },
+              {
+                "id": 2,
+                "name": "mvcc",
+                "type": "MvccInfo"
+              }
+            ]
+          },
+          {
+            "name": "DebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "mvcc_info",
+                "type": "MvccDebugInfo",
+                "is_repeated": true
               }
             ]
           },
@@ -11980,6 +12625,11 @@
                 "id": 3,
                 "name": "value",
                 "type": "bytes"
+              },
+              {
+                "id": 4,
+                "name": "commit_ts",
+                "type": "uint64"
               }
             ]
           },
@@ -12640,7 +13290,14 @@
               {
                 "id": 8,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 9,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -12909,6 +13566,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "metapb.proto"
           },
@@ -14020,7 +14680,14 @@
               {
                 "id": 10,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 22,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 11,
@@ -14249,6 +14916,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "coprocessor.proto"
           },
@@ -14694,6 +15364,11 @@
                 "id": 3,
                 "name": "dc_location",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity"
               }
             ]
           },
@@ -16541,7 +17216,14 @@
               {
                 "id": 2,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 3,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               }
             ]
           },
@@ -16581,7 +17263,14 @@
               {
                 "id": 1,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 4,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 2,
@@ -16627,7 +17316,14 @@
               {
                 "id": 2,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 4,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 3,
@@ -16662,7 +17358,14 @@
               {
                 "id": 2,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 6,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 3,
@@ -16722,7 +17425,14 @@
               {
                 "id": 1,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 3,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 2,
@@ -16749,6 +17459,406 @@
                 "id": 3,
                 "name": "revision",
                 "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "KeyspaceScope",
+            "fields": [
+              {
+                "id": 1,
+                "name": "keyspace_id",
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
+              }
+            ]
+          },
+          {
+            "name": "AdvanceGCSafePointRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 3,
+                "name": "target",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "AdvanceGCSafePointResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "old_gc_safe_point",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "new_gc_safe_point",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "AdvanceTxnSafePointRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 3,
+                "name": "target",
+                "type": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "AdvanceTxnSafePointResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "old_txn_safe_point",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "new_txn_safe_point",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "blocker_description",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "SetGCBarrierRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 3,
+                "name": "barrier_id",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "barrier_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 5,
+                "name": "ttl_seconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "GCBarrierInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "barrier_id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "barrier_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "ttl_seconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "SetGCBarrierResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "new_barrier_info",
+                "type": "GCBarrierInfo"
+              }
+            ]
+          },
+          {
+            "name": "DeleteGCBarrierRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 3,
+                "name": "barrier_id",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "DeleteGCBarrierResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "deleted_barrier_info",
+                "type": "GCBarrierInfo"
+              }
+            ]
+          },
+          {
+            "name": "SetGlobalGCBarrierRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "barrier_id",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "barrier_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "ttl_seconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "SetGlobalGCBarrierResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "new_barrier_info",
+                "type": "GlobalGCBarrierInfo"
+              }
+            ]
+          },
+          {
+            "name": "DeleteGlobalGCBarrierRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "barrier_id",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "DeleteGlobalGCBarrierResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "deleted_barrier_info",
+                "type": "GlobalGCBarrierInfo"
+              }
+            ]
+          },
+          {
+            "name": "GlobalGCBarrierInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "barrier_id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "barrier_ts",
+                "type": "uint64"
+              },
+              {
+                "id": 3,
+                "name": "ttl_seconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "GetGCStateRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 3,
+                "name": "exclude_gc_barriers",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "GCState",
+            "fields": [
+              {
+                "id": 1,
+                "name": "keyspace_scope",
+                "type": "KeyspaceScope"
+              },
+              {
+                "id": 2,
+                "name": "is_keyspace_level_gc",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "txn_safe_point",
+                "type": "uint64"
+              },
+              {
+                "id": 4,
+                "name": "gc_safe_point",
+                "type": "uint64"
+              },
+              {
+                "id": 5,
+                "name": "gc_barriers",
+                "type": "GCBarrierInfo",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "GetGCStateResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "gc_state",
+                "type": "GCState"
+              }
+            ]
+          },
+          {
+            "name": "GetAllKeyspacesGCStatesRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "RequestHeader"
+              },
+              {
+                "id": 2,
+                "name": "exclude_gc_barriers",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "exclude_global_gc_barriers",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "GetAllKeyspacesGCStatesResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "ResponseHeader"
+              },
+              {
+                "id": 2,
+                "name": "gc_states",
+                "type": "GCState",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "global_gc_barriers",
+                "type": "GlobalGCBarrierInfo",
+                "is_repeated": true
               }
             ]
           },
@@ -17470,6 +18580,46 @@
                 "out_type": "GetAllGCSafePointV2Response"
               },
               {
+                "name": "AdvanceGCSafePoint",
+                "in_type": "AdvanceGCSafePointRequest",
+                "out_type": "AdvanceGCSafePointResponse"
+              },
+              {
+                "name": "AdvanceTxnSafePoint",
+                "in_type": "AdvanceTxnSafePointRequest",
+                "out_type": "AdvanceTxnSafePointResponse"
+              },
+              {
+                "name": "SetGCBarrier",
+                "in_type": "SetGCBarrierRequest",
+                "out_type": "SetGCBarrierResponse"
+              },
+              {
+                "name": "DeleteGCBarrier",
+                "in_type": "DeleteGCBarrierRequest",
+                "out_type": "DeleteGCBarrierResponse"
+              },
+              {
+                "name": "SetGlobalGCBarrier",
+                "in_type": "SetGlobalGCBarrierRequest",
+                "out_type": "SetGlobalGCBarrierResponse"
+              },
+              {
+                "name": "DeleteGlobalGCBarrier",
+                "in_type": "DeleteGlobalGCBarrierRequest",
+                "out_type": "DeleteGlobalGCBarrierResponse"
+              },
+              {
+                "name": "GetGCState",
+                "in_type": "GetGCStateRequest",
+                "out_type": "GetGCStateResponse"
+              },
+              {
+                "name": "GetAllKeyspacesGCStates",
+                "in_type": "GetAllKeyspacesGCStatesRequest",
+                "out_type": "GetAllKeyspacesGCStatesResponse"
+              },
+              {
                 "name": "SyncRegions",
                 "in_type": "SyncRegionRequest",
                 "out_type": "SyncRegionResponse",
@@ -17547,6 +18697,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "metapb.proto"
           },
@@ -20407,12 +21560,54 @@
         ],
         "messages": [
           {
+            "name": "ListKeyspaceResourceGroupsRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "keyspace_ids",
+                "type": "uint32",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ListKeyspaceResourceGroupsResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "error",
+                "type": "Error"
+              },
+              {
+                "id": 2,
+                "name": "groups",
+                "type": "ResourceGroup",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "KeyspaceIDValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "value",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
             "name": "ListResourceGroupsRequest",
             "fields": [
               {
                 "id": 1,
                 "name": "with_ru_stats",
                 "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ]
           },
@@ -20444,6 +21639,11 @@
                 "id": 2,
                 "name": "with_ru_stats",
                 "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ]
           },
@@ -20469,6 +21669,11 @@
                 "id": 1,
                 "name": "resource_group_name",
                 "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ]
           },
@@ -20567,6 +21772,11 @@
                 "id": 6,
                 "name": "is_tiflash",
                 "type": "bool"
+              },
+              {
+                "id": 7,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ],
             "messages": [
@@ -20629,6 +21839,11 @@
                 "name": "granted_resource_tokens",
                 "type": "GrantedRawResourceTokenBucket",
                 "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ]
           },
@@ -20716,6 +21931,16 @@
                 "type": "double"
               },
               {
+                "id": 9,
+                "name": "read_cross_az_traffic_bytes",
+                "type": "uint64"
+              },
+              {
+                "id": 10,
+                "name": "write_cross_az_traffic_bytes",
+                "type": "uint64"
+              },
+              {
                 "id": 11,
                 "name": "tikv_r_u_v2",
                 "type": "double"
@@ -20730,10 +21955,6 @@
                 "name": "tiflash_r_u_v2",
                 "type": "double"
               }
-            ],
-            "reserved_ids": [
-              9,
-              10
             ]
           },
           {
@@ -20808,6 +22029,11 @@
                 "id": 8,
                 "name": "RUStats",
                 "type": "Consumption"
+              },
+              {
+                "id": 9,
+                "name": "keyspace_id",
+                "type": "KeyspaceIDValue"
               }
             ]
           },
@@ -20988,6 +22214,11 @@
           {
             "name": "ResourceManager",
             "rpcs": [
+              {
+                "name": "ListKeyspaceResourceGroups",
+                "in_type": "ListKeyspaceResourceGroupsRequest",
+                "out_type": "ListKeyspaceResourceGroupsResponse"
+              },
               {
                 "name": "ListResourceGroups",
                 "in_type": "ListResourceGroupsRequest",
@@ -21839,6 +23070,11 @@
                 "name": "request_ids",
                 "type": "uint64",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "client_send_time_ns",
+                "type": "uint64"
               }
             ],
             "messages": [
@@ -22091,6 +23327,11 @@
                 "id": 4,
                 "name": "health_feedback",
                 "type": "kvrpcpb.HealthFeedback"
+              },
+              {
+                "id": 5,
+                "name": "tikv_send_time_ns",
+                "type": "uint64"
               }
             ],
             "messages": [
@@ -22686,6 +23927,11 @@
                 "out_type": "kvrpcpb.TiFlashSystemTableResponse"
               },
               {
+                "name": "GetEstimateTiCICount",
+                "in_type": "coprocessor.TiCIEstimateCountRequest",
+                "out_type": "coprocessor.TiCIEstimateCountResponse"
+              },
+              {
                 "name": "tryAddLock",
                 "in_type": "disaggregated.TryAddLockRequest",
                 "out_type": "disaggregated.TryAddLockResponse"
@@ -23035,7 +24281,14 @@
               {
                 "id": 3,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 6,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 4,
@@ -23065,7 +24318,14 @@
               {
                 "id": 3,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 5,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
               },
               {
                 "id": 4,
@@ -23212,7 +24472,19 @@
               {
                 "id": 2,
                 "name": "keyspace_id",
-                "type": "uint32"
+                "type": "uint32",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 4,
+                "name": "keyspace_identity",
+                "type": "apipb.KeyspaceIdentity",
+                "oneof_parent": "keyspace"
+              },
+              {
+                "id": 3,
+                "name": "mod_revision",
+                "type": "uint64"
               }
             ]
           },
@@ -23228,6 +24500,11 @@
                 "id": 2,
                 "name": "keyspace_group",
                 "type": "KeyspaceGroup"
+              },
+              {
+                "id": 3,
+                "name": "mod_revision",
+                "type": "uint64"
               }
             ]
           },
@@ -23297,6 +24574,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "apipb.proto"
+          },
           {
             "path": "pdpb.proto"
           },
